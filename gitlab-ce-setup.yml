@@ -1,0 +1,10 @@
+- name: Setup GitLab CE
+  hosts: gitlab-ce
+  vars: 
+    EXTERNAL_URL: 'http://gitlab.ipool.me'
+  become: true
+  roles:
+    - docker-ce-setup
+    - gitlab-ce-setup
+    - gitlab-runner-setup
+

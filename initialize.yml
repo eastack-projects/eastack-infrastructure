@@ -1,0 +1,5 @@
+- name: Initialize
+  hosts: all
+  become: true
+  roles:
+    - initialize

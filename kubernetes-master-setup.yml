@@ -1,0 +1,6 @@
+- name: Setup Kubernetes master
+  hosts: kubernetes-master
+  become: true
+  roles:
+    - etcd-setup
+    - kubernetes-master-setup

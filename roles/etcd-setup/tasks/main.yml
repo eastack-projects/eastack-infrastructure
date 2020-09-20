@@ -1,0 +1,43 @@
+---
+# tasks file for setup-etcd
+- name: Create etcd directory
+  file:
+    path: '/tmp/etcd'
+    state: directory
+
+- name: Extract etcd package
+  unarchive:
+    src: "/home/radix10/desktop/my-server-playbook/roles/etcd/templates/etcd-v3.4.7-linux-amd64.tar.gz"
+    dest: '/tmp/etcd'
+    extra_opts: [--strip-components=1]
+    creates: '/tmp/etcd/etcdctl'
+
+- name: Copy etcdctl to /usr/bin
+  copy:
+    src: "/tmp/etcd/{{ item }}"
+    dest: "/usr/bin/{{ item }}"
+    remote_src: true
+    mode: '0755'
+  with_items:
+  - etcd
+  - etcdctl
+
+
+- name: Add etcd systemd service
+  copy: 
+    src: 'etcd.service'
+    dest: '/usr/lib/systemd/system/etcd.service'
+    mode: '0644'
+
+- name: Create etcd work directory
+  file:
+    path: '/var/lib/etcd'
+    state: directory
+    mode: '0755'
+
+- name: Enable and start etcd service
+  systemd:
+    name: etcd
+    daemon_reload: true
+    state: started
+    enabled: true

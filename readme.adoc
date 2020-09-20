@@ -1,0 +1,11 @@
+= Playbook
+
+一些常用的Playbook
+
+== TODO
+
+解决多主机名问题
+
+== 参考文献
+
+https://wiki.archlinux.org/index.php/User:Grawity/Adding_a_trusted_CA_certificate[User:Grawity/Adding a trusted CA certificate]

@@ -1,0 +1,22 @@
+---
+# tasks file for docker-ce-config
+- name: Create docker cert directory
+  file:
+    path: "/etc/docker/certs.d/{{ HARBOR_FQDN }}"
+    state: directory
+    mode: '0755'
+    
+- name: Copy custome registry cert
+  copy:
+    src: "harbor/opt/harbor/certificate/{{ item }}"
+    dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}"
+    mode: '0755'
+  with_items:
+  - "{{ HARBOR_FQDN }}.cert"
+  - "{{ HARBOR_FQDN }}.key"
+  - "ca.crt"
+
+- name: Restart docker daemon
+  systemd:
+    state: restarted
+    name: docker

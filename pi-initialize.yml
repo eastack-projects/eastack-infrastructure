@@ -1,0 +1,5 @@
+- name: Initialize Raspberry Pi
+  hosts: pi
+  become: true
+  roles:
+    - pi-initialize

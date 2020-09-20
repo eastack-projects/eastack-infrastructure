@@ -1,0 +1,4 @@
+---
+# defaults file for gitlab-runner
+CI_SERVER_URL: 'http://gitlab.ipool.me'
+REGISTRATION_TOKEN: ''
