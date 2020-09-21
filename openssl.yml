@@ -1,0 +1,8 @@
+- name: Generate certificate
+  hosts: localhost
+  vars:
+    IPOOL_FQDN: "ipool.me"
+    HARBOR_FQDN: "harbor.ipool.me"
+    PASSPHRASE: "helloworld"
+  roles:
+    - openssl/generate-certificate

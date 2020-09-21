@@ -1,0 +1,5 @@
+- name: Setup Harbor
+  hosts: localhost
+  become: true
+  roles:
+    - harbor/prepare

@@ -1,0 +1,52 @@
+---
+# tasks file for generate-certificate
+
+# Generate CA certificate
+- name: Generate an CA private key with the default values (4096 bits, RSA) and a passphrase
+  openssl_privatekey:
+    path: "roles/openssl/generate-certificate/files/{{ IPOOL_FQDN }}.pem"
+    passphrase: helloworld
+    cipher: auto
+
+- name: Generate an CA Certificate Signing Request
+  openssl_csr:
+    path: "roles/openssl/generate-certificate/files/{{ IPOOL_FQDN }}.csr"
+    privatekey_path: "roles/openssl/generate-certificate/files/{{ IPOOL_FQDN }}.pem"
+    privatekey_passphrase: helloworld
+    common_name: "{{ IPOOL_FQDN }}"
+    country_name: "CN"
+    email_address: "admin@radix10.me"
+    locality_name: "Beijing"
+    state_or_province_name: "Beijing"
+
+- name: Generate a Self Signed CA Certificate
+  openssl_certificate:
+    path: "roles/openssl/generate-certificate/files/{{ IPOOL_FQDN }}.crt"
+    privatekey_path: "roles/openssl/generate-certificate/files/{{ IPOOL_FQDN }}.pem"
+    privatekey_passphrase: helloworld
+    csr_path: "roles/openssl/generate-certificate/files/{{ IPOOL_FQDN }}.csr"
+    provider: selfsigned
+
+# Generate Harbor certificate
+- name: Generate an Harbor private key with the default values (4096 bits, RSA)
+  openssl_privatekey:
+    path: "roles/openssl/generate-certificate/files/{{ HARBOR_FQDN }}.pem"
+
+- name: Generate an Harbor Certificate Signing Request
+  openssl_csr:
+    path: "roles/openssl/generate-certificate/files/{{ HARBOR_FQDN }}.csr"
+    privatekey_path: "roles/openssl/generate-certificate/files/{{ HARBOR_FQDN }}.pem"
+    common_name: "{{ HARBOR_FQDN }}"
+    country_name: "CN"
+    email_address: "admin@radix10.me"
+    locality_name: "Beijing"
+    state_or_province_name: "Beijing"
+
+- name: Generate an OpenSSL certificate signed with your own CA certificate
+  openssl_certificate:
+    path: "roles/openssl/generate-certificate/files/{{ HARBOR_FQDN }}.crt"
+    csr_path: "roles/openssl/generate-certificate/files/{{ HARBOR_FQDN }}.csr"
+    ownca_path:  "roles/openssl/generate-certificate/files/{{ IPOOL_FQDN }}.crt"
+    ownca_privatekey_path: "roles/openssl/generate-certificate/files/{{ IPOOL_FQDN }}.pem"
+    ownca_privatekey_passphrase: helloworld
+    provider: ownca
