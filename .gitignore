@@ -1,1 +1,1 @@
-roles/harbor-setup/files/harbor/opt/harbor/certificate
+roles/openssl/generate-certificate/files/

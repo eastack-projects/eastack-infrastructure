@@ -5,6 +5,7 @@
 == TODO
 
 解决多主机名问题
+清理无用的generate-cert...sh
 
 == 参考文献
 
