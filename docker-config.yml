@@ -1,7 +1,8 @@
 - name: Config Docker
-  hosts: docker-ce
+  hosts: localhost
   become: true
   vars:
     HARBOR_FQDN: 'harbor.ipool.me'
+    IPOOL_FQDN: 'ipool.me'
   roles:
-    - docker-ce-config
+    - docker/config

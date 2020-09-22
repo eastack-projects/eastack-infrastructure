@@ -8,15 +8,15 @@
     
 - name: Copy custome registry cert
   copy:
-    src: "harbor/opt/harbor/certificate/{{ item }}"
-    dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}"
+    src: "roles/openssl/generate-certificate/files/{{ item }}"
+    dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/{{item}}"
     mode: '0755'
   with_items:
-  - "{{ HARBOR_FQDN }}.cert"
-  - "{{ HARBOR_FQDN }}.key"
-  - "ca.crt"
+  - "{{ HARBOR_FQDN }}.crt"
+  - "{{ HARBOR_FQDN }}.pem"
+  - "{{ IPOOL_FQDN }}.crt"
 
-- name: Restart docker daemon
-  systemd:
-    state: restarted
-    name: docker
+    #- name: Restart docker daemon
+    #  systemd:
+    #    state: restarted
+    #    name: docker
