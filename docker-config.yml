@@ -1,8 +1,0 @@
-- name: Config Docker
-  hosts: localhost
-  become: true
-  vars:
-    HARBOR_FQDN: 'harbor.ipool.me'
-    IPOOL_FQDN: 'ipool.me'
-  roles:
-    - docker/config

@@ -1,6 +1,0 @@
-- name: Setup Harbor
-  hosts: harbor
-  become: true
-  roles:
-          #    - docker-ce-setup
-    - harbor-setup

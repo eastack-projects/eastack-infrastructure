@@ -5,6 +5,7 @@
     update_cache: yes
     name:
     - postfix
+    - apt-transport-https
 
 - name: Enable and start postfix service
   systemd:
@@ -19,7 +20,7 @@
 
 - name:
   apt_repository:
-    repo: deb http://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/ubuntu focal main
+    repo: deb https://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/ubuntu focal main
     state: present
     mode: 0644
 

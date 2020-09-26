@@ -1,0 +1,28 @@
+---
+# tasks file for setup
+- name: Download CoreDNS
+  get_url:
+    url: https://cdn.radix10.cn/coredns
+    dest: /usr/bin/coredns
+    mode: 0755
+
+- name: Copy systemd unit
+  copy:
+    src: "coredns.service"
+    dest: "/usr/lib/systemd/system/coredns.service"
+    mode: '0644'
+
+- name: Copy config file
+  copy:
+    src: "{{ item }}"
+    dest: "/var/lib/coredns/"
+    mode: '0644'
+  with_items:
+  - Corefile
+  - ipool.db
+
+- name: Enable and start coredns service
+  systemd:
+    name: "coredns"
+    state: started
+    enabled: true

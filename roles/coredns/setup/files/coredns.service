@@ -1,0 +1,13 @@
+[Unit]
+Description=CoreDNS
+Documentation=https://coredns.io/
+After=network.target
+Requites=network.target
+
+[Service]
+WorkingDirectory=/var/lib/coredns
+ExecStart=/usr/bin/coredns
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

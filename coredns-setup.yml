@@ -1,0 +1,4 @@
+- name: Setup CoreDNS
+  hosts: coredns
+  roles:
+    - coredns/setup

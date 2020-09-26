@@ -2,11 +2,36 @@
 
 一些常用的Playbook
 
+* initialize-host
+* coredns
+* docker
+* etcd
+* gitlab
+* harbor
+* kubernetes
+* openssl
+
+== 安装宿主机操作系统
+
+== 准备宿主机环境
+
+[source, bash]
+----
+----
+
+== 下载虚拟机镜像
+
+这里我使用 `qcow2` 格式的 Ubuntu Server 镜像作为基础镜像。
+
+== 创建虚拟机
+
 == TODO
 
 解决多主机名问题
 清理无用的generate-cert...sh
+apt真的需要再安装https支持吗->需要
 
 == 参考文献
 
+https://docs.openstack.org/image-guide/obtain-images.html[OpenStack Docs: Get images]
 https://wiki.archlinux.org/index.php/User:Grawity/Adding_a_trusted_CA_certificate[User:Grawity/Adding a trusted CA certificate]

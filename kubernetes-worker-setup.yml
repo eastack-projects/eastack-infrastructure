@@ -1,6 +1,0 @@
-- name: Setup Kubernetes worker
-  hosts: kubernetes-worker
-  become: true
-  roles:
-    - docker-ce-setup
-    - kubernetes-worker-setup

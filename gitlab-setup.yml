@@ -1,5 +1,0 @@
-- name: Setup GitLab CE
-  hosts: gitlab-ce
-  become: true
-  roles:
-    - register-gitlab-ce

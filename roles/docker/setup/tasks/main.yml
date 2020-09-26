@@ -1,8 +1,25 @@
+# tasks file for docker-setup
 - name: Install Docker CE and Docker Compose
   apt:
     update_cache: yes
     name:
     - docker-compose
+
+- name: Create docker cert directory
+  file:
+    path: "/etc/docker/certs.d/{{ HARBOR_FQDN }}"
+    state: directory
+    mode: '0755'
+    
+- name: Copy custome registry cert
+  copy:
+    src: "roles/openssl/generate-certificate/files/{{ item }}"
+    dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/{{item}}"
+    mode: '0755'
+  with_items:
+  - "{{ HARBOR_FQDN }}.crt"
+  - "{{ HARBOR_FQDN }}.pem"
+  - "{{ IPOOL_FQDN }}.crt"
 
 - name: Enable and start Docker service
   systemd:

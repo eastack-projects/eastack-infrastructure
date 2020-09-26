@@ -1,27 +1,16 @@
-[test]
-192.168.122.35
+[coredns]
+raspberrypi
 
-[kubernetes-master]
-kmaster
-
-[kubernetes-worker]
-kworker
-
-[docker-ce]
-kworker
+[docker]
+kubernetes_worker
 harbor
+gitlab_runner
 
-[etcd]
-kmaster
+[guest]
 
-[harbor]
-harbor
-
-[gitlab-ce]
-slabs-gitlab-ce
-
-[pi]
-pi
-
-[gitlab-runner]
-harbor
+raspberrypi       ansible_ssh_host=192.168.122.114
+kubernetes_master ansible_ssh_host=192.168.122.114
+kubernetes_worker ansible_ssh_host=192.168.122.114
+harbor            ansible_ssh_host=192.168.122.114
+gitlab            ansible_ssh_host=192.168.122.114
+gitlab_runner     ansible_ssh_host=192.168.122.114
