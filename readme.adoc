@@ -27,9 +27,10 @@
 
 == TODO
 
-解决多主机名问题
+[*] 解决多主机名问题
 清理无用的generate-cert...sh
 apt真的需要再安装https支持吗->需要
+添加 Kubernetes HTTPS的支持
 
 == 参考文献
 

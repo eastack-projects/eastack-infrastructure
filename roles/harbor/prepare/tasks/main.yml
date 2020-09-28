@@ -1,3 +1,0 @@
----
-- name: Generate harbor certificate
-  local_action: command 

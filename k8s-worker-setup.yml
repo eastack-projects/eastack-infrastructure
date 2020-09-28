@@ -1,0 +1,4 @@
+- name: Setup Etcd
+  hosts: harbor.ipool.me
+  roles:
+    - kubernetes/worker-setup

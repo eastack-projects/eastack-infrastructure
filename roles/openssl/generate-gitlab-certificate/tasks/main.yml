@@ -1,0 +1,35 @@
+---
+# tasks file for generate-gitlab-certificate
+- name: Generate an GiaLab private key with the default values (4096 bits, RSA)
+  local_action:
+    module: openssl_privatekey
+    path: "roles/openssl/generate-gitlab-certificate/files/{{ GITLAB_FQDN }}.key"
+
+- name: Generate an GitLab Certificate Signing Request
+  local_action:
+    module: openssl_csr
+    path: "roles/openssl/generate-gitlab-certificate/files/{{ GITLAB_FQDN }}.csr"
+    privatekey_path: "roles/openssl/generate-gitlab-certificate/files/{{ GITLAB_FQDN }}.key"
+    basic_constraints: CA:FALSE
+    key_usage: 
+      - digitalSignature
+      - nonRepudiation
+      - keyEncipherment
+      - dataEncipherment
+    extended_key_usage: serverAuth
+    subject_alt_name: 'DNS:www.gitlab.ipool.me,DNS:gitlab.ipool.me'
+    common_name: "{{ GITLAB_FQDN }}"
+    country_name: "CN"
+    email_address: "admin@radix10.me"
+    locality_name: "Beijing"
+    state_or_province_name: "Beijing"
+
+- name: Generate an OpenSSL certificate signed with your own CA certificate
+  local_action:
+    module: openssl_certificate
+    path: "roles/openssl/generate-gitlab-certificate/files/{{ GITLAB_FQDN }}.crt"
+    csr_path: "roles/openssl/generate-gitlab-certificate/files/{{ GITLAB_FQDN }}.csr"
+    ownca_path:  "roles/openssl/generate-ca-certificate/files/{{ IPOOL_FQDN }}.crt"
+    ownca_privatekey_path: "roles/openssl/generate-ca-certificate/files/{{ IPOOL_FQDN }}.key"
+    ownca_privatekey_passphrase: helloworld
+    provider: ownca

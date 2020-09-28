@@ -1,4 +1,0 @@
-- name: Initialize Raspberry Pi
-  hosts: raspberrypi
-  roles:
-    - initialize/raspberrypi

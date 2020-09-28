@@ -1,0 +1,19 @@
+---
+# tasks file for setup-gitlab-ce
+- name: Create certificate directory
+  file:
+    path: "/etc/gitlab/ssl"
+    state: directory
+    mode: '0755'
+    
+- name: Copy custome registry cert
+  copy:
+    src: "roles/openssl/generate-gitlab-certificate/files/{{ item }}"
+    dest: "/etc/gitlab/ssl/{{item}}"
+    mode: '0755'
+  with_items:
+  - "{{ GITLAB_FQDN }}.crt"
+  - "{{ GITLAB_FQDN }}.key"
+
+- name: Reconfigure GitLab
+  shell: gitlab-ctl reconfigure

@@ -1,3 +1,0 @@
-; example.org test file
-gitlab.ipool.me.            IN      SOA     sns.dns.icann.org. noc.dns.icann.org. 2015082541 7200 3600 1209600 3600
-gitlab.ipool.me.            IN      A       192.168.122.35

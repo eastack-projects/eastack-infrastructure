@@ -1,0 +1,4 @@
+- name: Setup Etcd
+  hosts: etcd.ipool.me
+  roles:
+    - etcd/setup

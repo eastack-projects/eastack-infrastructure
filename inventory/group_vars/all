@@ -1,0 +1,9 @@
+---
+EXTERNAL_URL: "https://gitlab.ipool.me"
+IPOOL_FQDN: "ipool.me"
+GITLAB_FQDN: "gitlab.ipool.me"
+HARBOR_FQDN: "harbor.ipool.me"
+HARBOR_PACK: "/home/radix10/desktop/github/docker-downloader/harbor.tar.gz"
+KUBERNETES_PACK: "/home/radix10/desktop/github/docker-downloader/k8s-bin.tar.gz"
+CORE_DNS: "192.168.122.239"
+FALLBACK_DNS: "114.114.114.114"

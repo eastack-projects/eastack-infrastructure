@@ -1,0 +1,4 @@
+- name: Setup Docker
+  hosts: harbor.ipool.me
+  roles:
+    - docker/setup

@@ -11,15 +11,26 @@
     state: directory
     mode: '0755'
     
-- name: Copy custome registry cert
+- name: Copy CA certificate
   copy:
-    src: "roles/openssl/generate-certificate/files/{{ item }}"
+    src: "roles/openssl/generate-ca-certificate/files/{{ IPOOL_FQDN }}.crt"
+    dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/{{ IPOOL_FQDN }}.crt"
+    mode: '0755'
+
+- name: Copy daemon.json
+  copy:
+    src: "daemon.json"
+    dest: "/etc/docker/daemon.json"
+    mode: '0644'
+
+- name: Copy registry certificate
+  copy:
+    src: "roles/openssl/generate-harbor-certificate/files/{{ item }}"
     dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/{{item}}"
     mode: '0755'
   with_items:
   - "{{ HARBOR_FQDN }}.crt"
-  - "{{ HARBOR_FQDN }}.pem"
-  - "{{ IPOOL_FQDN }}.crt"
+  - "{{ HARBOR_FQDN }}.key"
 
 - name: Enable and start Docker service
   systemd:

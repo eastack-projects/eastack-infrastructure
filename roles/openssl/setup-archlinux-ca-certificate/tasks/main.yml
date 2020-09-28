@@ -1,0 +1,5 @@
+---
+- name: Setup CA Certificate To ArchLinux
+  shell:
+    cmd: "trust anchor --store roles/openssl/generate-ca-certificate/files/{{ IPOOL_FQDN }}.crt"
+    chdir: "{{ playbook_dir }}"

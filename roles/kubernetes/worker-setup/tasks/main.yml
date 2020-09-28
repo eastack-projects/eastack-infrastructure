@@ -5,15 +5,15 @@
 
 - name: Extract kubernetes package
   unarchive:
-    src: /home/radix10/desktop/my-server-playbook/roles/kubernetes/templates/kubernetes-server-linux-amd64.tar.gz
+    src: "{{ KUBERNETES_PACK }}"
     dest: '/tmp/kubernetes'
-    creates: '/tmp/kubernetes/server'
+    creates: '/tmp/kubernetes/node'
     extra_opts: [--strip-components=1]
 
 
 - name: Install Kubernetes worker components
   copy:
-    src: "/tmp/kubernetes/server/bin/{{ item }}"
+    src: "/tmp/kubernetes/node/bin/{{ item }}"
     dest: "/usr/bin/{{ item }}"
     remote_src: true
     mode: '0755'
@@ -45,18 +45,17 @@
     mode: '0644'
   with_items:
   - kubelet
+  - kubelet.conf
   - kube-proxy
   - kubeconfig
 
 
-- name: Systemd daemon reload
-  systemd:
-    daemon_reload: true
 - name: Enable and start kubernetes apiserver service
   systemd:
     name: "{{ item }}"
     state: started
     enabled: true
+    daemon_reload: true
   with_items:
   - kubelet
   - kube-proxy

@@ -1,4 +1,0 @@
-- name: Initialize host
-  hosts: host
-  roles:
-    - initialize/host

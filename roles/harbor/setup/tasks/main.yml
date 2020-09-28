@@ -1,5 +1,5 @@
 ---
- tasks file for harbor-setup
+# tasks file for harbor-setup
 - name: Create harbor directory
   file:
     path: "{{ item }}"
@@ -11,42 +11,25 @@
 
 - name: Extract harbor offline package
   unarchive:
-    src: harbor-offline-installer-v2.0.2.tgz
+    src: "{{ HARBOR_PACK }}"
     dest: /opt/harbor
     extra_opts: [--strip-components=1]
     creates: /opt/harbor/install.sh
 
-- name: Copy generate certificate script
+- name: Copy Harbor certificate
   copy:
-    src: generate-certificate.sh
-    dest: /opt/harbor/certificate/generate-certificate.sh
+    src: "roles/openssl/generate-harbor-certificate/files/{{ item }}"
+    dest: "/opt/harbor/certificate/{{ item }}"
     mode: 0755
-
-- name: Generate certificate
-  shell: ./generate-certificate.sh
-  args:
-    chdir: /opt/harbor/certificate/
+  with_items:
+    - harbor.ipool.me.crt
+    - harbor.ipool.me.key
 
 - name: Copy generate harbor yml script
   copy:
     src: generate-harbor-yml.py
     dest: /opt/harbor/generate-harbor-yml.py
     mode: 0755
-
-
-- name: Download cert to local
-  fetch:
-    src: "/opt/harbor/certificate/{{ item }}"
-    dest: roles/harbor-setup/files
-  with_items:
-    - ca.crt
-    - ca.key
-    - ca.srl
-    - harbor.ipool.me.cert
-    - harbor.ipool.me.crt
-    - harbor.ipool.me.csr
-    - harbor.ipool.me.key
-    - v3.ext
 
 - name: Generate harbor.yml
   shell: ./generate-harbor-yml.py
@@ -57,8 +40,3 @@
   shell: ./install.sh
   args:
     chdir: /opt/harbor/
-
-- name: Fetch certificate
-  fetch:
-    src: "/opt/harbor/{item}"
-    dest: /tmp/

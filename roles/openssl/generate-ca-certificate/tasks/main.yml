@@ -1,0 +1,34 @@
+---
+# tasks file for generate-ca-certificate
+
+# Generate CA certificate
+- name: Generate an CA private key with the default values (4096 bits, RSA) and a passphrase
+  local_action:
+    module: openssl_privatekey
+    path: "roles/openssl/generate-ca-certificate/files/{{ IPOOL_FQDN }}.key"
+    passphrase: helloworld
+    cipher: auto
+
+- name: Generate an CA Certificate Signing Request
+  local_action:
+    module: openssl_csr
+    path: "roles/openssl/generate-ca-certificate/files/{{ IPOOL_FQDN }}.csr"
+    privatekey_path: "roles/openssl/generate-ca-certificate/files/{{ IPOOL_FQDN }}.key"
+    privatekey_passphrase: helloworld
+    common_name: "{{ IPOOL_FQDN }}"
+    country_name: "CN"
+    basic_constraints: "CA:TRUE"
+    email_address: "admin@radix10.me"
+    locality_name: "Beijing"
+    state_or_province_name: "Beijing"
+
+- name: Generate a Self Signed CA Certificate
+  local_action:
+    module: openssl_certificate
+    path: "roles/openssl/generate-ca-certificate/files/{{ IPOOL_FQDN }}.crt"
+    privatekey_path: "roles/openssl/generate-ca-certificate/files/{{ IPOOL_FQDN }}.key"
+    privatekey_passphrase: helloworld
+    csr_path: "roles/openssl/generate-ca-certificate/files/{{ IPOOL_FQDN }}.csr"
+    provider: selfsigned
+    ownca_create_authority_key_identifier: yes
+  register: ownca_authority_key_identifier
