@@ -1,5 +1,5 @@
 - name: Setup GitLab CE
-  hosts: gitlab.ipool.me
+  hosts: runner.ipool.me
   roles:
     - openssl/generate-gitlab-certificate
     - gitlab/ce-setup

@@ -3,7 +3,7 @@
         log
 }
 
-.:5333 {
+.:53 {
 	import common-plugin
         file ./ipool.db ipool.me.
 	forward . 114.114.114.114

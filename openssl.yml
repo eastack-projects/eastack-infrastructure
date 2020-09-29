@@ -1,0 +1,28 @@
+- name: Generate Certificate
+  hosts: localhost
+  become: False
+  roles:
+    - openssl/generate-ca-certificate
+    - openssl/generate-gitlab-certificate
+    - openssl/generate-harbor-certificate
+
+- name: Config GitLab Certificate
+  hosts: gitlab.ipool.me
+  roles:
+		- gitlab/cert-setup
+
+- name: Config Harbor Certificate
+  hosts: harbor.ipool.me
+  roles:
+		- harbor/setup
+
+- name: Install CA Certificate For Ubuntu Guests
+	hosts: all
+	roles:
+		- openssl/setup-ca-certificate
+
+- name: Install CA Certificate For Local ArchLinux
+	hosts: all
+	roles:
+		- openssl/setup-archlinux-ca-certificate
+

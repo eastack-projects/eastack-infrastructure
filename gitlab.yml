@@ -1,0 +1,12 @@
+- name: Generate GitLab Certificate
+  hosts: localhost
+  become: False
+  roles:
+    - openssl/generate-ca-certificate
+    - openssl/generate-gitlab-certificate
+
+- name: Setup GitLab CE
+  hosts: gitlab.ipool.me
+  roles:
+    - gitlab/ce-setup
+    - gitlab/ce-certificate-setup

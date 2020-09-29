@@ -21,6 +21,12 @@
   - Corefile
   - ipool.db
 
+- name: Stop systemd-resolved service
+  systemd:
+    name: "systemd-resolved"
+    state: stopped
+    enabled: true
+
 - name: Enable and start coredns service
   systemd:
     name: "coredns"

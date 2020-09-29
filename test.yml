@@ -1,4 +1,4 @@
-- name: Setup Docker
-  hosts: harbor.ipool.me
+- name: Test
+  hosts: gitlab.ipool.me
   roles:
     - docker/setup

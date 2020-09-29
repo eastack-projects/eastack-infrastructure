@@ -1,0 +1,12 @@
+- name: Generate Harbor Certificate
+  hosts: localhost
+  become: False
+  roles:
+    - openssl/generate-ca-certificate
+    - openssl/generate-harbor-certificate
+
+- name: Setup Harbor
+  hosts: harbor.ipool.me
+  roles:
+    - docker/setup
+    - harbor/setup

@@ -14,7 +14,19 @@
 - name: Copy CA certificate
   copy:
     src: "roles/openssl/generate-ca-certificate/files/{{ IPOOL_FQDN }}.crt"
-    dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/{{ IPOOL_FQDN }}.crt"
+    dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/ca.crt"
+    mode: '0755'
+
+- name: Copy Harbor key
+  copy:
+    src: "roles/openssl/generate-harbor-certificate/files/{{ HARBOR_FQDN }}.key"
+    dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/{{ HARBOR_FQDN }}.key"
+    mode: '0755'
+
+- name: Copy Harbor certificate
+  copy:
+    src: "roles/openssl/generate-harbor-certificate/files/{{ HARBOR_FQDN }}.crt"
+    dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/{{ HARBOR_FQDN }}.cert"
     mode: '0755'
 
 - name: Copy daemon.json
@@ -22,15 +34,6 @@
     src: "daemon.json"
     dest: "/etc/docker/daemon.json"
     mode: '0644'
-
-- name: Copy registry certificate
-  copy:
-    src: "roles/openssl/generate-harbor-certificate/files/{{ item }}"
-    dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/{{item}}"
-    mode: '0755'
-  with_items:
-  - "{{ HARBOR_FQDN }}.crt"
-  - "{{ HARBOR_FQDN }}.key"
 
 - name: Enable and start Docker service
   systemd:

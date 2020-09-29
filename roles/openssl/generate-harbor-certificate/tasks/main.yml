@@ -1,6 +1,6 @@
 ---
 # tasks file for generate-harbor-certificate
-- name: Generate an GiaLab private key with the default values (4096 bits, RSA)
+- name: Generate an Harbor private key with the default values (4096 bits, RSA)
   openssl_privatekey:
     path: "roles/openssl/generate-harbor-certificate/files/{{ HARBOR_FQDN }}.key"
 

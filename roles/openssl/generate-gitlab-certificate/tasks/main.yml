@@ -1,13 +1,11 @@
 ---
 # tasks file for generate-gitlab-certificate
 - name: Generate an GiaLab private key with the default values (4096 bits, RSA)
-  local_action:
-    module: openssl_privatekey
+  openssl_privatekey:
     path: "roles/openssl/generate-gitlab-certificate/files/{{ GITLAB_FQDN }}.key"
 
 - name: Generate an GitLab Certificate Signing Request
-  local_action:
-    module: openssl_csr
+  openssl_csr:
     path: "roles/openssl/generate-gitlab-certificate/files/{{ GITLAB_FQDN }}.csr"
     privatekey_path: "roles/openssl/generate-gitlab-certificate/files/{{ GITLAB_FQDN }}.key"
     basic_constraints: CA:FALSE
@@ -25,8 +23,7 @@
     state_or_province_name: "Beijing"
 
 - name: Generate an OpenSSL certificate signed with your own CA certificate
-  local_action:
-    module: openssl_certificate
+  openssl_certificate:
     path: "roles/openssl/generate-gitlab-certificate/files/{{ GITLAB_FQDN }}.crt"
     csr_path: "roles/openssl/generate-gitlab-certificate/files/{{ GITLAB_FQDN }}.csr"
     ownca_path:  "roles/openssl/generate-ca-certificate/files/{{ IPOOL_FQDN }}.crt"

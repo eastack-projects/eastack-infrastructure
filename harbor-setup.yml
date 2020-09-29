@@ -1,6 +1,0 @@
-- name: Setup Harbor
-  hosts: harbor.ipool.me
-  roles:
-    - openssl/generate-harbor-certificate
-    - docker/setup
-    - harbor/setup
