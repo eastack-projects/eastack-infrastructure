@@ -5,8 +5,7 @@
     - openssl/generate-ca-certificate
     - openssl/generate-gitlab-certificate
 
-- name: Setup GitLab CE
+- name: Setup GitLab Server
   hosts: gitlab.ipool.me
   roles:
-    - gitlab/ce-setup
-    - gitlab/ce-certificate-setup
+    - gitlab/server/setup

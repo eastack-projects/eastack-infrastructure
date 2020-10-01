@@ -1,4 +1,4 @@
 - name: Initialize host
-  hosts: host
+  hosts: e450.ipool.me
   roles:
     - initialize/host

@@ -1,0 +1,3 @@
+---
+# defaults file for setup-kubernetes
+KUBERNETES_CONFIG_DIRECTORY: '/etc/kubernetes'

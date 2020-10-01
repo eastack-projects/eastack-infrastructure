@@ -8,3 +8,5 @@
     - libvirt-daemon-system
     - virtinst
     - libosinfo-bin
+    - cloud-image-utils
+    - trash-cli

@@ -1,5 +1,5 @@
 ---
-# tasks file for setup-gitlab-ce
+# tasks file for setup-gitlab-server
 - name: Install GitLab dependencies
   apt:
     update_cache: yes
@@ -23,6 +23,21 @@
     repo: deb https://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/ubuntu focal main
     state: present
     mode: 0644
+
+- name: Create certificate directory
+  file:
+    path: "/etc/gitlab/ssl"
+    state: directory
+    mode: '0755'
+
+- name: Copy custome registry cert
+  copy:
+    src: "roles/openssl/generate-gitlab-certificate/files/{{ item }}"
+    dest: "/etc/gitlab/ssl/{{item}}"
+    mode: '0755'
+  with_items:
+  - "{{ GITLAB_FQDN }}.crt"
+  - "{{ GITLAB_FQDN }}.key"
 
 - name: Install GitLab CE
   apt:

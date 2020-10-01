@@ -1,4 +1,4 @@
 - name: Test
   hosts: gitlab.ipool.me
   roles:
-    - docker/setup
+    - gitlab/server/certificate-setup
