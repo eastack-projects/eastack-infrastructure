@@ -1,4 +1,0 @@
-- name: Setup GitLab Runner
-  hosts: runner.ipool.me
-  roles:
-    - gitlab/runner/setup

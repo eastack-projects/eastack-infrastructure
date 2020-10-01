@@ -10,3 +10,5 @@
   roles:
     - docker/setup
     - harbor/setup
+    - openssl/setup-ca-certificate
+    - coredns/config

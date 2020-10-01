@@ -2,8 +2,3 @@
   hosts: coredns.ipool.me
   roles:
     - coredns/setup
-
-- name: Config CoreDNS
-  hosts: all
-  roles:
-    - coredns/config

@@ -1,4 +1,7 @@
 - name: Test
-  hosts: gitlab.ipool.me
+  hosts: localhost
+  become: False
   roles:
-    - gitlab/server/certificate-setup
+    - openssl/generate-kubernetes-api-server-certificate
+    - openssl/generate-kubernetes-kubelet-certificate
+    - openssl/generate-kubernetes-controller-manager-certificate
