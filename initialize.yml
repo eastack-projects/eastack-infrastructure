@@ -1,4 +1,4 @@
-- name: Initialize host
-  hosts: e450.ipool.me
+- name: Initialize Guests
+  hosts: all
   roles:
-    - initialize/host
+    - common/timezone

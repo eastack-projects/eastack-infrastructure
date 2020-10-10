@@ -2,12 +2,12 @@
 # tasks file for generate-kubernetes-server-certificate
 - name: Generate an Kubernetes Controller Manager private key with the default values (4096 bits, RSA)
   openssl_privatekey:
-    path: "roles/openssl/generate-kubernetes-controller-manager-certificate/files/{{ K8S_API_SERVER_FQDN }}.key"
+    path: "roles/openssl/generate-kubernetes-api-server-certificate/files/{{ K8S_API_SERVER_FQDN }}.key"
 
 - name: Generate an Kubernetes API Server Certificate Signing Request
   openssl_csr:
-    path: "roles/openssl/generate-kubernetes-controller-manager-certificate/files/{{ K8S_API_SERVER_FQDN }}.csr"
-    privatekey_path: "roles/openssl/generate-kubernetes-controller-manager-certificate/files/{{ K8S_API_SERVER_FQDN }}.key"
+    path: "roles/openssl/generate-kubernetes-api-server-certificate/files/{{ K8S_API_SERVER_FQDN }}.csr"
+    privatekey_path: "roles/openssl/generate-kubernetes-api-server-certificate/files/{{ K8S_API_SERVER_FQDN }}.key"
     basic_constraints: CA:FALSE
     key_usage:
       - digitalSignature
@@ -24,8 +24,8 @@
 
 - name: Generate an OpenSSL certificate signed with your own CA certificate
   openssl_certificate:
-    path: "roles/openssl/generate-kubernetes-controller-manager-certificate/files/{{ K8S_API_SERVER_FQDN }}.crt"
-    csr_path: "roles/openssl/generate-kubernetes-controller-manager-certificate/files/{{ K8S_API_SERVER_FQDN }}.csr"
+    path: "roles/openssl/generate-kubernetes-api-server-certificate/files/{{ K8S_API_SERVER_FQDN }}.crt"
+    csr_path: "roles/openssl/generate-kubernetes-api-server-certificate/files/{{ K8S_API_SERVER_FQDN }}.csr"
     ownca_path:  "roles/openssl/generate-ca-certificate/files/{{ IPOOL_FQDN }}.crt"
     ownca_privatekey_path: "roles/openssl/generate-ca-certificate/files/{{ IPOOL_FQDN }}.key"
     ownca_privatekey_passphrase: helloworld

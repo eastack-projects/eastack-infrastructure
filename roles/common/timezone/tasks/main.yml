@@ -1,0 +1,5 @@
+---
+# tasks file for common
+- name: Set Timezone
+  timezone:
+    name: Asia/Shanghai

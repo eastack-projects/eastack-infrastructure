@@ -1,0 +1,17 @@
+---
+# tasks file for dns
+- name: Config DNS
+  replace:
+    path: /etc/systemd/resolved.conf
+    regexp: '#DNS='
+    replace: "DNS={{ CORE_DNS }}"
+    backup: yes
+	notify: Restart systemd-resolved service
+
+- name: Config Fallback DNS
+  replace:
+    path: /etc/systemd/resolved.conf
+    regexp: '#FallbackDNS='
+    replace: "FallbackDNS={{ FALLBACK_DNS }}"
+    backup: yes
+	notify: Restart systemd-resolved service

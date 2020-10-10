@@ -3,7 +3,7 @@
     url: https://packages.gitlab.com/gpg.key
     state: present
 
-- name:
+- name: Add tsinghua repository
   apt_repository:
     repo: deb https://mirrors.tuna.tsinghua.edu.cn/gitlab-runner/ubuntu focal main
     state: present

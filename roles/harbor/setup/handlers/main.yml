@@ -1,2 +1,5 @@
 ---
-# handlers file for harbor-setup
+- name: Restart Harbor
+  shell: ./install.sh
+  args:
+    chdir: /opt/harbor/

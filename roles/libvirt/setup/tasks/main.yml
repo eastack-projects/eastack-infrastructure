@@ -1,6 +1,6 @@
 ---
-# tasks file for server-initialize
-- name: Install necessary application
+# tasks file for libvirt
+- name: Setup Libvirt
   apt:
     update_cache: true
     name:

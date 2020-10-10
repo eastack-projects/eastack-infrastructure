@@ -1,2 +1,6 @@
 ---
-# handlers file for gitlab-runner
+- name: Restart Docker Service
+  systemd:
+    name: docker
+    enabled: True
+    state: started

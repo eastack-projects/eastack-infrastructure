@@ -1,7 +1,0 @@
-- name: Test
-  hosts: localhost
-  become: False
-  roles:
-    - openssl/generate-kubernetes-api-server-certificate
-    - openssl/generate-kubernetes-kubelet-certificate
-    - openssl/generate-kubernetes-controller-manager-certificate

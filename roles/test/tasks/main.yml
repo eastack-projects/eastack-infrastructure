@@ -1,6 +1,0 @@
----
-# tasks file for test
-- name: Test
-  debug:
-    msg: "{{ item }}"
-  with_items: "{{ groups['all'] }}"

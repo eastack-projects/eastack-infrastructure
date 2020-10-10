@@ -1,5 +1,0 @@
----
-# tasks file for initialize
-- name: Set Timezone
-  timezone:
-    name: Asia/Shanghai

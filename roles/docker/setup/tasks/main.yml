@@ -5,38 +5,41 @@
     name:
     - docker-compose
 
+- name: Enable Docker service
+  systemd:
+    name: docker
+    enabled: True
+
 - name: Create docker cert directory
   file:
     path: "/etc/docker/certs.d/{{ HARBOR_FQDN }}"
     state: directory
     mode: '0755'
-    
+
 - name: Copy CA certificate
   copy:
     src: "roles/openssl/generate-ca-certificate/files/{{ IPOOL_FQDN }}.crt"
     dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/ca.crt"
     mode: '0755'
+	notify: Restart Docker Service
 
 - name: Copy Harbor key
   copy:
     src: "roles/openssl/generate-harbor-certificate/files/{{ HARBOR_FQDN }}.key"
     dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/{{ HARBOR_FQDN }}.key"
     mode: '0755'
+	notify: Restart Docker Service
 
 - name: Copy Harbor certificate
   copy:
     src: "roles/openssl/generate-harbor-certificate/files/{{ HARBOR_FQDN }}.crt"
     dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/{{ HARBOR_FQDN }}.cert"
     mode: '0755'
+	notify: Restart Docker Service
 
 - name: Copy daemon.json
   copy:
     src: "daemon.json"
     dest: "/etc/docker/daemon.json"
     mode: '0644'
-
-- name: Enable and start Docker service
-  systemd:
-    name: docker
-    state: started
-    enabled: true
+	notify: Restart Docker Service
