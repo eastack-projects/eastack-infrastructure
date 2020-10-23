@@ -4,6 +4,6 @@ worker.kubernetes.ipool.me     ansible_ssh_host=192.168.122.114
 master.kubernetes.ipool.me     ansible_ssh_host=192.168.122.114
 server.gitlab.ipool.me         ansible_ssh_host=192.168.123.201
 runner.gitlab.ipool.me         ansible_ssh_host=192.168.122.114
-harbor.ipool.me                ansible_ssh_host=192.168.123.204 ansible_sudo_pass=12345
+harbor.ipool.me                ansible_ssh_host=192.168.123.204
 vault.ipool.me                 ansible_ssh_host=192.168.123.204 ansible_sudo_pass=12345
-coredns.ipool.me               ansible_ssh_host=192.168.122.237 ansible_sudo_pass=12345
+coredns.ipool.me               ansible_ssh_host=192.168.123.101 ansible_user=pi

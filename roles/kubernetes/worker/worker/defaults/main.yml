@@ -1,3 +1,7 @@
 ---
 # defaults file for setup-kubernetes
 KUBERNETES_CONFIG_DIRECTORY: '/etc/kubernetes'
+KUBERNETES_VERSION: v1.18.10
+ETCD_VERSION: v3.4.0
+PAUSE_VERSION: 3.2
+COREDNS_VERSION: 1.6.7

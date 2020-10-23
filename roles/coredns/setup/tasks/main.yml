@@ -2,14 +2,14 @@
 # tasks file for setup
 - name: Download CoreDNS
   get_url:
-    url: https://cdn.radix10.cn/coredns
+    url: https://cdn.radix10.cn/coredns?a=10086
     dest: /usr/bin/coredns
     mode: 0755
 
 - name: Copy systemd unit
   copy:
     src: "coredns.service"
-    dest: "/usr/lib/systemd/system/coredns.service"
+    dest: "/etc/systemd/system"
     mode: '0644'
 
 - name: Copy config file

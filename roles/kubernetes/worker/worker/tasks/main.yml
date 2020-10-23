@@ -1,36 +1,14 @@
-- name: Create kubernetes temporary directory
-  file:
-    path: '/tmp/kubernetes'
-    state: directory
+- name: Install kubelet
+  get_url:
+    url: /tmp/kubernetes/node/bin/kubelet
+    dest: /usr/bin/kubelet
+    mode: 0755
 
-- name: Extract kubernetes package
-  unarchive:
-    src: "{{ KUBERNETES_PACK }}"
-    dest: '/tmp/kubernetes'
-    creates: '/tmp/kubernetes/node'
-    extra_opts: [--strip-components=1]
-
-
-- name: Install Kubernetes worker components
+- name: Add kubelet systemd service
   copy:
-    src: "/tmp/kubernetes/node/bin/{{ item }}"
-    dest: "/usr/bin/{{ item }}"
-    remote_src: true
-    mode: '0755'
-  with_items:
-  - kubelet
-  - kube-proxy
-
-
-- name: Add Kubernetes worker systemd service
-  copy: 
-    src: "{{ item }}"
-    dest: "/usr/lib/systemd/system/{{ item }}"
-    mode: '0644'
-  with_items:
-  - kubelet.service
-  - kube-proxy.service
-
+    src: kubelet.service
+    dest: /usr/lib/systemd/system/kubelet.service
+    mode: 0644
 
 - name: Create kubernetes config directory
   file:
@@ -39,7 +17,7 @@
     mode: '0755'
 
 - name: Add kubernetes worker environment file
-  copy: 
+  copy:
     src: "{{ item }}"
     dest: "/etc/kubernetes"
     mode: '0644'
@@ -61,11 +39,34 @@
   - kube-proxy
 
 
-- name: Pull pause docker image
+- name: Pull Pause docker image
   docker_image:
-    name: registry.aliyuncs.com/google_containers/pause:3.2
-    repository: k8s.gcr.io/pause:3.2
+    name: "registry.aliyuncs.com/google_containers/pause:{{ PAUSE_VERSION }}"
+    repository: "k8s.gcr.io/pause:{{ PAUSE_VERSION }}"
     source: pull
+
+- name: Pull ETCD docker image
+  docker_image:
+    name: "quay.io/coreos/etcd:{{ ETCD_VERSION }}"
+    repository: "k8s.gcr.io/etcd:{{ ETCD_VERSION }}"
+    source: pull
+
+- name: Pull CoreDNS docker image
+  docker_image:
+    name: "registry.aliyuncs.com/google_containers/coredns:{{ COREDNS_VERSION }}"
+    repository: "k8s.gcr.io/coredns:{{ COREDNS_VERSION }}"
+    source: pull
+
+- name: Pull Kubernetes docker image
+  docker_image:
+    name: "registry.aliyuncs.com/google_containers/{{ item }}:{{ KUBERNETES_VERSION }}"
+    repository: "k8s.gcr.io/{{ item }}:{{ KUBERNETES_VERSION }}"
+    source: pull
+	with_items:
+	- kube-apiserver
+	- kube-controller-manager
+	- kube-scheduler
+	- kube-proxy
 
 - name: Create kubelet directory
   file:

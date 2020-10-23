@@ -1,7 +1,6 @@
 - name: Setup Harbor
-  hosts: harbor.ipool.me
+  hosts: server.gitlab.ipool.me
   roles:
   - docker/setup
-  - harbor/setup
   - common/dns
 #    - openssl/setup-ca-certificate

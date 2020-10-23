@@ -1,4 +1,6 @@
-= Playbook
+= iPool Infrastructures
+
+使用Ansible和Libvirt在本地搭建一个云原生开发环境。
 
 一些常用的Playbook
 
@@ -28,9 +30,9 @@
 == TODO
 
 [*] 解决多主机名问题
-清理无用的generate-cert...sh
-apt真的需要再安装https支持吗->需要
-添加 Kubernetes HTTPS的支持
+[ ] apt真的需要再安装https支持吗->需要
+[ ] 添加 Kubernetes HTTPS的支持
+[ ] handler
 
 == 参考文献
 

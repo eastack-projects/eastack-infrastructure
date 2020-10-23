@@ -18,23 +18,23 @@
 
 - name: Copy Harbor certificate
   copy:
-    src: "roles/openssl/generate-harbor-certificate/files/{{ item }}"
+    src: "roles/pki/harbor/{{ item }}"
     dest: "/opt/harbor/certificate/{{ item }}"
     mode: 0755
   with_items:
     - harbor.ipool.me.crt
     - harbor.ipool.me.key
-	notify: Restart Harbor
+  notify: Restart Harbor
 
 - name: Copy generate harbor yml script
   copy:
     src: generate-harbor-yml.py
     dest: /opt/harbor/generate-harbor-yml.py
     mode: 0755
-	notify: Restart Harbor
+  notify: Restart Harbor
 
 - name: Generate harbor.yml
   shell: ./generate-harbor-yml.py
   args:
     chdir: /opt/harbor
-	notify: Restart Harbor
+  notify: Restart Harbor

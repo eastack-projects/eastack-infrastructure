@@ -21,25 +21,25 @@
     src: "roles/openssl/generate-ca-certificate/files/{{ IPOOL_FQDN }}.crt"
     dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/ca.crt"
     mode: '0755'
-	notify: Restart Docker Service
+  notify: Restart Docker Service
 
 - name: Copy Harbor key
   copy:
     src: "roles/openssl/generate-harbor-certificate/files/{{ HARBOR_FQDN }}.key"
     dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/{{ HARBOR_FQDN }}.key"
     mode: '0755'
-	notify: Restart Docker Service
+  notify: Restart Docker Service
 
 - name: Copy Harbor certificate
   copy:
     src: "roles/openssl/generate-harbor-certificate/files/{{ HARBOR_FQDN }}.crt"
     dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/{{ HARBOR_FQDN }}.cert"
     mode: '0755'
-	notify: Restart Docker Service
+  notify: Restart Docker Service
 
 - name: Copy daemon.json
   copy:
     src: "daemon.json"
     dest: "/etc/docker/daemon.json"
     mode: '0644'
-	notify: Restart Docker Service
+  notify: Restart Docker Service

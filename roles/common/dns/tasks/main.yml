@@ -6,7 +6,7 @@
     regexp: '#DNS='
     replace: "DNS={{ CORE_DNS }}"
     backup: yes
-	notify: Restart systemd-resolved service
+  notify: Restart systemd-resolved service
 
 - name: Config Fallback DNS
   replace:
@@ -14,4 +14,4 @@
     regexp: '#FallbackDNS='
     replace: "FallbackDNS={{ FALLBACK_DNS }}"
     backup: yes
-	notify: Restart systemd-resolved service
+  notify: Restart systemd-resolved service

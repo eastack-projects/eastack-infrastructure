@@ -1,5 +1,6 @@
 ---
 - include: coredns.yml
+- include: vault.yml
 - include: gitlab.yml
 - include: harbor.yml
 - include: initialize.yml
