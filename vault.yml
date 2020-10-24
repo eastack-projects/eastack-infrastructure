@@ -1,4 +1,4 @@
 - name: Setup Vault
-  hosts: vault.ipool.me
+  hosts: host.ipool.me
   roles:
-    - vault/setup
+    - vault/prepare

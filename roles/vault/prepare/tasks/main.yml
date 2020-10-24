@@ -1,0 +1,10 @@
+---
+- name: Define VM
+  virt:
+    command: define
+    xml: vm.xml
+
+- name: Start VM
+  virt:
+    name: Vault
+    state: running

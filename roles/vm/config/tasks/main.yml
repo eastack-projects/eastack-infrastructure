@@ -1,0 +1,40 @@
+---
+#- name: Download vm image
+#  get_url:
+#    url: https://cloud-images.ubuntu.com/groovy/current/groovy-server-cloudimg-amd64.img
+#    dest: /var/lib/libvirt/images/groovy-server-cloudimg-amd64.img
+#    mode: 0644
+#
+#- name: Generate vm image
+#  shell:
+#    cmd: "qemu-img create -f qcow2 -b groovy-server-cloudimg-amd64.img {{ item }}.qcow2 100G"
+#    chdir: /var/lib/libvirt/images/
+#  with_items:
+#  - vault
+#  - gitlab
+#  - k8s
+#
+#- name: Copy cloud-init config file
+#  copy:
+#    src: "{{ item }}.yaml"
+#    dest: /var/lib/libvirt/images/
+#    mode: 0644
+#  with_items:
+#  - vault
+#  - gitlab
+#  - k8s
+#
+#- name: Generate vault vm image
+#  shell:
+#    cmd: "cloud-localds {{ item }}.img {{ item }}.yaml"
+#    chdir: /var/lib/libvirt/images/
+#  with_items:
+#  - vault
+#  - gitlab
+#  - k8s
+
+- name: Define VM
+  virt:
+    command: define
+    xml: /tmp/tmp.xml
+    autostart: yes
