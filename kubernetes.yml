@@ -1,9 +1,0 @@
-- name: Setup Kubernetes Master
-  hosts: master.kubernetes.ipool.me
-  roles:
-    - kubernetes/master/setup
-
-- name: Setup Kubernetes Worker
-  hosts: worker.kubernetes.ipool.me
-  roles:
-    - kubernetes/worker/setup

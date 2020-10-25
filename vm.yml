@@ -1,5 +1,0 @@
-- name: Generate GitLab Certificate
-  hosts: host.ipool.me
-  roles:
-    - vm/setup
-    - vm/config

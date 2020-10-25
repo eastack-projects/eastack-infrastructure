@@ -1,4 +1,0 @@
-- name: Setup CoreDNS
-  hosts: coredns.ipool.me
-  roles:
-    - coredns/setup

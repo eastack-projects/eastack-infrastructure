@@ -1,2 +1,2 @@
-*/.vagrant
-roles/.apt-cache
+.vagrant
+.apt-cache

@@ -1,4 +1,0 @@
-- name: Initialize Guests
-  hosts: all
-  roles:
-    - common/timezone
