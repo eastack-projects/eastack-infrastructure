@@ -1,45 +1,30 @@
-# tasks file for docker-setup
-- name: Install Docker CE and Docker Compose
+---
+- name: Install docker-ce and docker-compose
   apt:
     update_cache: yes
     name:
     - docker-compose
 
-- name: Enable Docker service
-  systemd:
-    name: docker
-    enabled: True
-
 - name: Create docker cert directory
   file:
     path: "/etc/docker/certs.d/{{ HARBOR_FQDN }}"
     state: directory
-    mode: '0755'
+    mode: 0644
 
-- name: Copy CA certificate
+- name: Copy ca certificate
   copy:
-    src: "roles/openssl/generate-ca-certificate/files/{{ IPOOL_FQDN }}.crt"
-    dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/ca.crt"
-    mode: '0755'
-  notify: Restart Docker Service
-
-- name: Copy Harbor key
-  copy:
-    src: "roles/openssl/generate-harbor-certificate/files/{{ HARBOR_FQDN }}.key"
-    dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/{{ HARBOR_FQDN }}.key"
-    mode: '0755'
-  notify: Restart Docker Service
-
-- name: Copy Harbor certificate
-  copy:
-    src: "roles/openssl/generate-harbor-certificate/files/{{ HARBOR_FQDN }}.crt"
-    dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/{{ HARBOR_FQDN }}.cert"
-    mode: '0755'
-  notify: Restart Docker Service
+    src: "{{ item.src }}"
+    dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/{{ item.dest }}"
+    mode: 0644
+  with_items:
+    - { src: ca.crt , dest: ca.crt }
+    - { src: harbor.ipool.me.crt , dest: harbor.ipool.me.crt }
+    - { src: harbor.ipool.me.key , dest: harbor.ipool.me.key }
+  notify: Restart docker service
 
 - name: Copy daemon.json
   copy:
     src: "daemon.json"
     dest: "/etc/docker/daemon.json"
-    mode: '0644'
-  notify: Restart Docker Service
+    mode: 0644
+  notify: Restart docker service

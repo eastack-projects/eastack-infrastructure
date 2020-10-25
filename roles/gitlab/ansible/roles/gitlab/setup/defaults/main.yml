@@ -1,2 +1,3 @@
 ---
-# defaults file for setup-gitlab-ce
+GITLAB_FQDN: gitlab.ipool.me
+EXTERNAL_URL: https://gitlab.ipool.me

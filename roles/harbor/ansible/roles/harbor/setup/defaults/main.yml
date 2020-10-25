@@ -1,0 +1,3 @@
+---
+HARBOR_FQDN: harbor.ipool.me
+HARBOR_PACK: /home/radix10/desktop/docker-downloader/harbor.tar.gz

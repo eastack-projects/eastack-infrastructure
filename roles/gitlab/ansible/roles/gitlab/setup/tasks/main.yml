@@ -1,5 +1,4 @@
 ---
-# tasks file for setup-gitlab-server
 - name: Install gitlab-ce dependencies
   apt:
     update_cache: yes
@@ -34,13 +33,13 @@
   file:
     path: "/etc/gitlab/ssl"
     state: directory
-    mode: '0755'
+    mode: 0644
 
 - name: Copy self-signed certificate
   copy:
-    src: "roles/pki/{{ item }}"
+    src: "{{ item }}"
     dest: "/etc/gitlab/ssl/{{item}}"
-    mode: '0755'
+    mode: 0644
   with_items:
   - "{{ GITLAB_FQDN }}.crt"
   - "{{ GITLAB_FQDN }}.key"
