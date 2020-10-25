@@ -1,0 +1,8 @@
+- name: Initialize vault
+  become: true
+  hosts: all
+  roles:
+  - vault/setup
+  - vault/config
+  - coredns/config
+  - common/config

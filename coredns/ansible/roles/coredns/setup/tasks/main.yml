@@ -1,0 +1,45 @@
+---
+- name: Create coredns temporary directory
+  file:
+    path: /tmp/coredns
+    state: directory
+
+- name: Extract coredns package
+  unarchive:
+    src: "{{ COREDNS_PACKAGE }}"
+    dest: /tmp/coredns
+    creates: /tmp/coredns/coredns
+
+- name: Install coredns
+  copy:
+    src: /tmp/coredns/coredns
+    dest: /usr/bin/coredns
+    remote_src: true
+    mode: 0755
+
+- name: Copy systemd unit
+  copy:
+    src: coredns.service
+    dest: /etc/systemd/system
+    mode: 0644
+
+- name: Copy config file
+  copy:
+    src: "{{ item }}"
+    dest: /var/lib/coredns/
+    mode: 0644
+  with_items:
+  - Corefile
+  - ipool.me.db
+
+- name: Stop systemd-resolved service
+  systemd:
+    name: systemd-resolved
+    state: stopped
+    enabled: false
+
+- name: Enable and start coredns service
+  systemd:
+    name: coredns
+    state: started
+    enabled: true

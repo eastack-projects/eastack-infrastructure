@@ -1,0 +1,13 @@
+---
+- name: Copy self-signed certificate
+  copy:
+    src: ca.crt
+    dest: ca.crt
+    mode: 0755
+
+- name: Setup ca certificate
+  shell: update-ca-certificates
+
+- name: Set Timezone
+  timezone:
+    name: Asia/Shanghai

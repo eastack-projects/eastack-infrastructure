@@ -1,0 +1,5 @@
+- name: Initialize coredns
+  become: true
+  hosts: all
+  roles:
+  - coredns/setup

@@ -1,6 +1,0 @@
-- name: Initialize gitlab
-  become: true
-  hosts: all
-  roles:
-  - docker/setup
-  - gitlab/setup

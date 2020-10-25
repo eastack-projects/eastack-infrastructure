@@ -1,0 +1,8 @@
+- name: Initialize kubernetes node
+  become: true
+  hosts: all
+  roles:
+  - coredns/config
+  - common/config
+  - docker/setup
+  - kubernetes-node/setup

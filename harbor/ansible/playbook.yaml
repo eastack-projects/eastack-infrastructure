@@ -1,7 +1,0 @@
-- name: Initialize harbor
-  become: true
-  hosts: all
-  roles:
-  - docker/setup
-  - harbor/setup
-  - coredns/config

@@ -1,0 +1,78 @@
+- name: Create kubernetes temporary directory
+  file:
+    path: /tmp/kubernetes
+    state: directory
+
+- name: Extract kubernetes package
+  unarchive:
+    src: "{{ KUBERNETES_NODE_PACKAGE }}"
+    dest: /tmp/kubernetes
+    creates: /tmp/kubernetes/node
+    extra_opts: [--strip-components=1]
+
+- name: Install kubernetes components
+  copy:
+    src: "/tmp/kubernetes/node/bin/{{ item }}"
+    dest: "/usr/bin/{{ item }}"
+    remote_src: true
+    mode: 0755
+  with_items:
+  - kubelet
+  - kube-proxy
+  notify: Restart kubernetes node service
+
+- name: Add kubelet systemd service
+  copy:
+    src: "{{ item }}.service"
+    dest: "/usr/lib/systemd/system/{{ item }}.service"
+    mode: 0644
+  with_items:
+  - kubelet
+  - kube-proxy
+  notify: Restart kubernetes node service
+
+- name: Create kubernetes config directory
+  file:
+    path: /etc/kubernetes
+    state: directory
+    mode: 0755
+
+- name: Add kubernetes node config file
+  copy:
+    src: "{{ item }}"
+    dest: /etc/kubernetes
+    mode: 0644
+  with_items:
+  - kubelet
+  - kube-proxy
+  - kubeconfig
+  - kubelet.yml
+  notify: Restart kubernetes node service
+
+- name: Pull Pause docker image
+  docker_image:
+    name: "registry.aliyuncs.com/google_containers/pause:{{ PAUSE_VERSION }}"
+    repository: "k8s.gcr.io/pause:{{ PAUSE_VERSION }}"
+    source: pull
+
+- name: Create kubelet work directory
+  file:
+    path: /var/lib/kubelet
+    state: directory
+    mode: 0755
+
+- name: Create kubernetes pki directory
+  file:
+    path: /var/run/kubernetes
+    state: directory
+
+- name: Copy self-signed certificate
+  copy:
+    src: "{{ item }}"
+    dest: "/var/run/kubernetes/{{ item }}"
+    mode: 0644
+  with_items:
+  - ca.crt
+  - node.kubernetes.ipool.me.key
+  - node.kubernetes.ipool.me.crt
+  notify: Restart kubernetes node service
