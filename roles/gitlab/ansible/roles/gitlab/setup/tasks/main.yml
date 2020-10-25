@@ -1,0 +1,55 @@
+---
+# tasks file for setup-gitlab-server
+- name: Install gitlab-ce dependencies
+  apt:
+    update_cache: yes
+    name:
+    - postfix
+    - apt-transport-https
+
+- name: Enable and start postfix service
+  systemd:
+    name: postfix
+    state: started
+    enabled: true
+
+- name: Add an apt signing key, uses whichever key is at the url
+  apt_key:
+    url: https://packages.gitlab.com/gpg.key
+    state: present
+
+- name: Add gitlab-ce tsinghua repository
+  apt_repository:
+    repo: deb https://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/ubuntu focal main
+    state: present
+    mode: 0644
+
+- name: Add gitlab-runner tsinghua repository
+  apt_repository:
+    repo: deb https://mirrors.tuna.tsinghua.edu.cn/gitlab-runner/ubuntu focal main
+    state: present
+    mode: 0644
+
+- name: Create certificate directory
+  file:
+    path: "/etc/gitlab/ssl"
+    state: directory
+    mode: '0755'
+
+- name: Copy self-signed certificate
+  copy:
+    src: "roles/pki/{{ item }}"
+    dest: "/etc/gitlab/ssl/{{item}}"
+    mode: '0755'
+  with_items:
+  - "{{ GITLAB_FQDN }}.crt"
+  - "{{ GITLAB_FQDN }}.key"
+
+- name: Install gitlab-ce and gitlab-runner
+  apt:
+    update_cache: yes
+    name:
+    - gitlab-ce
+    - gitlab-runner
+  environment:
+    EXTERNAL_URL: "{{ EXTERNAL_URL }}"

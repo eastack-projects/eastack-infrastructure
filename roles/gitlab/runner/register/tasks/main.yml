@@ -1,5 +1,0 @@
-- name: "Register runner"
-  gitlab_runner:
-    api_url: "{{ CI_SERVER_URL }}"
-    registration_token: "{{ REGISTRATION_TOKEN }}"
-    description: In Harbor Server

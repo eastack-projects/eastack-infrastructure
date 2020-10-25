@@ -1,0 +1,6 @@
+- name: Initialize Vault
+  become: true
+  hosts: all
+  roles:
+  - setup
+  - config
