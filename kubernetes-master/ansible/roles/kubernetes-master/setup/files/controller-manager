@@ -1,1 +1,1 @@
-KUBE_CONTROLLER_MANAGER_ARGS="--kubeconfig=/etc/kubernetes/kubeconfig --logtostderr=false --log-dir=/var/log/kubernetes --v=0 --service-account-private-key-file=/var/run/kubernetes/master.kubernetes.ipool.me.key"
+KUBE_CONTROLLER_MANAGER_ARGS="--kubeconfig=/etc/kubernetes/kubeconfig --logtostderr=false --log-dir=/var/log/kubernetes --v=0 --service-account-private-key-file=/var/run/kubernetes/master.kubernetes.ipool.me.key --root-ca-file=/var/run/kubernetes/ca.crt"

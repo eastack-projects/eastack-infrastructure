@@ -2,4 +2,5 @@
   become: true
   hosts: all
   roles:
+  - common/config
   - coredns/setup

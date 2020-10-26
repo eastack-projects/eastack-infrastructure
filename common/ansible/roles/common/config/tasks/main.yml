@@ -2,7 +2,7 @@
 - name: Copy self-signed certificate
   copy:
     src: ca.crt
-    dest: ca.crt
+    dest: /usr/local/share/ca-certificates/ca.crt
     mode: 0755
 
 - name: Setup ca certificate

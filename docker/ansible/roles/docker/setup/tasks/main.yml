@@ -24,7 +24,7 @@
 
 - name: Copy daemon.json
   copy:
-    src: "daemon.json"
-    dest: "/etc/docker/daemon.json"
+    src: daemon.json
+    dest: /etc/docker/daemon.json
     mode: 0644
   notify: Restart docker service

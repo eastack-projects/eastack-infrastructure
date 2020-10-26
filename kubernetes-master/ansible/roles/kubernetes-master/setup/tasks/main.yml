@@ -51,6 +51,12 @@
   - scheduler
   notify: Restart kubernetes master service
 
+- name: Create kubernetes pki directory
+  file:
+    path: /var/run/kubernetes
+    state: directory
+    mode: 0755
+
 - name: Copy self-signed certificate
   copy:
     src: "{{ item }}"
