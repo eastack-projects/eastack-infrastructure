@@ -1,8 +1,8 @@
-- name: Initialize kubernetes master
+- name: Initialize kubernetes server
   become: true
   hosts: all
   roles:
   - common/config
   - coredns/config
   - etcd/setup
-  - kubernetes-master/setup
+  - kubernetes-server/setup

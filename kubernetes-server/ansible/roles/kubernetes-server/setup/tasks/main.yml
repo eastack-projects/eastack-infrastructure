@@ -20,7 +20,7 @@
   - kube-apiserver
   - kube-controller-manager
   - kube-scheduler
-  notify: Restart kubernetes master service
+  notify: Restart kubernetes server service
 
 - name: Add kubernetes systemd service
   copy:
@@ -31,7 +31,7 @@
   - kube-apiserver.service
   - kube-controller-manager.service
   - kube-scheduler.service
-  notify: Restart kubernetes master service
+  notify: Restart kubernetes server service
 
 - name: Create kubernetes config directory
   file:
@@ -49,7 +49,7 @@
   - apiserver
   - controller-manager
   - scheduler
-  notify: Restart kubernetes master service
+  notify: Restart kubernetes server service
 
 - name: Create kubernetes pki directory
   file:
@@ -64,8 +64,8 @@
     mode: 0644
   with_items:
   - ca.crt
-  - master.kubernetes.ipool.me.key
-  - master.kubernetes.ipool.me.crt
+  - server.kubernetes.ipool.me.key
+  - server.kubernetes.ipool.me.crt
   - client.kubernetes.ipool.me.key
   - client.kubernetes.ipool.me.crt
-  notify: Restart kubernetes master service
+  notify: Restart kubernetes server service

@@ -1,3 +1,5 @@
 = Infrastructures
 
 Based Ansible and Vagrant.
+
+* [ ] host内主机配置

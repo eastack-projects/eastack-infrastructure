@@ -1,5 +1,5 @@
 ---
-- name: Restart kubernetes master service
+- name: Restart kubernetes server service
   systemd:
     name: "{{ item }}"
     state: restarted

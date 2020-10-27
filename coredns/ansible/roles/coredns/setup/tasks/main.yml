@@ -16,12 +16,14 @@
     dest: /usr/bin/coredns
     remote_src: true
     mode: 0755
+  notify: Enable and restart coredns service
 
 - name: Copy systemd unit
   copy:
     src: coredns.service
     dest: /etc/systemd/system
     mode: 0644
+  notify: Enable and restart coredns service
 
 - name: Copy config file
   copy:
@@ -31,15 +33,10 @@
   with_items:
   - Corefile
   - ipool.me.db
+  notify: Enable and restart coredns service
 
 - name: Stop systemd-resolved service
   systemd:
     name: systemd-resolved
     state: stopped
     enabled: false
-
-- name: Enable and start coredns service
-  systemd:
-    name: coredns
-    state: started
-    enabled: true

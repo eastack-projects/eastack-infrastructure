@@ -1,2 +1,7 @@
 ---
-# handlers file for setup
+- name: Enable and restart coredns service
+  systemd:
+    name: coredns
+    state: restarted
+    daemon_reload: true
+    enabled: true
