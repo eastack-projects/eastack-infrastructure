@@ -1,1 +1,16 @@
-KUBE_API_ARGS="--authorization-mode=RBAC --client-ca-file=/var/run/kubernetes/ca.crt --tls-private-key-file=/var/run/kubernetes/server.kubernetes.ipool.me.key --tls-cert-file=/var/run/kubernetes/server.kubernetes.ipool.me.crt --etcd-servers=http://127.0.0.1:2379 --bind-address=0.0.0.0 --secure-port=6443 --service-cluster-ip-range=169.169.0.0/16 --service-node-port-range=1-65535 --logtostderr=false --log-dir=/var/log/kubernetes --v=0"
+KUBE_API_ARGS="--authorization-mode=RBAC,Node \
+--kubelet-client-certificate=/etc/kubernetes/pki/client.kubernetes.ipool.me.crt \
+--kubelet-client-key=/etc/kubernetes/pki/client.kubernetes.ipool.me.key \
+--tls-cert-file=/etc/kubernetes/pki/server.kubernetes.ipool.me.crt \             
+--tls-private-key-file=/etc/kubernetes/pki/server.kubernetes.ipool.me.key \      
+--client-ca-file=/etc/kubernetes/pki/ca.crt \ 
+--service-account-key-file=/etc/kubernetes/pki/ca.key \                          
+--enable-bootstrap-token-auth=true \
+--etcd-servers=http://127.0.0.1:2379 \
+--bind-address=0.0.0.0 \
+--secure-port=6443 \
+--service-cluster-ip-range=169.169.0.0/16 \
+--service-node-port-range=1-65535 \
+--logtostderr=false \
+--log-dir=/var/log/kubernetes \
+--v=0"

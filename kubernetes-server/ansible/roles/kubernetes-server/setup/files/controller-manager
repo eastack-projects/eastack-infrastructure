@@ -1,1 +1,8 @@
-KUBE_CONTROLLER_MANAGER_ARGS="--kubeconfig=/etc/kubernetes/kubeconfig --logtostderr=false --log-dir=/var/log/kubernetes --v=0 --service-account-private-key-file=/var/run/kubernetes/server.kubernetes.ipool.me.key --root-ca-file=/var/run/kubernetes/ca.crt"
+KUBE_CONTROLLER_MANAGER_ARGS="--master=https://master.kubernetes.ipool.me:6443 \
+--cluster-signing-cert-file=/etc/kubernetes/pki/ca.crt \
+--cluster-signing-key-file=/etc/kubernetes/pki/ca.key \
+--service-account-private-key-file=/etc/kubernetes/pki/ca.key \
+--root-ca-file=/etc/kubernetes/pki/ca.crt \
+--log-dir=/var/log/kubernetes \
+--logtostderr=false \
+--v=0"

@@ -1,0 +1,17 @@
+{
+  "CN": "k8s-admin",
+  "hosts": [],
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "CN",
+      "ST": "Singapore",
+      "L": "Singapore",
+      "O": "system:masters",
+      "OU": "kubernetes"
+    }
+  ]
+}

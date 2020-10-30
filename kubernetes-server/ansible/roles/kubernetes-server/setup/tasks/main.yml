@@ -1,18 +1,18 @@
 - name: Create kubernetes temporary directory
   file:
-    path: /tmp/kubernetes
+    path: /opt/kubernetes
     state: directory
 
 - name: Extract kubernetes package
   unarchive:
     src: "{{ KUBERNETES_PACKAGE }}"
-    dest: /tmp/kubernetes
-    creates: /tmp/kubernetes/server
+    dest: /opt/kubernetes
+    creates: /opt/kubernetes/server
     extra_opts: [--strip-components=1]
 
 - name: Install Kubernetes components
   copy:
-    src: "/tmp/kubernetes/server/bin/{{ item }}"
+    src: "/opt/kubernetes/server/bin/{{ item }}"
     dest: "/usr/bin/{{ item }}"
     remote_src: true
     mode: 0755
@@ -53,17 +53,18 @@
 
 - name: Create kubernetes pki directory
   file:
-    path: /var/run/kubernetes
+    path: /etc/kubernetes/pki
     state: directory
     mode: 0755
 
 - name: Copy self-signed certificate
   copy:
     src: "{{ item }}"
-    dest: "/var/run/kubernetes/{{ item }}"
+    dest: "/etc/kubernetes/pki/{{ item }}"
     mode: 0644
   with_items:
   - ca.crt
+  - ca.key
   - server.kubernetes.ipool.me.key
   - server.kubernetes.ipool.me.crt
   - client.kubernetes.ipool.me.key

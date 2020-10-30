@@ -28,3 +28,8 @@
     dest: /etc/docker/daemon.json
     mode: 0644
   notify: Restart docker service
+
+- name: Add vagrant user to docker group
+  user:
+    name: vagrant
+    group: docker

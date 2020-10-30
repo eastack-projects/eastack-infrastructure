@@ -7,19 +7,19 @@
 
 - name: Create kubernetes temporary directory
   file:
-    path: /tmp/kubernetes
+    path: /opt/kubernetes
     state: directory
 
 - name: Extract kubernetes package
   unarchive:
     src: "{{ KUBERNETES_NODE_PACKAGE }}"
-    dest: /tmp/kubernetes
-    creates: /tmp/kubernetes/node
+    dest: /opt/kubernetes
+    creates: /opt/kubernetes/node
     extra_opts: [--strip-components=1]
 
 - name: Install kubernetes components
   copy:
-    src: "/tmp/kubernetes/node/bin/{{ item }}"
+    src: "/opt/kubernetes/node/bin/{{ item }}"
     dest: "/usr/bin/{{ item }}"
     remote_src: true
     mode: 0755

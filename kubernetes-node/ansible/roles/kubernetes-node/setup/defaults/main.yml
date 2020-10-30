@@ -1,3 +1,3 @@
 ---
 PAUSE_VERSION: 3.2
-KUBERNETES_NODE_PACKAGE: /home/radix10/desktop/docker-downloader/kubernetes-node-linux-amd64.tar.gz
+KUBERNETES_NODE_PACKAGE: /home/radix10/desktop/docker-downloader/downloads/kubernetes-node-linux-amd64.tar.gz
