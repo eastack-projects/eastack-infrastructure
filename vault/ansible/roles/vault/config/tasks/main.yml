@@ -13,6 +13,12 @@
     line: 127.0.0.1 Vault Vault
     state: present
 
+- name: Add default vault address to bashrc
+  lineinfile:
+    dest: /root/.bashrc
+    line: export VAULT_ADDR='https://Vault:8200'
+    state: present
+
 - name: Enable vault service
   systemd:
     name: vault

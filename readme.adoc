@@ -5,3 +5,4 @@ Based Ansible and Vagrant.
 == To Do
 
 * [ ] 实现使用通过vault获取所有密钥
+* [ ] 搭建Etcd集群
