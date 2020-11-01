@@ -30,3 +30,9 @@
   systemd:
     name: vault
     state: started
+
+- name: Fetch vault certificate
+  fetch:
+    src: /opt/vault/tls/tls.crt
+    dest: ./roles/common/config/files/ca.crt
+    flat: true
