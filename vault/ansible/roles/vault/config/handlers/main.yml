@@ -1,2 +1,8 @@
 ---
-# handlers file for config
+- name: Update ca certificate
+  shell: update-ca-certificates
+
+- name: Initializing the vault
+  shell: vault operator init > ~/vault-init-out.txt
+  environment:
+    VAULT_ADDR: https://Vault:8200

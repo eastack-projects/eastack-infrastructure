@@ -3,6 +3,6 @@
   hosts: all
   roles:
   - docker/setup
-  - gitlab/setup
-  - coredns/config
+#  - gitlab/setup
+#  - coredns/config
   - common/config

@@ -1,2 +1,7 @@
 ---
-# handlers file for setup-etcd
+- name: Enable and restart etcd service
+  systemd:
+    name: etcd
+    daemon_reload: true
+    enabled: true
+    state: restarted

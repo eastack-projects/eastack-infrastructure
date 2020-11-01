@@ -20,22 +20,17 @@
   with_items:
   - etcd
   - etcdctl
+	notify: Enable and restart etcd service
 
 - name: Add etcd systemd service
   copy:
     src: etcd.service
     dest: /usr/lib/systemd/system/etcd.service
-    mode: 064
+    mode: 0644
+	notify: Enable and restart etcd service
 
 - name: Create etcd work directory
   file:
     path: /var/lib/etcd
     state: directory
     mode: 0755
-
-- name: Enable and start etcd service
-  systemd:
-    name: etcd
-    daemon_reload: true
-    state: started
-    enabled: true

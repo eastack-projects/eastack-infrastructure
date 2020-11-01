@@ -1,19 +1,26 @@
 ---
-- name: Create Vault data directory
-  file:
-    path: /var/lib/vault/data
-    state: directory
-    mode: 0700
-
-- name: Copy Vault config file
+- name: Copy vault certificate
   copy:
-    src: config.hcl
-    dest: /etc/config.hcl
-    mode: 0600
+    remote_src: true
+    src: /opt/vault/tls/tls.crt
+    dest: /usr/local/share/ca-certificates/vault-ca.crt
+    mode: 0755
+  notify: Update ca certificate
 
-- name: Enable and start Etcd service
+- name: Add Vault to hosts
+  lineinfile:
+    dest: /etc/hosts
+    line: 127.0.0.1 Vault Vault
+    state: present
+
+- name: Enable vault service
   systemd:
     name: vault
     daemon_reload: true
-    state: started
     enabled: true
+  notify: Initializing the vault
+
+- name: Start vault service
+  systemd:
+    name: vault
+    state: started

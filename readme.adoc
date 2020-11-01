@@ -2,4 +2,6 @@
 
 Based Ansible and Vagrant.
 
-* [ ] host内主机配置
+== To Do
+
+* [ ] 实现使用通过vault获取所有密钥
