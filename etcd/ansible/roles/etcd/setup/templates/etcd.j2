@@ -1,0 +1,7 @@
+ETCD_ARGS="--name {{ ansible_facts.hostname }} --initial-advertise-peer-urls http://{{ ansible_facts.enp0s8.ipv4.address }}:2380 \
+  --listen-peer-urls http://{{ ansible_facts.enp0s8.ipv4.address }}:2380 \
+  --listen-client-urls http://{{ ansible_facts.enp0s8.ipv4.address }}:2379,http://{{ ansible_facts.enp0s8.ipv4.address }}:2379 \
+  --advertise-client-urls http://{{ ansible_facts.enp0s8.ipv4.address }}:2379 \
+  --initial-cluster-token etcd-cluster-1 \
+  --initial-cluster etcd1=http://192.168.123.211:2380,etcd2=http://192.168.123.212:2380,etcd3=http://192.168.123.213:2380 \
+  --initial-cluster-state new"

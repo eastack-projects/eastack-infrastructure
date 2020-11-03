@@ -1,0 +1,5 @@
+- name: Initialize etcd cluster
+  become: true
+  hosts: all
+  roles:
+  - etcd/setup

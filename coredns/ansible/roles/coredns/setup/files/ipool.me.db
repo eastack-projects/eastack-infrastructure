@@ -2,6 +2,8 @@ ipool.me.                    IN  SOA  sns.dns.icann.org. noc.dns.icann.org. 2015
 gitlab.ipool.me.             IN  A    192.168.123.201
 harbor.ipool.me.             IN  A    192.168.123.202
 vault.ipool.me.              IN  A    192.168.123.203
-etcd.ipool.me.               IN  A    192.168.123.204
 master.kubernetes.ipool.me.  IN  A    192.168.123.205
-node.kubernetes.ipool.me.    IN  A    192.168.50.206
+node.kubernetes.ipool.me.    IN  A    192.168.123.206
+etcd1.ipool.me.              IN  A    192.168.123.211
+etcd2.ipool.me.              IN  A    192.168.123.212
+etcd3.ipool.me.              IN  A    192.168.123.213

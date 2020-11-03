@@ -1,12 +1,4 @@
 ---
-- name: Copy vault certificate
-  copy:
-    remote_src: true
-    src: /opt/vault/tls/tls.crt
-    dest: /usr/local/share/ca-certificates/vault-ca.crt
-    mode: 0755
-  notify: Update ca certificate
-
 - name: Add Vault to hosts
   lineinfile:
     dest: /etc/hosts
