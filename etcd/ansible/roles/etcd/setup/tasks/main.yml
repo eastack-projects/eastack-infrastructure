@@ -5,9 +5,9 @@
     state: directory
     mode: 0755
   with_items:
-  - /etc/etcd
-  - /var/lib/etcd
-  - /opt/etcd
+    - /etc/etcd
+    - /var/lib/etcd
+    - /opt/etcd
 
 - name: Extract etcd package
   unarchive:
@@ -23,8 +23,8 @@
     remote_src: true
     mode: 0755
   with_items:
-  - etcd
-  - etcdctl
+    - etcd
+    - etcdctl
   notify: Enable and restart etcd service
 
 - name: Add etcd systemd service
