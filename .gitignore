@@ -1,4 +1,4 @@
-**/.vagrant
+.vagrant
 .apt-cache
 *.crt
 *.key

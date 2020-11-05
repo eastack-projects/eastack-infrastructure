@@ -1,0 +1,4 @@
+{
+  "allowed_domains": ["example.com"],
+  "allow_subdomains": true
+}

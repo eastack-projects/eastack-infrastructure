@@ -16,7 +16,7 @@
     name: vault
     daemon_reload: true
     enabled: true
-  notify: Initializing the vault
+#  notify: Initializing the vault
 
 - name: Start vault service
   systemd:
@@ -25,6 +25,9 @@
 
 - name: Fetch vault certificate
   fetch:
-    src: /opt/vault/tls/tls.crt
-    dest: ./roles/common/config/files/ca.crt
+    src: "/opt/vault/tls/{{ item }}"
+    dest: "./roles/common/config/files/{{ item }}"
     flat: true
+  with_items:
+    - tls.crt
+    - tls.key
