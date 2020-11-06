@@ -1,4 +1,4 @@
 {
-  "allowed_domains": ["example.com"],
+  "allowed_domains": ["ipool.me"],
   "allow_subdomains": true
 }
