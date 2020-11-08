@@ -1,8 +1,18 @@
 ---
-- name: Add Vault to hosts
-  lineinfile:
-    dest: /etc/hosts
-    line: 127.0.0.1 Vault Vault
+- name: Update vault ip address
+  become: false
+  local_action:
+    module: replace
+    path: ./roles/coredns/config/defaults/main.yml
+    regexp: 'VAULT_IP:.*'
+    replace: "VAULT_IP: {{ ansible_facts.enp0s8.ipv4.address }}"
+
+- name: Append vault ip address
+  become: false
+  local_action:
+    module: lineinfile
+    dest: ./roles/coredns/config/defaults/main.yml
+    line: "VAULT_IP: {{ ansible_facts.enp0s8.ipv4.address }}"
     state: present
 
 - name: Add default vault address to bashrc
@@ -14,9 +24,8 @@
 - name: Enable vault service
   systemd:
     name: vault
-    daemon_reload: true
     enabled: true
-#  notify: Initializing the vault
+  notify: Initializing the vault
 
 - name: Start vault service
   systemd:

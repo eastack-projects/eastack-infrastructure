@@ -14,3 +14,16 @@
     replace: "FallbackDNS={{ FALLBACK_DNS }}"
     backup: yes
   notify: Restart systemd-resolved service
+
+- name: Update vault hosts entry
+  replace:
+    path: /etc/hosts
+    regexp: '.* Vault Vault$'
+    replace: "{{ VAULT_IP }} Vault Vault"
+    backup: yes
+
+- name: Makesure appened vault hosts entry
+  lineinfile:
+    dest: /etc/hosts
+    line: "{{ VAULT_IP }} Vault Vault"
+    state: present
