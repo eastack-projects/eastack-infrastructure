@@ -1,4 +1,7 @@
 ---
+- name: Notify test
+  shell: ls
+  notify: Initializing the vault
 - name: Update vault ip address
   become: false
   local_action:
@@ -6,14 +9,6 @@
     path: ./roles/coredns/config/defaults/main.yml
     regexp: 'VAULT_IP:.*'
     replace: "VAULT_IP: {{ ansible_facts.enp0s8.ipv4.address }}"
-
-- name: Append vault ip address
-  become: false
-  local_action:
-    module: lineinfile
-    dest: ./roles/coredns/config/defaults/main.yml
-    line: "VAULT_IP: {{ ansible_facts.enp0s8.ipv4.address }}"
-    state: present
 
 - name: Add default vault address to bashrc
   lineinfile:
@@ -24,6 +19,7 @@
 - name: Enable vault service
   systemd:
     name: vault
+    daemon_reload: true
     enabled: true
   notify: Initializing the vault
 
@@ -31,12 +27,3 @@
   systemd:
     name: vault
     state: started
-
-- name: Fetch vault certificate
-  fetch:
-    src: "/opt/vault/tls/{{ item }}"
-    dest: "./roles/common/config/files/{{ item }}"
-    flat: true
-  with_items:
-    - tls.crt
-    - tls.key

@@ -3,3 +3,4 @@
 *.crt
 *.key
 *.pem
+vault/ansible/roles/vault/config/files/sys-init-result.json

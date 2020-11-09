@@ -1,2 +1,3 @@
 ---
-# handlers file for setup-certificate
+- name: Setup ca certificate
+  shell: update-ca-certificates

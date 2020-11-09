@@ -1,20 +1,37 @@
 ---
 - name: Initializing the vault
-  local_action:
-    module: uri
+  uri:
     method: PUT
+    validate_certs: no
     url: https://Vault:8200/v1/sys/init
+    body_format: json
     body:
-      secret_shares: 10,
+      secret_shares: 10
       secret_threshold: 5
-  register: sys-init-result
-  environment:
-    VAULT_ADDR: https://Vault:8200
+  register: result
   listen: Initializing the vault
 
 - name: Persistent init result
+  become: false
   local_action:
     module: copy
-    content: "{{ sys-init-result }}"
+    content: "{{ result.json }}"
     dest: ./roles/vault/config/files/sys-init-result.json
+  listen: Initializing the vault
+
+- name: Include variable
+  include_vars:
+    file: ./roles/vault/config/files/sys-init-result.json
+    name: sys_init_result
+  listen: Initializing the vault
+
+- name: Unseal vault
+  uri:
+    method: PUT
+    validate_certs: no
+    url: https://Vault:8200/v1/sys/unseal
+    body_format: json
+    body:
+      key: "{{ item }}"
+  with_items: " {{ sys_init_result['keys'] }} "
   listen: Initializing the vault

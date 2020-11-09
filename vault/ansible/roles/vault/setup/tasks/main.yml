@@ -15,3 +15,12 @@
     update_cache: true
     name:
     - vault
+
+- name: Fetch vault certificate
+  fetch:
+    src: "/opt/vault/tls/{{ item }}"
+    dest: "./roles/common/config/files/{{ item }}"
+    flat: true
+  with_items:
+    - tls.crt
+    - tls.key

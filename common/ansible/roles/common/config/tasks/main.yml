@@ -5,9 +5,7 @@
 
 - name: Copy self-signed certificate
   copy:
-    src: ca.crt
+    src: tls.crt
     dest: /usr/local/share/ca-certificates/ca.crt
     mode: 0755
-
-- name: Setup ca certificate
-  shell: update-ca-certificates
+  notify: Setup ca certificate
