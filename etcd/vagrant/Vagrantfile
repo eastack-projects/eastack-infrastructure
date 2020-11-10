@@ -6,7 +6,7 @@
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
 Vagrant.configure("2") do |config|
-  (1..3).each do |i|
+  (1..1).each do |i|
     config.vm.define "etcd#{i}" do |etcd|
       # The most common configuration options are documented and commented below.
       # For a complete reference, please see the online documentation at
@@ -59,7 +59,7 @@ Vagrant.configure("2") do |config|
         #vb.gui = true
       
         # Customize the amount of memory on the VM:
-        vb.memory = "512"
+        vb.memory = "256"
       end
       #
       # View the documentation for the provider you are using for more

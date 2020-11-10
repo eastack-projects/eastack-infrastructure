@@ -1,4 +1,5 @@
 ---
+# Initializing
 - name: Initializing the vault
   uri:
     method: PUT
@@ -19,7 +20,8 @@
     dest: ./roles/vault/config/files/sys-init-result.json
   listen: Initializing the vault
 
-- name: Include variable
+# Unseal
+- name: Include keys as variable
   include_vars:
     file: ./roles/vault/config/files/sys-init-result.json
     name: sys_init_result
@@ -33,5 +35,33 @@
     body_format: json
     body:
       key: "{{ item }}"
-  with_items: " {{ sys_init_result['keys'] }} "
+  with_items: "{{ sys_init_result['keys'] }}"
+  listen: Initializing the vault
+
+# Mount pki secret engine
+- name: Mount pki secret engine
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    validate_certs: no
+    url: https://Vault:8200/v1/sys/mounts/pki
+    body_format: json
+    status_code: 204
+    body:
+      type: pki
+  listen: Initializing the vault
+
+# Submit ca certificate
+- name: Submit ca certificate
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    validate_certs: no
+    url: https://Vault:8200/v1/pki/config/ca
+    body_format: json
+    status_code: 204
+    body:
+      pem_bundle: "{{ lookup('file', './roles/common/config/files/tls.key') + '\n' +  lookup('file', './roles/common/config/files/tls.crt') }}"
   listen: Initializing the vault

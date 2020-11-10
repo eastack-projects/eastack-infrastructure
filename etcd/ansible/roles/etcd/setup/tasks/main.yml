@@ -1,42 +1,65 @@
 ---
-- name: Create etcd directory
-  file:
-    path: "{{ item }}"
-    state: directory
-    mode: 0755
-  with_items:
-    - /etc/etcd
-    - /var/lib/etcd
-    - /opt/etcd
+- name: Include keys as variable
+  include_vars:
+    file: ./roles/vault/config/files/sys-init-result.json
+    name: sys_init_result
 
-- name: Extract etcd package
-  unarchive:
-    src: "{{ ETCD_PACKAGE }}"
-    dest: /opt/etcd
-    extra_opts: [--strip-components=1]
-    creates: /opt/etcd/etcdctl
+- name: Generate peer intermediate ca csr
+  uri:
+    method: POST
+    validate_certs: no
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    url: https://Vault:8200/v1/pki/intermediate/generate/internal
+    body_format: json
+    body:
+      common_name: peer.etcd.ipool.me
+  register: etcd_peer_intermediate_ca_csr
 
-- name: Copy etcdctl to /usr/bin
-  copy:
-    src: "/opt/etcd/{{ item }}"
-    dest: "/usr/bin/{{ item }}"
-    remote_src: true
-    mode: 0755
-  with_items:
-    - etcd
-    - etcdctl
-  notify: Enable and restart etcd service
-
-- name: Add etcd systemd service
-  copy:
-    src: etcd.service
-    dest: /usr/lib/systemd/system/etcd.service
-    mode: 0644
-  notify: Enable and restart etcd service
-
-- name: Generate etcd environment file
-  template:
-    src: etcd.j2
-    dest: /etc/etcd/etcd
-    mode: 0644
-  notify: Enable and restart etcd service
+- name: Persistent peer intermediate ca csr result
+  become: false
+  local_action:
+    module: copy
+    content: "{{ etcd_peer_intermediate_ca_csr.json.data.csr }}"
+    dest: ./roles/etcd/setup/files/etcd-peer-intermediate-ca-csr.csr
+#- name: Create etcd directory
+#  file:
+#    path: "{{ item }}"
+#    state: directory
+#    mode: 0755
+#  with_items:
+#    - /etc/etcd
+#    - /var/lib/etcd
+#    - /opt/etcd
+#
+#- name: Extract etcd package
+#  unarchive:
+#    src: "{{ ETCD_PACKAGE }}"
+#    dest: /opt/etcd
+#    extra_opts: [--strip-components=1]
+#    creates: /opt/etcd/etcdctl
+#
+#- name: Copy etcdctl to /usr/bin
+#  copy:
+#    src: "/opt/etcd/{{ item }}"
+#    dest: "/usr/bin/{{ item }}"
+#    remote_src: true
+#    mode: 0755
+#  with_items:
+#    - etcd
+#    - etcdctl
+#  notify: Enable and restart etcd service
+#
+#- name: Add etcd systemd service
+#  copy:
+#    src: etcd.service
+#    dest: /usr/lib/systemd/system/etcd.service
+#    mode: 0644
+#  notify: Enable and restart etcd service
+#
+#- name: Generate etcd environment file
+#  template:
+#    src: etcd.j2
+#    dest: /etc/etcd/etcd
+#    mode: 0644
+#  notify: Enable and restart etcd service
