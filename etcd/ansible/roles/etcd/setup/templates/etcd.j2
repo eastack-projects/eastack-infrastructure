@@ -1,14 +1,13 @@
 ETCD_ARGS="--name {{ ansible_facts.hostname }} \
-  --initial-advertise-peer-urls http://{{ ansible_facts.hostname }}.ipool.me:2380 \
-  --listen-peer-urls http://{{ ansible_facts.hostname }}.ipool.me:2380 \
-  --listen-client-urls http://{{ ansible_facts.hostname }}.ipool.me:2379,http://127.0.0.1:2379 \
-  --advertise-client-urls http://{{ ansible_facts.hostname }}.ipool.me:2379 \
+  --initial-advertise-peer-urls https://{{ ansible_facts.enp0s8.ipv4.address }}:2380 \
+  --listen-peer-urls https://{{ ansible_facts.enp0s8.ipv4.address }}:2380 \
+  --listen-client-urls https://{{ ansible_facts.enp0s8.ipv4.address }}:2379,http://127.0.0.1:2379 \
+  --advertise-client-urls https://{{ ansible_facts.enp0s8.ipv4.address }}:2379 \
   --initial-cluster-token etcd-cluster-1 \
-  --initial-cluster {% for host in groups['all'] %}{{ host }}=http://{{ host }}.ipool.me{{ "," if not loop.last }}{% endfor %} \
+  --initial-cluster etcd1=https://192.168.33.31:2380,etcd2=https://192.168.33.32:2380,etcd3=https://192.168.33.33:2380 \
   --initial-cluster-state new \
   --client-cert-auth \
-  --trusted-ca-file=/path/to/ca-client.crt \
-  --cert-file=/path/to/infra0-client.crt --key-file=/path/to/infra0-client.key \
-  --peer-client-cert-auth --peer-trusted-ca-file=ca-peer.crt \
-  --peer-cert-file=/path/to/infra0-peer.crt --peer-key-file=/path/to/infra0-peer.key"
-# todo
+  --trusted-ca-file=/opt/etcd/tls/intermediate-ca.crt \
+  --cert-file=/opt/etcd/tls/{{ ansible_facts.hostname }}-client.crt --key-file=/opt/etcd/tls/{{ ansible_facts.hostname }}-client.key \
+  --peer-client-cert-auth --peer-trusted-ca-file=/opt/etcd/tls/intermediate-ca.crt \
+  --peer-cert-file=/opt/etcd/tls/{{ ansible_facts.hostname }}-peer.crt --peer-key-file=/opt/etcd/tls/{{ ansible_facts.hostname }}-peer.key"

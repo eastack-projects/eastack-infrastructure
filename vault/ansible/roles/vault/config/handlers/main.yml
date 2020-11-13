@@ -52,6 +52,19 @@
       type: pki
   listen: Initializing the vault
 
+- name: Tune pki secret engine
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    validate_certs: no
+    url: https://Vault:8200/v1/sys/mounts/pki/tune
+    body_format: json
+    status_code: 204
+    body:
+      max_lease_ttl: "2400h"
+  listen: Initializing the vault
+
 # Submit ca certificate
 - name: Submit ca certificate
   uri:
@@ -67,7 +80,7 @@
   listen: Initializing the vault
 
 # Mount intermediate ca
-- name: Mount pki secret engine
+- name: Mount pki intermediate secret engine
   uri:
     method: POST
     headers:
@@ -78,6 +91,19 @@
     status_code: 204
     body:
       type: pki
+  listen: Initializing the vault
+
+- name: Tune pki intermediate secret engine
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    validate_certs: no
+    url: https://Vault:8200/v1/sys/mounts/pki_int/tune
+    body_format: json
+    status_code: 204
+    body:
+      max_lease_ttl: "2400h"
   listen: Initializing the vault
 
 # Generate intermediate ca
@@ -113,6 +139,7 @@
     body:
       csr: "{{ lookup('file', './roles/vault/config/files/intermediate-ca.csr') }}"
       common_name: ipool.me
+      ttl: 2400h
   register: intermediate_ca_crt
   listen: Initializing the vault
 

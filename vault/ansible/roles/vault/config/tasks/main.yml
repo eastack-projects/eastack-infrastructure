@@ -1,8 +1,4 @@
 ---
-- name: Notify test
-  shell: ls
-  notify: Initializing the vault
-
 - name: Update vault ip address
   become: false
   local_action:
