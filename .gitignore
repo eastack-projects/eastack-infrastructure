@@ -4,6 +4,7 @@
 !.cache/.gitkeep
 
 *.crt
+*.csr
 *.key
 
-sys-init-result.json
+playbooks/roles/vault/config/files/sys-init-result.json
