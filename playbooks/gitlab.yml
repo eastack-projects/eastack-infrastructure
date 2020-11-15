@@ -1,0 +1,8 @@
+- name: Initialize gitlab
+  become: true
+  hosts: all
+  roles:
+  - common/config
+  - coredns/config
+  - docker/setup
+  - gitlab/setup

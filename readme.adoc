@@ -8,11 +8,14 @@ vault: Initializing the vault and fetch default ca file.
 
 == IP allocation
 
-CoreDNS 172.17.1.1
-Vault   172.17.2.1
+vault:: 192.168.33.20
+etcd:: 192.168.33.31..3
+
+harbor:: 192.168.33.40
+gitlab:: 192.168.33.50
 
 == To Do
 
-* [ ] 实现使用通过vault获取所有密钥
-* [ ] 搭建Etcd集群
-* [ ] 生成CA
+* [x] 实现使用通过vault获取所有密钥
+* [x] 搭建Etcd集群
+* [x] 生成CA

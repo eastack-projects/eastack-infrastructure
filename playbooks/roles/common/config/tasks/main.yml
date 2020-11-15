@@ -1,0 +1,11 @@
+---
+- name: Set Timezone
+  timezone:
+    name: Asia/Shanghai
+
+- name: Copy self-signed certificate
+  copy:
+    src: ./roles/vault/setup/files/tls.crt
+    dest: /usr/local/share/ca-certificates/ca.crt
+    mode: 0755
+  notify: Setup ca certificate

@@ -1,6 +1,9 @@
 .vagrant
-.apt-cache
+
+.cache/**
+!.cache/.gitkeep
+
 *.crt
 *.key
-*.pem
-vault/ansible/roles/vault/config/files/sys-init-result.json
+
+sys-init-result.json

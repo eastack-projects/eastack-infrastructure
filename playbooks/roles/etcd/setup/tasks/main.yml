@@ -1,0 +1,125 @@
+---
+- name: Create etcd directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  with_items:
+    - /etc/etcd
+    - /var/lib/etcd
+    - /opt/etcd
+    - /opt/etcd/tls
+
+- name: Extract etcd package
+  unarchive:
+    src: "{{ ETCD_PACKAGE }}"
+    dest: /opt/etcd
+    extra_opts: [--strip-components=1]
+    creates: /opt/etcd/etcdctl
+
+- name: Copy etcdctl to /usr/bin
+  copy:
+    src: "/opt/etcd/{{ item }}"
+    dest: "/usr/bin/{{ item }}"
+    remote_src: true
+    mode: 0755
+  with_items:
+    - etcd
+    - etcdctl
+  notify: Enable and restart etcd service
+
+- name: Add etcd systemd service
+  copy:
+    src: etcd.service
+    dest: /usr/lib/systemd/system/etcd.service
+    mode: 0644
+  notify: Enable and restart etcd service
+
+- name: Generate etcd environment file
+  template:
+    src: etcd.j2
+    dest: /etc/etcd/etcd
+    mode: 0644
+  notify: Enable and restart etcd service
+
+- name: Copy ca certificate
+  copy:
+    src: ./roles/vault/config/files/intermediate-ca.crt
+    dest: /opt/etcd/tls/
+    mode: 0644
+  notify: Enable and restart etcd service
+
+- name: Include keys as variable
+  include_vars:
+    file: ./roles/vault/config/files/sys-init-result.json
+    name: sys_init_result
+
+- name: Add vault etcd role
+  uri:
+    method: POST
+    validate_certs: no
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    url: https://Vault:8200/v1/pki_int/roles/etcd-role
+    body_format: json
+    status_code: 204
+    body:
+     allowed_domains: etcd.ipool.me
+     allow_subdomains: true
+     max_ttl: 2400h
+
+# Generate etcd peer certificate
+- name: Generate etcd peer certificate
+  uri:
+    method: POST
+    validate_certs: no
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    url: https://Vault:8200/v1/pki_int/issue/etcd-role
+    body_format: json
+    status_code: 200
+    body:
+      common_name: "peer.etcd.ipool.me"
+      max_ttl: 2400h
+      ip_sans: "{{ ansible_facts.enp0s8.ipv4.address }}"
+  register: "peer_certificate"
+
+- name: Persistent peer certificate
+  copy:
+    content: "{{ peer_certificate.json.data.certificate }}"
+    dest: "/opt/etcd/tls/peer.crt"
+    mode: 0644
+
+- name: Persistent peer key
+  copy:
+    content: "{{ peer_certificate.json.data.private_key }}"
+    dest: "/opt/etcd/tls/peer.key"
+    mode: 0644
+
+# Generate etcd client certificate
+- name: Generate etcd client certificate
+  uri:
+    method: POST
+    validate_certs: no
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    url: https://Vault:8200/v1/pki_int/issue/etcd-role
+    body_format: json
+    status_code: 200
+    body:
+      common_name: "client.etcd.ipool.me"
+      max_ttl: 2400h
+      ip_sans: "{{ ansible_facts.enp0s8.ipv4.address }}"
+  register: "client_certificate"
+
+- name: Persistent client certificate
+  copy:
+    content: "{{ client_certificate.json.data.certificate }}"
+    dest: "/opt/etcd/tls/client.crt"
+    mode: 0644
+
+- name: Persistent client key
+  copy:
+    content: "{{ client_certificate.json.data.private_key }}"
+    dest: "/opt/etcd/tls/client.key"
+    mode: 0644

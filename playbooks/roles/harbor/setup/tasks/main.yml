@@ -1,0 +1,74 @@
+---
+- name: Create harbor directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0775
+  with_items:
+  - /opt/harbor/certificate
+  - /opt/harbor/data
+
+- name: Extract harbor offline package
+  unarchive:
+    src: "{{ HARBOR_PACK }}"
+    dest: /opt/harbor
+    extra_opts: [--strip-components=1]
+    creates: /opt/harbor/install.sh
+
+- name: Copy generate harbor yml script
+  copy:
+    src: generate-harbor-yml.py
+    dest: /opt/harbor/generate-harbor-yml.py
+    mode: 0755
+
+- name: Generate harbor.yml
+  shell: ./generate-harbor-yml.py
+  args:
+    chdir: /opt/harbor
+  notify: Restart harbor
+
+- name: Include keys as variable
+  include_vars:
+    file: ./roles/vault/config/files/sys-init-result.json
+    name: sys_init_result
+
+- name: Add vault etcd role
+  uri:
+    method: POST
+    validate_certs: no
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    url: https://Vault:8200/v1/pki_int/roles/harbor-role
+    body_format: json
+    status_code: 204
+    body:
+     allowed_domains: harbor.ipool.me
+     allow_subdomains: true
+     max_ttl: 2400h
+
+# Generate harbor certificate
+- name: Generate harbor certificate
+  uri:
+    method: POST
+    validate_certs: no
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    url: https://Vault:8200/v1/pki_int/issue/harbor-role
+    body_format: json
+    status_code: 200
+    body:
+      common_name: "harbor.ipool.me"
+      max_ttl: 2400h
+  register: "certificate"
+
+- name: Persistent harbor certificate
+  copy:
+    content: "{{ certificate.json.data.certificate }}"
+    dest: "/opt/harbor/certificate/{{ HARBOR_FQDN }}.crt"
+    mode: 0644
+
+- name: Persistent harbor key
+  copy:
+    content: "{{ certificate.json.data.private_key }}"
+    dest: "/opt/harbor/certificate/{{ HARBOR_FQDN }}.key"
+    mode: 0644

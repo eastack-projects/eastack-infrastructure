@@ -1,0 +1,91 @@
+---
+- name: Install gitlab-ce dependencies
+  apt:
+    update_cache: yes
+    name:
+    - postfix
+    - apt-transport-https
+
+- name: Enable and start postfix service
+  systemd:
+    name: postfix
+    state: started
+    enabled: true
+
+- name: Add an apt signing key, uses whichever key is at the url
+  apt_key:
+    url: https://packages.gitlab.com/gpg.key
+    state: present
+
+- name: Add gitlab-ce tsinghua repository
+  apt_repository:
+    repo: deb https://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/ubuntu focal main
+    state: present
+    mode: 0644
+
+- name: Add gitlab-runner tsinghua repository
+  apt_repository:
+    repo: deb https://mirrors.tuna.tsinghua.edu.cn/gitlab-runner/ubuntu focal main
+    state: present
+    mode: 0644
+
+- name: Create certificate directory
+  file:
+    path: "/etc/gitlab/ssl"
+    state: directory
+    mode: 0644
+
+- name: Include keys as variable
+  include_vars:
+    file: ./roles/vault/config/files/sys-init-result.json
+    name: sys_init_result
+
+- name: Add vault etcd role
+  uri:
+    method: POST
+    validate_certs: no
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    url: https://Vault:8200/v1/pki_int/roles/gitlab-role
+    body_format: json
+    status_code: 204
+    body:
+     allowed_domains: gitlab.ipool.me
+     allow_subdomains: true
+     max_ttl: 2400h
+
+# Generate gitlab certificate
+- name: Generate gitlab certificate
+  uri:
+    method: POST
+    validate_certs: no
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    url: https://Vault:8200/v1/pki_int/issue/gitlab-role
+    body_format: json
+    status_code: 200
+    body:
+      common_name: "gitlab.ipool.me"
+      max_ttl: 2400h
+  register: "certificate"
+
+- name: Persistent gitlab certificate
+  copy:
+    content: "{{ certificate.json.data.certificate }}"
+    dest: "/etc/gitlab/ssl/{{ GITLAB_FQDN }}.crt"
+    mode: 0644
+
+- name: Persistent gitlab key
+  copy:
+    content: "{{ certificate.json.data.private_key }}"
+    dest: "/etc/gitlab/ssl/{{ GITLAB_FQDN }}.key"
+    mode: 0644
+
+- name: Install gitlab-ce and gitlab-runner
+  apt:
+    update_cache: yes
+    name:
+    - gitlab-ce
+    - gitlab-runner
+  environment:
+    EXTERNAL_URL: "{{ EXTERNAL_URL }}"

@@ -1,0 +1,19 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/focal64"
+  config.vm.box_check_update = false
+  config.vm.network "private_network", ip: "192.168.33.20"
+  config.vm.hostname = "vault"
+  config.vm.synced_folder "../../.apt-cache/var/cache/apt", "/var/cache/apt"
+  config.vm.synced_folder "../../.apt-cache/var/lib/apt", "/var/lib/apt"
+  config.vm.synced_folder "../../.apt-cache/etc/apt", "/etc/apt"
+  config.vm.provider "virtualbox" do |vb|
+    vb.gui = false
+    vb.memory = "512"
+  end
+  config.vm.provision :ansible do |ansible|
+    ansible.playbook = "../playbooks/vault.yml"
+  end
+end
