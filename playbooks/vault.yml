@@ -2,8 +2,8 @@
   become: true
   hosts: all
   roles:
-    #    - vault/setup
-    - vault/unseal
-      #    - common/config
-      #    - vault/config
-      #    - coredns/config
+    - vault/setup
+      #    - vault/unseal
+    - common/config
+    - vault/config
+    - coredns/config
