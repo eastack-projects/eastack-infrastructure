@@ -7,4 +7,4 @@
 *.csr
 *.key
 
-playbooks/roles/vault/config/files/sys-init-result.json
+sys-init-result.json
