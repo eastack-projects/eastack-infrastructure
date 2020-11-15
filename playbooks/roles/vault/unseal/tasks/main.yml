@@ -1,0 +1,17 @@
+---
+# tasks file for unseal
+# Unseal
+- name: Include keys as variable
+  include_vars:
+    file: ./roles/vault/config/files/sys-init-result.json
+    name: sys_init_result
+
+- name: Unseal vault
+  uri:
+    method: PUT
+    validate_certs: no
+    url: https://Vault:8200/v1/sys/unseal
+    body_format: json
+    body:
+      key: "{{ item }}"
+  with_items: "{{ sys_init_result['keys'] }}"

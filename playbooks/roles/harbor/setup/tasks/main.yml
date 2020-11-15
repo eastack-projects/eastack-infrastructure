@@ -32,20 +32,6 @@
     file: ./roles/vault/config/files/sys-init-result.json
     name: sys_init_result
 
-- name: Add vault etcd role
-  uri:
-    method: POST
-    validate_certs: no
-    headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/roles/harbor-role
-    body_format: json
-    status_code: 204
-    body:
-     allowed_domains: harbor.ipool.me
-     allow_subdomains: true
-     max_ttl: 2400h
-
 # Generate harbor certificate
 - name: Generate harbor certificate
   uri:
@@ -53,22 +39,36 @@
     validate_certs: no
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/issue/harbor-role
+    url: https://Vault:8200/v1/pki_int/issue/ipool-dot-me
     body_format: json
     status_code: 200
     body:
-      common_name: "harbor.ipool.me"
+      common_name: harbor.ipool.me
       max_ttl: 2400h
-  register: "certificate"
+  register: certificate
 
 - name: Persistent harbor certificate
-  copy:
+  become: false
+  local_action:
+    module: copy
     content: "{{ certificate.json.data.certificate }}"
+    dest: "./roles/harbor/setup/files/{{ HARBOR_FQDN }}.crt"
+
+- name: Copy harbor certificate
+  copy:
+    src: "./roles/harbor/setup/files/{{ HARBOR_FQDN }}.crt"
     dest: "/opt/harbor/certificate/{{ HARBOR_FQDN }}.crt"
     mode: 0644
 
-- name: Persistent harbor key
-  copy:
+- name: Persistent harbor private key
+  become: false
+  local_action:
+    module: copy
     content: "{{ certificate.json.data.private_key }}"
+    dest: "./roles/harbor/setup/files/{{ HARBOR_FQDN }}.key"
+
+- name: Copy harbor private key
+  copy:
+    src: "./roles/harbor/setup/files/{{ HARBOR_FQDN }}.key"
     dest: "/opt/harbor/certificate/{{ HARBOR_FQDN }}.key"
     mode: 0644

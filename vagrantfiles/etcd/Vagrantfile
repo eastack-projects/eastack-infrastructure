@@ -6,15 +6,16 @@ Vagrant.configure("2") do |config|
     config.vm.define "etcd#{i}" do |etcd|
       etcd.vm.box = "ubuntu/focal64"
       etcd.vm.box_check_update = false
+
       etcd.vm.network "private_network", ip: "192.168.33.3#{i}"
       etcd.vm.hostname = "etcd#{i}"
-      config.vm.synced_folder "../../.apt-cache/opt/etcd", "/opt/etcd"
+
       etcd.vm.provider "virtualbox" do |vb|
         vb.memory = "256"
       end
 
       etcd.vm.provision :ansible do |ansible|
-        ansible.playbook = "../ansible/playbook.yml"
+        ansible.playbook = "../../playbooks/etcd.yml"
       end
     end
   end

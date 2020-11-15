@@ -13,11 +13,17 @@
 
 - name: Copy ca certificate
   copy:
-    src: "{{ item.src }}"
+    src: ./roles/vault/config/files/ca.crt
+    dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/ca.crt"
+    mode: 0644
+  notify: Restart docker service
+
+- name: Copy certificate and private key
+  copy:
+    src: "./roles/harbor/setup/files/{{ item.src }}"
     dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/{{ item.dest }}"
     mode: 0644
   with_items:
-    - { src: ca.crt , dest: ca.crt }
     - { src: harbor.ipool.me.crt , dest: harbor.ipool.me.crt }
     - { src: harbor.ipool.me.key , dest: harbor.ipool.me.key }
   notify: Restart docker service

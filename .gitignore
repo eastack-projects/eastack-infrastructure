@@ -1,7 +1,7 @@
 .vagrant
 
-.cache/**
-!.cache/.gitkeep
+vagrantfiles/.cache/**
+!vagrantfiles/.cache/.gitkeep
 
 *.crt
 *.csr

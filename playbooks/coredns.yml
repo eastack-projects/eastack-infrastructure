@@ -4,3 +4,4 @@
   roles:
   - common/config
   - coredns/setup
+  - coredns/config

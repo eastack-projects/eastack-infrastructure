@@ -8,6 +8,7 @@ vault: Initializing the vault and fetch default ca file.
 
 == IP allocation
 
+coredns:: 192.168.33.10
 vault:: 192.168.33.20
 etcd:: 192.168.33.31..3
 

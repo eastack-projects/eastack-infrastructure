@@ -5,7 +5,7 @@
 
 - name: Copy self-signed certificate
   copy:
-    src: ./roles/vault/setup/files/tls.crt
+    src: ./roles/vault/config/files/ca.crt
     dest: /usr/local/share/ca-certificates/ca.crt
     mode: 0755
   notify: Setup ca certificate

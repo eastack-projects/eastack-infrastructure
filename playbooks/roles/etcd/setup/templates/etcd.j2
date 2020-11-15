@@ -7,7 +7,7 @@ ETCD_ARGS="--name {{ ansible_facts.hostname }} \
   --initial-cluster etcd1=https://192.168.33.31:2380,etcd2=https://192.168.33.32:2380,etcd3=https://192.168.33.33:2380 \
   --initial-cluster-state new \
   --client-cert-auth \
-  --trusted-ca-file=/opt/etcd/tls/intermediate-ca.crt \
+  --trusted-ca-file=/opt/etcd/tls/ca.crt \
   --cert-file=/opt/etcd/tls/client.crt --key-file=/opt/etcd/tls/client.key \
-  --peer-client-cert-auth --peer-trusted-ca-file=/opt/etcd/tls/intermediate-ca.crt \
+  --peer-client-cert-auth --peer-trusted-ca-file=/opt/etcd/tls/ca.crt \
   --peer-cert-file=/opt/etcd/tls/peer.crt --peer-key-file=/opt/etcd/tls/peer.key"

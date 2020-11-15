@@ -2,7 +2,7 @@
   become: true
   hosts: all
   roles:
-  - docker/setup
-  - harbor/setup
-  - coredns/config
   - common/config
+  - coredns/config
+  - harbor/setup
+  - docker/setup

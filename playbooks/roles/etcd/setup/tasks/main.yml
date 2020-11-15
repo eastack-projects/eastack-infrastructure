@@ -44,7 +44,7 @@
 
 - name: Copy ca certificate
   copy:
-    src: ./roles/vault/config/files/intermediate-ca.crt
+    src: ./roles/vault/config/files/ca.crt
     dest: /opt/etcd/tls/
     mode: 0644
   notify: Enable and restart etcd service
@@ -54,20 +54,6 @@
     file: ./roles/vault/config/files/sys-init-result.json
     name: sys_init_result
 
-- name: Add vault etcd role
-  uri:
-    method: POST
-    validate_certs: no
-    headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/roles/etcd-role
-    body_format: json
-    status_code: 204
-    body:
-     allowed_domains: etcd.ipool.me
-     allow_subdomains: true
-     max_ttl: 2400h
-
 # Generate etcd peer certificate
 - name: Generate etcd peer certificate
   uri:
@@ -75,7 +61,7 @@
     validate_certs: no
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/issue/etcd-role
+    url: https://Vault:8200/v1/pki_int/issue/ipool-dot-me
     body_format: json
     status_code: 200
     body:

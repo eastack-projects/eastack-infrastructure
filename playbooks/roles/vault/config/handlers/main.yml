@@ -76,7 +76,7 @@
     body_format: json
     status_code: 204
     body:
-      pem_bundle: "{{ lookup('file', './roles/common/config/files/tls.key') + '\n' +  lookup('file', './roles/common/config/files/tls.crt') }}"
+      pem_bundle: "{{ lookup('file', './roles/vault/setup/files/tls.key') + '\n' +  lookup('file', './roles/vault/setup/files/tls.crt') }}"
   listen: Initializing the vault
 
 # Mount intermediate ca
@@ -125,7 +125,7 @@
   local_action:
     module: copy
     content: "{{ intermediate_ca_csr.json.data.csr }}"
-    dest: ./roles/vault/config/files/intermediate-ca.csr
+    dest: ./roles/vault/config/files/ca.csr
   listen: Initializing the vault
 
 - name: Sign intermediate ca
@@ -137,7 +137,7 @@
     url: https://Vault:8200/v1/pki/root/sign-intermediate
     body_format: json
     body:
-      csr: "{{ lookup('file', './roles/vault/config/files/intermediate-ca.csr') }}"
+      csr: "{{ lookup('file', './roles/vault/config/files/ca.csr') }}"
       common_name: ipool.me
       ttl: 2400h
   register: intermediate_ca_crt
@@ -148,7 +148,7 @@
   local_action:
     module: copy
     content: "{{ intermediate_ca_crt.json.data.certificate }}"
-    dest: ./roles/vault/config/files/intermediate-ca.crt
+    dest: ./roles/vault/config/files/ca.crt
   listen: Initializing the vault
 
 - name: Set sign intermediate
@@ -161,6 +161,21 @@
     body_format: json
     status_code: 204
     body:
-      certificate: "{{ lookup('file', './roles/vault/config/files/intermediate-ca.crt') }}"
+      certificate: "{{ lookup('file', './roles/vault/config/files/ca.crt') }}"
   register: intermediate_ca_crt
+  listen: Initializing the vault
+
+- name: Add ipool.me common role
+  uri:
+    method: POST
+    validate_certs: no
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    url: https://Vault:8200/v1/pki_int/roles/ipool-dot-me
+    body_format: json
+    status_code: 204
+    body:
+     allowed_domains: ipool.me
+     allow_subdomains: true
+     max_ttl: 2400h
   listen: Initializing the vault

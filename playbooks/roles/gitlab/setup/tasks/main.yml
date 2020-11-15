@@ -40,20 +40,6 @@
     file: ./roles/vault/config/files/sys-init-result.json
     name: sys_init_result
 
-- name: Add vault etcd role
-  uri:
-    method: POST
-    validate_certs: no
-    headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/roles/gitlab-role
-    body_format: json
-    status_code: 204
-    body:
-     allowed_domains: gitlab.ipool.me
-     allow_subdomains: true
-     max_ttl: 2400h
-
 # Generate gitlab certificate
 - name: Generate gitlab certificate
   uri:
@@ -61,7 +47,7 @@
     validate_certs: no
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/issue/gitlab-role
+    url: https://Vault:8200/v1/pki_int/issue/ipool-dot-me
     body_format: json
     status_code: 200
     body:
