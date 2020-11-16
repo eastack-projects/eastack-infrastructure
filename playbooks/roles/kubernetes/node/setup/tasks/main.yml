@@ -21,11 +21,11 @@
   copy:
     src: "/opt/kubernetes/node/bin/{{ item }}"
     dest: "/usr/bin/{{ item }}"
-    remote_src: true
+    remote_src: yes
     mode: 0755
   with_items:
-  - kubelet
-  - kube-proxy
+    - kubelet
+    - kube-proxy
   notify: Restart kubernetes node service
 
 - name: Add kubelet systemd service
@@ -50,10 +50,10 @@
     dest: /etc/kubernetes
     mode: 0644
   with_items:
-  - kubelet
-  - kube-proxy
-  - kubeconfig
-  - kubelet.yml
+    - kubelet
+    - kube-proxy
+    - kubeconfig
+    - kubelet.yml
   notify: Restart kubernetes node service
 
 - name: Pull Pause docker image

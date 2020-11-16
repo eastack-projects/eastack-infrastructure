@@ -1,7 +1,8 @@
 - name: Initialize etcd cluster
-  become: true
+  become: yes
   hosts: all
   roles:
     - common/config
     - coredns/config
+    - etcd/gencert
     - etcd/setup

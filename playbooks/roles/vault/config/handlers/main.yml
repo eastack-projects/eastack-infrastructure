@@ -13,7 +13,7 @@
   listen: Initializing the vault
 
 - name: Persistent init result
-  become: false
+  become: no
   local_action:
     module: copy
     content: "{{ result.json }}"
@@ -62,7 +62,7 @@
     body_format: json
     status_code: 204
     body:
-      max_lease_ttl: "2400h"
+      max_lease_ttl: 2400h
   listen: Initializing the vault
 
 # Submit ca certificate
@@ -103,7 +103,7 @@
     body_format: json
     status_code: 204
     body:
-      max_lease_ttl: "2400h"
+      max_lease_ttl: 2400h
   listen: Initializing the vault
 
 # Generate intermediate ca
@@ -121,7 +121,7 @@
   listen: Initializing the vault
 
 - name: Persistent peer intermediate ca csr result
-  become: false
+  become: no
   local_action:
     module: copy
     content: "{{ intermediate_ca_csr.json.data.csr }}"
@@ -144,7 +144,7 @@
   listen: Initializing the vault
 
 - name: Persistent intermediate ca crt result
-  become: false
+  become: no
   local_action:
     module: copy
     content: "{{ intermediate_ca_crt.json.data.certificate }}"
@@ -176,6 +176,6 @@
     status_code: 204
     body:
      allowed_domains: ipool.me
-     allow_subdomains: true
+     allow_subdomains: yes
      max_ttl: 2400h
   listen: Initializing the vault

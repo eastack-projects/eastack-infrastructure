@@ -10,7 +10,7 @@
   systemd:
     name: postfix
     state: started
-    enabled: true
+    enabled: yes
 
 - name: Add an apt signing key, uses whichever key is at the url
   apt_key:
@@ -31,41 +31,21 @@
 
 - name: Create certificate directory
   file:
-    path: "/etc/gitlab/ssl"
+    path: /etc/gitlab/ssl
     state: directory
     mode: 0644
 
-- name: Include keys as variable
-  include_vars:
-    file: ./roles/vault/config/files/sys-init-result.json
-    name: sys_init_result
-
-# Generate gitlab certificate
-- name: Generate gitlab certificate
-  uri:
-    method: POST
-    validate_certs: no
-    headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/issue/ipool-dot-me
-    body_format: json
-    status_code: 200
-    body:
-      common_name: "gitlab.ipool.me"
-      max_ttl: 2400h
-  register: "certificate"
-
-- name: Persistent gitlab certificate
+- name: Copy self-signed certificate
   copy:
-    content: "{{ certificate.json.data.certificate }}"
-    dest: "/etc/gitlab/ssl/{{ GITLAB_FQDN }}.crt"
+    src: "./roles/gitlab/gencert/files/{{ item }}"
+    dest: "/etc/gitlab/ssl/{{ item }}"
     mode: 0644
-
-- name: Persistent gitlab key
-  copy:
-    content: "{{ certificate.json.data.private_key }}"
-    dest: "/etc/gitlab/ssl/{{ GITLAB_FQDN }}.key"
-    mode: 0644
+  with_items:
+    - server.key
+    - server.crt
+    - client.key
+    - client.crt
+  notify: Restart kubernetes server service
 
 - name: Install gitlab-ce and gitlab-runner
   apt:

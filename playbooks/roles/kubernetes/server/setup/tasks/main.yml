@@ -1,25 +1,25 @@
 - name: Create kubernetes temporary directory
   file:
-    path: /opt/kubernetes
+    path: /tmp/kubernetes
     state: directory
 
 - name: Extract kubernetes package
   unarchive:
     src: "{{ KUBERNETES_PACKAGE }}"
-    dest: /opt/kubernetes
-    creates: /opt/kubernetes/server
-    extra_opts: [--strip-components=1]
+    dest: /tmp/kubernetes
+    creates: /tmp/kubernetes/server
+    extra_opts: [ "--strip-components=1" ]
 
 - name: Install Kubernetes components
   copy:
-    src: "/opt/kubernetes/server/bin/{{ item }}"
+    remote_src: yes
+    src: "/tmp/kubernetes/server/bin/{{ item }}"
     dest: "/usr/bin/{{ item }}"
-    remote_src: true
     mode: 0755
   with_items:
-  - kube-apiserver
-  - kube-controller-manager
-  - kube-scheduler
+    - kube-apiserver
+    - kube-controller-manager
+    - kube-scheduler
   notify: Restart kubernetes server service
 
 - name: Add kubernetes systemd service
@@ -28,9 +28,9 @@
     dest: "/usr/lib/systemd/system/{{ item }}"
     mode: 0644
   with_items:
-  - kube-apiserver.service
-  - kube-controller-manager.service
-  - kube-scheduler.service
+    - kube-apiserver.service
+    - kube-controller-manager.service
+    - kube-scheduler.service
   notify: Restart kubernetes server service
 
 - name: Create kubernetes config directory
@@ -45,10 +45,10 @@
     dest: "/etc/kubernetes/{{ item }}"
     mode: 0644
   with_items:
-  - kubeconfig
-  - apiserver
-  - controller-manager
-  - scheduler
+    - kubeconfig
+    - apiserver
+    - controller-manager
+    - scheduler
   notify: Restart kubernetes server service
 
 - name: Create kubernetes pki directory
@@ -59,14 +59,12 @@
 
 - name: Copy self-signed certificate
   copy:
-    src: "{{ item }}"
+    src: "./roles/kubernetes/server/gencert/files/{{ item }}"
     dest: "/etc/kubernetes/pki/{{ item }}"
     mode: 0644
   with_items:
-  - ca.crt
-  - ca.key
-  - server.kubernetes.ipool.me.key
-  - server.kubernetes.ipool.me.crt
-  - client.kubernetes.ipool.me.key
-  - client.kubernetes.ipool.me.crt
+    - server.key
+    - server.crt
+    - client.key
+    - client.crt
   notify: Restart kubernetes server service

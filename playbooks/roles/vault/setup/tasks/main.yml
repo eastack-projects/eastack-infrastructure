@@ -12,15 +12,15 @@
 
 - name: Install Vault
   apt:
-    update_cache: true
+    update_cache: yes
     name:
-    - vault
+      - vault
 
 - name: Fetch vault certificate
   fetch:
     src: "/opt/vault/tls/{{ item }}"
     dest: "./roles/vault/setup/files/{{ item }}"
-    flat: true
+    flat: yes
   with_items:
     - tls.crt
     - tls.key

@@ -8,8 +8,8 @@ FQDN = 'harbor.ipool.me'
 with open('harbor.yml.tmpl', 'r') as file:
     content = load(file, Loader=Loader)
     content['hostname'] = FQDN
-    content['https']['certificate'] = f'/opt/harbor/certificate/{FQDN}.crt'
-    content['https']['private_key'] = f'/opt/harbor/certificate/{FQDN}.key'
+    content['https']['certificate'] = f'/opt/harbor/tls/{FQDN}.crt'
+    content['https']['private_key'] = f'/opt/harbor/tls/{FQDN}.key'
     content['data_volume'] = '/opt/harbor/data'
 
 with open('harbor.yml', 'w') as file:

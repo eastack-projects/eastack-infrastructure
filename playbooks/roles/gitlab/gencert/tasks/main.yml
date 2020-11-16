@@ -1,0 +1,37 @@
+---
+# tasks file for gencert
+- name: Include keys as variable
+  include_vars:
+    file: ./roles/vault/config/files/sys-init-result.json
+    name: sys_init_result
+
+# Generate gitlab certificate
+- name: Generate gitlab certificate
+  uri:
+    method: POST
+    validate_certs: no
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    url: https://Vault:8200/v1/pki_int/issue/ipool-dot-me
+    body_format: json
+    status_code: 200
+    body:
+      common_name: gitlab.ipool.me
+      max_ttl: 2400h
+  register: certificate
+
+- name: Persistent gitlab certificate
+  become: no
+  local_action:
+    module: copy
+    content: "{{ certificate.json.data.certificate }}"
+    dest: "/etc/gitlab/ssl/{{ GITLAB_FQDN }}.crt"
+    mode: 0644
+
+- name: Persistent gitlab key
+  become: no
+  local_action:
+    module: copy
+    content: "{{ certificate.json.data.private_key }}"
+    dest: "/etc/gitlab/ssl/{{ GITLAB_FQDN }}.key"
+    mode: 0644

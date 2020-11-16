@@ -1,0 +1,36 @@
+---
+# tasks file for gencert
+- name: Include keys as variable
+  include_vars:
+    file: ./roles/vault/config/files/sys-init-result.json
+    name: sys_init_result
+
+# Generate harbor certificate
+- name: Generate harbor certificate
+  uri:
+    method: POST
+    validate_certs: no
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    url: https://Vault:8200/v1/pki_int/issue/ipool-dot-me
+    body_format: json
+    status_code: 200
+    body:
+      common_name: harbor.ipool.me
+      max_ttl: 2400h
+  register: certificate
+
+- name: Persistent harbor certificate
+  become: no
+  local_action:
+    module: copy
+    content: "{{ certificate.json.data.certificate }}"
+    dest: "./roles/harbor/gencert/files/{{ HARBOR_FQDN }}.crt"
+
+- name: Persistent harbor private key
+  become: no
+  local_action:
+    module: copy
+    content: "{{ certificate.json.data.private_key }}"
+    dest: "./roles/harbor/gencert/files/{{ HARBOR_FQDN }}.key"
+

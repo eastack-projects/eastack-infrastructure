@@ -3,5 +3,5 @@
   systemd:
     name: coredns
     state: restarted
-    daemon_reload: true
-    enabled: true
+    daemon_reload: yes
+    enabled: yes

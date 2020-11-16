@@ -1,6 +1,6 @@
 ---
 - name: Update vault ip address
-  become: false
+  become: no
   local_action:
     module: replace
     path: ./roles/coredns/config/defaults/main.yml
@@ -16,8 +16,8 @@
 - name: Enable vault service
   systemd:
     name: vault
-    daemon_reload: true
-    enabled: true
+    daemon_reload: yes
+    enabled: yes
   notify: Initializing the vault
 
 - name: Start vault service

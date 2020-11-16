@@ -3,8 +3,8 @@
   systemd:
     name: "{{ item }}"
     state: restarted
-    enabled: true
-    daemon_reload: true
+    enabled: yes
+    daemon_reload: yes
   with_items:
-  - kubelet
-  - kube-proxy
+    - kubelet
+    - kube-proxy

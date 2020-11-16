@@ -1,9 +1,7 @@
 - name: Initialize vault
-  become: true
+  become: yes
   hosts: all
   roles:
     - vault/setup
-      #    - vault/unseal
-    - common/config
-    - vault/config
     - coredns/config
+    - vault/config

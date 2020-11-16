@@ -1,5 +1,5 @@
 - name: Initialize coredns
-  become: true
+  become: yes
   hosts: all
   roles:
   - common/config

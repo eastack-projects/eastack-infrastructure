@@ -14,7 +14,7 @@
   copy:
     src: /tmp/coredns/coredns
     dest: /usr/bin/coredns
-    remote_src: true
+    remote_src: yes
     mode: 0755
   notify: Enable and restart coredns service
 
@@ -31,12 +31,12 @@
     dest: /var/lib/coredns/
     mode: 0644
   with_items:
-  - Corefile
-  - ipool.me.db
+    - Corefile
+    - ipool.me.db
   notify: Enable and restart coredns service
 
 - name: Stop systemd-resolved service
   systemd:
     name: systemd-resolved
     state: stopped
-    enabled: false
+    enabled: no

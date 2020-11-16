@@ -21,7 +21,7 @@
   copy:
     src: "/opt/etcd/{{ item }}"
     dest: "/usr/bin/{{ item }}"
-    remote_src: true
+    remote_src: yes
     mode: 0755
   with_items:
     - etcd
@@ -49,63 +49,14 @@
     mode: 0644
   notify: Enable and restart etcd service
 
-- name: Include keys as variable
-  include_vars:
-    file: ./roles/vault/config/files/sys-init-result.json
-    name: sys_init_result
-
-# Generate etcd peer certificate
-- name: Generate etcd peer certificate
-  uri:
-    method: POST
-    validate_certs: no
-    headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/issue/ipool-dot-me
-    body_format: json
-    status_code: 200
-    body:
-      common_name: "peer.etcd.ipool.me"
-      max_ttl: 2400h
-      ip_sans: "{{ ansible_facts.enp0s8.ipv4.address }}"
-  register: "peer_certificate"
-
-- name: Persistent peer certificate
+- name: Copy self-signed certificate
   copy:
-    content: "{{ peer_certificate.json.data.certificate }}"
-    dest: "/opt/etcd/tls/peer.crt"
+    src: "./roles/etcd/gencert/files/{{ item }}"
+    dest: "/opt/etcd/tls/{{ item }}"
     mode: 0644
+  with_items:
+    - peer.key
+    - peer.crt
+    - client.key
+    - client.crt
 
-- name: Persistent peer key
-  copy:
-    content: "{{ peer_certificate.json.data.private_key }}"
-    dest: "/opt/etcd/tls/peer.key"
-    mode: 0644
-
-# Generate etcd client certificate
-- name: Generate etcd client certificate
-  uri:
-    method: POST
-    validate_certs: no
-    headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/issue/etcd-role
-    body_format: json
-    status_code: 200
-    body:
-      common_name: "client.etcd.ipool.me"
-      max_ttl: 2400h
-      ip_sans: "{{ ansible_facts.enp0s8.ipv4.address }}"
-  register: "client_certificate"
-
-- name: Persistent client certificate
-  copy:
-    content: "{{ client_certificate.json.data.certificate }}"
-    dest: "/opt/etcd/tls/client.crt"
-    mode: 0644
-
-- name: Persistent client key
-  copy:
-    content: "{{ client_certificate.json.data.private_key }}"
-    dest: "/opt/etcd/tls/client.key"
-    mode: 0644

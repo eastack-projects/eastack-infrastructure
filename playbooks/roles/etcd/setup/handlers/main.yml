@@ -2,6 +2,6 @@
 - name: Enable and restart etcd service
   systemd:
     name: etcd
-    daemon_reload: true
-    enabled: true
+    daemon_reload: yes
+    enabled: yes
     state: restarted
