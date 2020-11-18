@@ -113,7 +113,7 @@
     validate_certs: no
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/intermediate/generate/internal
+    url: https://Vault:8200/v1/pki_int/intermediate/generate/exported
     body_format: json
     body:
       common_name: ipool.me
@@ -126,6 +126,14 @@
     module: copy
     content: "{{ intermediate_ca_csr.json.data.csr }}"
     dest: ./roles/vault/config/files/ca.csr
+  listen: Initializing the vault
+
+- name: Persistent intermediate ca private key result
+  become: no
+  local_action:
+    module: copy
+    content: "{{ intermediate_ca_csr.json.data.private_key }}"
+    dest: ./roles/vault/config/files/ca.key
   listen: Initializing the vault
 
 - name: Sign intermediate ca
@@ -143,7 +151,7 @@
   register: intermediate_ca_crt
   listen: Initializing the vault
 
-- name: Persistent intermediate ca crt result
+- name: Persistent intermediate ca certificate result
   become: no
   local_action:
     module: copy
@@ -175,7 +183,8 @@
     body_format: json
     status_code: 204
     body:
-     allowed_domains: ipool.me
-     allow_subdomains: yes
-     max_ttl: 2400h
+      allowed_domains: ipool.me
+      allow_any_name: true
+      allow_subdomains: yes
+      max_ttl: 2400h
   listen: Initializing the vault

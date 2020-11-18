@@ -26,7 +26,7 @@
   local_action:
     module: copy
     content: "{{ peer_certificate.json.data.certificate }}"
-    dest: ./roles/etcd/gencert/files/server.crt
+    dest: ./roles/etcd/gencert/files/peer.crt
     mode: 0644
 
 - name: Persistent peer key
@@ -34,7 +34,7 @@
   local_action:
     module: copy
     content: "{{ peer_certificate.json.data.private_key }}"
-    dest: ./roles/etcd/gencert/files/server.key
+    dest: ./roles/etcd/gencert/files/peer.key
     mode: 0644
 
 # Generate etcd client certificate
@@ -58,7 +58,7 @@
   local_action:
     module: copy
     content: "{{ client_certificate.json.data.certificate }}"
-    dest: ./roles/etcd/gencert/files/client.key
+    dest: ./roles/etcd/gencert/files/client.crt
     mode: 0644
 
 - name: Persistent client key

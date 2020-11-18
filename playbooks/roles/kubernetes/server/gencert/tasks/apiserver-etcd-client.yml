@@ -1,0 +1,48 @@
+---
+- name: Generate front proxy ca csr
+  uri:
+    method: POST
+    validate_certs: no
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    url: https://Vault:8200/v1/pki_int/intermediate/generate/exported
+    body_format: json
+    body:
+      common_name: front-proxy-ca
+  register: intermediate_ca_csr
+
+- name: Persistent front proxy intermediate ca csr result
+  become: no
+  local_action:
+    module: copy
+    content: "{{ intermediate_ca_csr.json.data.csr }}"
+    dest: ./roles/kubernetes/server/gencert/files/front-proxy.csr
+
+- name: Persistent front proxy ca private key result
+  become: no
+  local_action:
+    module: copy
+    content: "{{ intermediate_ca_csr.json.data.private_key }}"
+    dest: ./roles/kubernetes/server/gencert/files/front-proxy.key
+
+- name: Sign front proxy ca
+  uri:
+    method: POST
+    validate_certs: no
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    url: https://Vault:8200/v1/pki/root/sign-intermediate
+    body_format: json
+    body:
+      csr: "{{ lookup('file', './roles/kubernetes/server/gencert/files/front-proxy.csr') }}"
+      common_name: front-proxy-ca
+      ttl: 2400h
+  register: intermediate_ca_crt
+
+- name: Persistent intermediate ca certificate result
+  become: no
+  local_action:
+    module: copy
+    content: "{{ intermediate_ca_crt.json.data.certificate }}"
+    dest: ./roles/kubernetes/server/gencert/files/front-proxy.crt
+

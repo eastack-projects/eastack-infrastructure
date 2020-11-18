@@ -2,6 +2,6 @@
   become: yes
   hosts: all
   roles:
-    - vault/setup
-    - coredns/config
+#    - vault/setup
+#    - coredns/config
     - vault/config

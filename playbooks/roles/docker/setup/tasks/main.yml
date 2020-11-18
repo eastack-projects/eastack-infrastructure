@@ -3,7 +3,7 @@
   apt:
     update_cache: yes
     name:
-    - docker-compose
+      - docker-compose
 
 - name: Create docker cert directory
   file:

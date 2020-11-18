@@ -5,64 +5,38 @@
     file: ./roles/vault/config/files/sys-init-result.json
     name: sys_init_result
 
-# Generate kubernetes server certificate
-- name: Generate kubernetes server certificate
-  uri:
-    method: POST
-    validate_certs: no
-    headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/issue/ipool-dot-me
-    body_format: json
-    status_code: 200
-    body:
-      common_name: server.kubernetes.ipool.me
-      max_ttl: 2400h
-  register: server_certificate
-
-- name: Persistent server certificate
-  become: no
-  local_action:
-    module: copy
-    content: "{{ server_certificate.json.data.certificate }}"
-    dest: ./roles/kubernetes/server/gencert/files/server.crt
-    mode: 0644
-
-- name: Persistent server key
-  become: no
-  local_action:
-    module: copy
-    content: "{{ server_certificate.json.data.private_key }}"
-    dest: ./roles/kubernetes/server/gencert/files/server.key
-    mode: 0644
+- include_tasks: apiserver.yml
+- include_tasks: apiserver-kubelet-client.yml
+- include_tasks: front-proxy-ca.yml
+- include_tasks: front-proxy-client.yml
 
 # Generate kubernetes client certificate
-- name: Generate kubernetes client certificate
-  uri:
-    method: POST
-    validate_certs: no
-    headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/issue/ipool-dot-me
-    body_format: json
-    status_code: 200
-    body:
-      common_name: client.kubernetes.ipool.me
-      max_ttl: 2400h
-  register: client_certificate
-
-- name: Persistent client certificate
-  become: no
-  local_action:
-    module: copy
-    content: "{{ client_certificate.json.data.certificate }}"
-    dest: ./roles/kubernetes/server/gencert/files/client.crt
-    mode: 0644
-
-- name: Persistent client key
-  become: no
-  local_action:
-    module: copy
-    content: "{{ client_certificate.json.data.private_key }}"
-    dest: ./roles/kubernetes/server/gencert/files/client.key
-    mode: 0644
+#- name: Generate kubernetes client certificate
+#  uri:
+#    method: POST
+#    validate_certs: no
+#    headers:
+#      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+#    url: https://Vault:8200/v1/pki_int/issue/ipool-dot-me
+#    body_format: json
+#    status_code: 200
+#    body:
+#      common_name: client.kubernetes.ipool.me
+#      max_ttl: 2400h
+#  register: client_certificate
+#
+#- name: Persistent client certificate
+#  become: no
+#  local_action:
+#    module: copy
+#    content: "{{ client_certificate.json.data.certificate }}"
+#    dest: ./roles/kubernetes/server/gencert/files/client.crt
+#    mode: 0644
+#
+#- name: Persistent client key
+#  become: no
+#  local_action:
+#    module: copy
+#    content: "{{ client_certificate.json.data.private_key }}"
+#    dest: ./roles/kubernetes/server/gencert/files/client.key
+#    mode: 0644

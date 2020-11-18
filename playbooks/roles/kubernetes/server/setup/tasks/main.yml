@@ -1,7 +1,11 @@
-- name: Create kubernetes temporary directory
+- name: Create kubernetes directory
   file:
-    path: /tmp/kubernetes
+    path: "{{ item }}"
     state: directory
+  with_items:
+    - /opt/kubernetes/tls
+    - /etc/kubernetes/
+    - /tmp/kubernetes
 
 - name: Extract kubernetes package
   unarchive:
@@ -33,12 +37,6 @@
     - kube-scheduler.service
   notify: Restart kubernetes server service
 
-- name: Create kubernetes config directory
-  file:
-    path: /etc/kubernetes
-    state: directory
-    mode: 0644
-
 - name: Add kubernetes apiserver environment file
   copy:
     src: "{{ item }}"
@@ -51,20 +49,42 @@
     - scheduler
   notify: Restart kubernetes server service
 
-- name: Create kubernetes pki directory
-  file:
-    path: /etc/kubernetes/pki
-    state: directory
-    mode: 0755
+- name: Copy kubernetes ca certificate and private key
+  copy:
+    src: "./roles/vault/config/files/{{ item }}"
+    dest: "/opt/kubernetes/tls/{{ item }}"
+    mode: 0644
+  with_items:
+    - ca.crt
+    - ca.key
+  notify: Restart kubernetes server service
 
-- name: Copy self-signed certificate
+- name: Copy self-signed kubernetes certificate
   copy:
     src: "./roles/kubernetes/server/gencert/files/{{ item }}"
-    dest: "/etc/kubernetes/pki/{{ item }}"
+    dest: "/opt/kubernetes/tls/{{ item }}"
     mode: 0644
   with_items:
     - server.key
     - server.crt
+    - client.key
+    - client.crt
+  notify: Restart kubernetes server service
+
+# Copy etcd certificate
+- name: Copy etcd ca certificate
+  copy:
+    src: ./roles/vault/config/files/ca.crt
+    dest: /opt/etcd/tls/
+    mode: 0644
+  notify: Restart kubernetes server service
+
+- name: Copy self-signed etcd certificate
+  copy:
+    src: "./roles/etcd/gencert/files/{{ item }}"
+    dest: "/opt/etcd/tls/{{ item }}"
+    mode: 0644
+  with_items:
     - client.key
     - client.crt
   notify: Restart kubernetes server service
