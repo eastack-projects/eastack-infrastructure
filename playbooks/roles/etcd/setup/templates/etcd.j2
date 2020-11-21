@@ -4,7 +4,7 @@ ETCD_ARGS="--name {{ ansible_facts.hostname }} \
   --listen-client-urls https://{{ ansible_facts.enp0s8.ipv4.address }}:2379,http://127.0.0.1:2379 \
   --advertise-client-urls https://{{ ansible_facts.enp0s8.ipv4.address }}:2379 \
   --initial-cluster-token etcd-cluster-1 \
-  --initial-cluster etcd1=https://192.168.33.31:2380,etcd2=https://192.168.33.32:2380,etcd3=https://192.168.33.33:2380 \
+  --initial-cluster etcd=https://192.168.123.202:2380 \
   --initial-cluster-state new \
   --client-cert-auth \
   --trusted-ca-file=/opt/etcd/tls/ca.crt \

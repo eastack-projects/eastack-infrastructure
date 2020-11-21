@@ -2,8 +2,8 @@
   become: yes
   hosts: all
   roles:
-    #    - common/config
-    #    - coredns/config
-#    - vault/unseal
-    - kubernetes/server/gencert
-#    - kubernetes/server/setup
+          #    - common/config
+          #    - coredns/config
+          #    - vault/unseal
+          #    - kubernetes/server/gencert
+    - kubernetes/server/setup

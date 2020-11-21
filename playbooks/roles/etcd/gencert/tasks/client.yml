@@ -9,9 +9,9 @@
     body_format: json
     status_code: 204
     body:
+      allow_any_name: true
       allowed_domains: client.etcd.ipool.me
       max_ttl: 2400h
-  listen: Initializing the vault
 
 - name: Generate etcd client certificate
   uri:

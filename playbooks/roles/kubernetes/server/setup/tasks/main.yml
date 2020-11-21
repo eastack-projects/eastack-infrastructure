@@ -70,17 +70,15 @@
     mode: 0644
   with_items:
     - apiserver.crt
+    - apiserver.key
     - apiserver-etcd-client.crt
     - apiserver-etcd-client.key
-    - apiserver.key
     - apiserver-kubelet-client.crt
     - apiserver-kubelet-client.key
     - front-proxy-ca.crt
     - front-proxy-ca.key
     - front-proxy-client.crt
     - front-proxy-client.key
-    - front-proxy.crt
-    - front-proxy.key
     - sa.key
     - sa.pub
   notify: Restart kubernetes server service
