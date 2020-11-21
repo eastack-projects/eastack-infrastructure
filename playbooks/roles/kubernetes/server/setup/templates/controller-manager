@@ -1,0 +1,4 @@
+[Service]
+Environment="KUBE_CONTROLLER_MANAGER_ARGS=--authentication-kubeconfig=/etc/kubernetes/controller-manager.conf --authorization-kubeconfig=/etc/kubernetes/controller-manager.conf --bind-address={{ ansible_facts.enp0s8.ipv4.address }} --client-ca-file=/opt/kubernetes/tls/ca.crt --cluster-name=kubernetes --cluster-signing-cert-file=/opt/kubernetes/tls/ca.crt --cluster-signing-key-file=/opt/kubernetes/tls/ca.key --controllers=*,bootstrapsigner,tokencleaner --kubeconfig=/etc/kubernetes/controller-manager.conf --leader-elect=true --port=0 --requestheader-client-ca-file=/opt/kubernetes/tls/front-proxy-ca.crt --root-ca-file=/opt/kubernetes/tls/ca.crt --service-account-private-key-file=/opt/kubernetes/tls/sa.key --use-service-account-credentials=true"
+ExecStart=
+ExecStart=/usr/bin/kube-controller-manager $KUBE_CONTROLLER_MANAGER_ARGS
