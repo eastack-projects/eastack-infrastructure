@@ -21,17 +21,17 @@
     dest: /opt/harbor/generate-harbor-yml.py
     mode: 0755
 
+- name: Copy harbor certificate
+  copy:
+    src: "./roles/harbor/gencert/files/{{ HARBOR_FQDN }}.{{ item }}"
+    dest: "/opt/harbor/tls/{{ HARBOR_FQDN }}.{{ item }}"
+    mode: 0644
+  with_items:
+    - crt
+    - key
+
 - name: Generate harbor.yml
   shell: ./generate-harbor-yml.py
   args:
     chdir: /opt/harbor
   notify: Restart harbor
-
-- name: Copy harbor certificate
-  copy:
-    src: "./roles/harbor/gencert/files/{{ HARBOR_FQDN }}.{{ item }}"
-    dest: "/opt/harbor/tls/{{ HARBOR_FQDN }}. {{ item }}"
-    mode: 0644
-  with_items:
-    - crt
-    - key

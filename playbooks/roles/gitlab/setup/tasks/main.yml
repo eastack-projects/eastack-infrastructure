@@ -3,8 +3,8 @@
   apt:
     update_cache: yes
     name:
-    - postfix
-    - apt-transport-https
+      - postfix
+      - apt-transport-https
 
 - name: Enable and start postfix service
   systemd:
@@ -35,23 +35,20 @@
     state: directory
     mode: 0644
 
-- name: Copy self-signed certificate
+- name: Copy kubernetes certificate
   copy:
-    src: "./roles/gitlab/gencert/files/{{ item }}"
-    dest: "/etc/gitlab/ssl/{{ item }}"
+    src: "./roles/gitlab/gencert/{{ GITLAB_FQDN }}.{{ item }}"
+    dest: "/etc/gitlab/ssl/{{ GITLAB_FQDN }}.{{ item }}"
     mode: 0644
   with_items:
-    - server.key
-    - server.crt
-    - client.key
-    - client.crt
-  notify: Restart kubernetes server service
+    - key
+    - crt
 
 - name: Install gitlab-ce and gitlab-runner
   apt:
     update_cache: yes
     name:
-    - gitlab-ce
-    - gitlab-runner
+      - gitlab-ce
+      - gitlab-runner
   environment:
     EXTERNAL_URL: "{{ EXTERNAL_URL }}"
