@@ -4,8 +4,12 @@
     state: directory
   with_items:
     - /opt/kubernetes/tls
-    - /etc/kubernetes/
+    - /opt/etcd/tls
+    - /etc/kubernetes
     - /tmp/kubernetes
+    - /etc/systemd/system/kube-apiserver.service.d
+    - /etc/systemd/system/kube-controller-manager.service.d
+    - /etc/systemd/system/kube-scheduler.service.d
 
 - name: Extract kubernetes package
   unarchive:
@@ -29,7 +33,7 @@
 - name: Add kubernetes systemd service
   copy:
     src: "{{ item }}"
-    dest: "/usr/lib/systemd/system/{{ item }}"
+    dest: "/lib/systemd/system/{{ item }}"
     mode: 0644
   with_items:
     - kube-apiserver.service
@@ -38,20 +42,52 @@
   notify: Restart kubernetes server service
 
 - name: Add kubernetes apiserver environment file
-  copy:
+  template:
     src: "{{ item }}"
-    dest: "/etc/kubernetes/{{ item }}"
+    dest: "/etc/systemd/system/kube-{{ item }}.service.d/10-{{ item }}.conf"
     mode: 0644
   with_items:
-    - kubeconfig
     - apiserver
     - controller-manager
     - scheduler
   notify: Restart kubernetes server service
 
-- name: Copy kubernetes ca certificate and private key
+- name: Add kubernetes conf file
+  template:
+    src: "{{ item }}"
+    dest: "/etc/kubernetes/{{ item }}"
+    mode: 0644
+  with_items:
+    - controller-manager.conf
+    - scheduler.conf
+    - admin.conf
+  notify: Restart kubernetes server service
+
+- name: Copy kubernetes certificate
   copy:
-    src: "./roles/vault/config/files/{{ item }}"
+    src: "./roles/kubernetes/server/gencert/files/{{ item }}"
+    dest: "/opt/kubernetes/tls/{{ item }}"
+    mode: 0644
+  with_items:
+    - apiserver.crt
+    - apiserver-etcd-client.crt
+    - apiserver-etcd-client.key
+    - apiserver.key
+    - apiserver-kubelet-client.crt
+    - apiserver-kubelet-client.key
+    - front-proxy-ca.crt
+    - front-proxy-ca.key
+    - front-proxy-client.crt
+    - front-proxy-client.key
+    - front-proxy.crt
+    - front-proxy.key
+    - sa.key
+    - sa.pub
+  notify: Restart kubernetes server service
+
+- name: Copy ca certificate
+  copy:
+    src: ./roles/vault/config/files/ca.crt
     dest: "/opt/kubernetes/tls/{{ item }}"
     mode: 0644
   with_items:
@@ -59,32 +95,9 @@
     - ca.key
   notify: Restart kubernetes server service
 
-- name: Copy self-signed kubernetes certificate
-  copy:
-    src: "./roles/kubernetes/server/gencert/files/{{ item }}"
-    dest: "/opt/kubernetes/tls/{{ item }}"
-    mode: 0644
-  with_items:
-    - server.key
-    - server.crt
-    - client.key
-    - client.crt
-  notify: Restart kubernetes server service
-
-# Copy etcd certificate
 - name: Copy etcd ca certificate
   copy:
     src: ./roles/vault/config/files/ca.crt
-    dest: /opt/etcd/tls/
+    dest: /opt/etcd/tls/ca.crt
     mode: 0644
-  notify: Restart kubernetes server service
-
-- name: Copy self-signed etcd certificate
-  copy:
-    src: "./roles/etcd/gencert/files/{{ item }}"
-    dest: "/opt/etcd/tls/{{ item }}"
-    mode: 0644
-  with_items:
-    - client.key
-    - client.crt
   notify: Restart kubernetes server service

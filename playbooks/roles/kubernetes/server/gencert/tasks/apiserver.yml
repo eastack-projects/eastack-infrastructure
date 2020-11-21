@@ -9,12 +9,12 @@
     body_format: json
     status_code: 204
     body:
+      key_usage: ["DigitalSignature", "KeyEncipherment"]
+      ext_key_usage: ["ServerAuth"]
       allowed_domains: apiserver.kubernetes.ipool.me
       allow_any_name: true
-      allow_subdomains: yes
       max_ttl: 2400h
 
-# Generate kubernetes apiserver certificate
 - name: Generate kubernetes apiserver certificate
   uri:
     method: POST
@@ -25,12 +25,9 @@
     body_format: json
     status_code: 200
     body:
-      key_usage: ["DigitalSignature", "KeyEncipherment"]
-      ext_key_usage: ["ExtKeyUsageServerAuth"]
       common_name: apiserver.kubernetes.ipool.me
       alt_names: "kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster.local"
       ip_sans: "10.96.0.1,{{ ansible_facts.enp0s8.ipv4.address }}"
-      max_ttl: 2400h
   register: apiserver_certificate
 
 - name: Persistent apiserver certificate

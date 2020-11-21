@@ -1,0 +1,44 @@
+---
+- name: Add etcd client role
+  uri:
+    method: POST
+    validate_certs: no
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    url: https://Vault:8200/v1/pki_int/roles/client.etcd.ipool.me
+    body_format: json
+    status_code: 204
+    body:
+      allowed_domains: client.etcd.ipool.me
+      max_ttl: 2400h
+  listen: Initializing the vault
+
+- name: Generate etcd client certificate
+  uri:
+    method: POST
+    validate_certs: no
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    url: https://Vault:8200/v1/pki_int/issue/client.etcd.ipool.me
+    body_format: json
+    status_code: 200
+    body:
+      common_name: client.etcd.ipool.me
+      ip_sans: "{{ ansible_facts.enp0s8.ipv4.address }}"
+  register: certificate
+
+- name: Persistent client certificate
+  become: no
+  local_action:
+    module: copy
+    content: "{{ certificate.json.data.certificate }}"
+    dest: ./roles/etcd/gencert/files/client.crt
+    mode: 0644
+
+- name: Persistent client key
+  become: no
+  local_action:
+    module: copy
+    content: "{{ certificate.json.data.private_key }}"
+    dest: ./roles/etcd/gencert/files/client.key
+    mode: 0644

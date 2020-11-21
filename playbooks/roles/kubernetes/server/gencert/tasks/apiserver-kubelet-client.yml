@@ -1,5 +1,4 @@
 ---
-
 - name: Add apiserver kubelet client role
   uri:
     method: POST
@@ -10,11 +9,13 @@
     body_format: json
     status_code: 204
     body:
+      key_usage: ["DigitalSignature", "KeyEncipherment"]
+      ext_key_usage: ["ClientAuth"]
       organization: system:masters
+      common_name: kube-apiserver-kubelet-client
       allow_any_name: true
       max_ttl: 2400h
 
-# Generate apiserver kubelet client certificate
 - name: Generate apiserver kubelet client  certificate
   uri:
     method: POST
@@ -25,10 +26,7 @@
     body_format: json
     status_code: 200
     body:
-      key_usage: ["DigitalSignature", "KeyEncipherment"]
-      ext_key_usage: ["ExtKeyUsageClientAuth"]
       common_name: kube-apiserver-kubelet-client
-      max_ttl: 2400h
   register: apiserver_kubelet_client_certificate
 
 - name: Persistent apiserver kubelet client certificate
@@ -46,4 +44,3 @@
     content: "{{ apiserver_kubelet_client_certificate.json.data.private_key }}"
     dest: ./roles/kubernetes/server/gencert/files/apiserver-kubelet-client.key
     mode: 0644
-

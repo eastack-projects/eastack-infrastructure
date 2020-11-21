@@ -1,13 +1,12 @@
 [Unit]
 Description=Kubernetes API Server
 Documentation=https://github.com/GoogleCloudPlatform/kubernetes
-After=etcd.service
-Want=etcd.service
+Wants=network-online.target
+After=network-online.target
 
 [Service]
-EnvironmentFile=/etc/kubernetes/apiserver
-ExecStart=/usr/bin/kube-apiserver $KUBE_API_ARGS
-Restart=on-failure
+ExecStart=/usr/bin/kube-apiserver
+Restart=failure
 LimitNOFILE=65536
 
 [Install]

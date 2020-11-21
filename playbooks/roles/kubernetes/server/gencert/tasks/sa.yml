@@ -1,0 +1,16 @@
+---
+- name: Generate sa rsa private key
+  become: no
+  local_action:
+    module: shell
+    cmd: openssl genrsa -out sa.key 2048
+    args:
+      chdir: ./roles/kubernetes/server/gencert/files
+
+- name: Generate sa rsa public key
+  become: no
+  local_action:
+    module: shell
+    cmd: openssl rsa -in sa.key -pubout -out sa.pub
+    args:
+      chdir: ./roles/kubernetes/server/gencert/files
