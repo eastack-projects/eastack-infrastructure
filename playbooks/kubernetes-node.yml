@@ -2,8 +2,8 @@
   become: yes
   hosts: all
   roles:
-  - coredns/config
-  - common/config
-  - docker/setup
-  - kubernetes-node/prepare
-  - kubernetes-node/setup
+    - coredns/config
+    - common/config
+    - docker/setup
+    - kubernetes-node/prepare
+    - kubernetes-node/setup

@@ -1,0 +1,24 @@
+---
+- name: Enable ip forwarding
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    state: present
+    reload: yes
+
+- name: Create kubernetes temporary directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /opt/kubernetes/tls
+    - /tmp/kubernetes
+    - /etc/kubernetes
+
+- name: Create kubelet and kube-proxy systemd service directory
+  file:
+    path: /etc/systemd/system/{{ item }}.service.d
+    state: directory
+  with_items:
+    - kubelet
+    - kube-proxy
