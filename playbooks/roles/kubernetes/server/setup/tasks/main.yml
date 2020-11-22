@@ -85,7 +85,7 @@
 
 - name: Copy ca certificate
   copy:
-    src: ./roles/vault/config/files/ca.crt
+    src: "./roles/vault/config/files/{{ item }}"
     dest: "/opt/kubernetes/tls/{{ item }}"
     mode: 0644
   with_items:
