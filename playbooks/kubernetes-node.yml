@@ -4,6 +4,8 @@
   roles:
     - coredns/config
     - common/config
+    - vault/unseal
+    - harbor/gencert
     - docker/setup
-    - kubernetes-node/prepare
-    - kubernetes-node/setup
+    - kubernetes/node/prepare
+    - kubernetes/node/setup

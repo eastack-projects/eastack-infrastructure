@@ -6,7 +6,7 @@
     state: present
     reload: yes
 
-- name: Create kubernetes temporary directory
+- name: Create directory
   file:
     path: "{{ item }}"
     state: directory
@@ -14,6 +14,7 @@
     - /opt/kubernetes/tls
     - /tmp/kubernetes
     - /etc/kubernetes
+    - /var/lib/kubelet
 
 - name: Create kubelet and kube-proxy systemd service directory
   file:

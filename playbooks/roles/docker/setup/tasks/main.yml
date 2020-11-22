@@ -20,7 +20,7 @@
 
 - name: Copy certificate and private key
   copy:
-    src: "./roles/harbor/setup/files/{{ item.src }}"
+    src: "./roles/harbor/gencert/files/{{ item.src }}"
     dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/{{ item.dest }}"
     mode: 0644
   with_items:
