@@ -6,7 +6,7 @@ After=network-online.target
 
 [Service]
 ExecStart=/usr/bin/kube-apiserver
-Restart=failure
+Restart=on-failure
 LimitNOFILE=65536
 
 [Install]

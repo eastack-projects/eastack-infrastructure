@@ -1,0 +1,13 @@
+[Unit]
+Description=Kubernetes Kube-Proxy Server
+Documentation=https://github.com/GoogleCloudPlatfor/kubernetes
+After=network.service
+Requires=network.service
+
+[Service]
+ExecStart=/usr/bin/kube-proxy
+Restart=on-failure
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target

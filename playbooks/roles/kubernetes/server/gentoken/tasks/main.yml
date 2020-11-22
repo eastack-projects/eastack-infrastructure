@@ -1,0 +1,18 @@
+---
+- name: Copy token yml
+  template:
+    src: token.yml
+    dest: /root/token.yml
+    mode: 0644
+
+- name: Apply token to kubernetes
+  shell:
+    cmd: kubectl apply -f /root/token.yml
+
+- name: Generate bootstrap-kubeconfig.yml
+  become: no
+  local_action:
+    model: template
+    src: bootstrap-kubeconfig.yml
+    dest: ./roles/kubernetes/server/gentoken/files/bootstrap-kubeconfig.yml
+    mode: 0644

@@ -17,6 +17,15 @@
     - kube-proxy
 
 - name: Add kubelet and kube-proxy systemd service
+  copy:
+    src: "{{ item }}/{{ item }}.service"
+    dest: "/lib/systemd/system/{{ item }}.service"
+    mode: 0644
+  with_items:
+    - kubelet
+    - kube-proxy
+
+- name: Add kubelet and kube-proxy systemd service conf
   template:
     src: "{{ item }}/{{ item }}.service"
     dest: "/etc/systemd/system/{{ item }}.service.d/10-{{ item }}.conf"
@@ -33,7 +42,12 @@
   with_items:
     - { src: config.yaml, dest: /var/lib/kubelet/config.yaml }
     - { src: flags.env, dest: /var/lib/kubelet/kubeadm-flags.env}
-      #    - { src: bootstrap-kubelet.conf, dest: /etc/kubernetes/bootstrap-kubelet.conf}
+    - { src: bootstrap-kubelet.conf, dest: /etc/kubernetes/bootstrap-kubelet.conf}
+
+- name: Copy bootstrap kubelet kubeconfig
+  copy:
+    src: ./roles/kubernetes/server/gentoken/files/bootstrap-kubeconfig.yml
+    dest: /etc/kubernetes/bootstrap-kubelet.conf
 
 - name: Pull Pause docker image
   docker_image:
