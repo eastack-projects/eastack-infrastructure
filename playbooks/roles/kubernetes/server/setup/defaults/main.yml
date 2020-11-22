@@ -1,3 +1,2 @@
 ---
 KUBERNETES_CONFIG_DIRECTORY: /etc/kubernetes
-KUBERNETES_PACKAGE: /home/radix10/kubernetes-server-linux-amd64.tar.gz

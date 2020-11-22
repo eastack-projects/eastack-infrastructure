@@ -6,7 +6,7 @@ authentication:
     cacheTTL: 0s
     enabled: true
   x509:
-    clientCAFile: /etc/kubernetes/pki/ca.crt
+    clientCAFile: /opt/kubernetes/tls/ca.crt
 authorization:
   mode: Webhook
   webhook:
@@ -19,7 +19,7 @@ clusterDomain: cluster.local
 cpuManagerReconcilePeriod: 0s
 evictionPressureTransitionPeriod: 0s
 fileCheckFrequency: 0s
-healthzBindAddress: 127.0.0.1
+healthzBindAddress: {{ ansible_facts.enp0s8.ipv4.address }}
 healthzPort: 10248
 httpCheckFrequency: 0s
 imageMinimumGCAge: 0s

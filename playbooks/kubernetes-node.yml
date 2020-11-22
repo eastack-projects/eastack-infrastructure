@@ -5,4 +5,5 @@
   - coredns/config
   - common/config
   - docker/setup
+  - kubernetes-node/prepare
   - kubernetes-node/setup

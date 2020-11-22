@@ -1,23 +1,12 @@
-- name: Enable ip forwarding
-  sysctl:
-    name: net.ipv4.ip_forward
-    value: '1'
-    state: present
-    reload: yes
-
-- name: Create kubernetes temporary directory
-  file:
-    path: /opt/kubernetes
-    state: directory
-
+---
 - name: Extract kubernetes package
   unarchive:
     src: "{{ KUBERNETES_NODE_PACKAGE }}"
-    dest: /opt/kubernetes
-    creates: /opt/kubernetes/node
-    extra_opts: [--strip-components=1]
+    dest: /tmp/kubernetes
+    creates: /tmp/kubernetes/node
+    extra_opts: [ "--strip-components=1" ]
 
-- name: Install kubernetes components
+- name: Install kubelet and kube-proxy components
   copy:
     src: "/opt/kubernetes/node/bin/{{ item }}"
     dest: "/usr/bin/{{ item }}"
@@ -28,32 +17,26 @@
     - kube-proxy
   notify: Restart kubernetes node service
 
-- name: Add kubelet systemd service
-  copy:
-    src: "{{ item }}.service"
-    dest: "/usr/lib/systemd/system/{{ item }}.service"
-    mode: 0644
-  with_items:
-  - kubelet
-  - kube-proxy
-  notify: Restart kubernetes node service
-
-- name: Create kubernetes config directory
-  file:
-    path: /etc/kubernetes
-    state: directory
-    mode: 0755
-
-- name: Add kubernetes node config file
-  copy:
-    src: "{{ item }}"
-    dest: /etc/kubernetes
+- name: Add kubelet and kube-proxy systemd service
+  template:
+    src: "{{ item }}/{{ item }}.service"
+    dest: "/etc/systemd/system/{{ item }}.service.d/10-{{ item }}.conf"
     mode: 0644
   with_items:
     - kubelet
     - kube-proxy
-    - kubeconfig
-    - kubelet.yml
+    - scheduler
+  notify: Restart kubernetes node service
+
+- name: Copy kubelet config file
+  template:
+    src: "kubelet/{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: 0644
+  with_items:
+    - { src: config.yaml, dest: /var/lib/kubelet/config.yaml }
+    - { src: flags.env, dest: /var/lib/kubelet/kubeadm-flags.env}
+    - { src: bootstrap-kubelet.conf, dest: /etc/kubernetes/bootstrap-kubelet.conf}
   notify: Restart kubernetes node service
 
 - name: Pull Pause docker image
@@ -73,13 +56,8 @@
     path: /var/run/kubernetes
     state: directory
 
-- name: Copy self-signed certificate
+- name: Copy ca certificate
   copy:
-    src: "{{ item }}"
-    dest: "/var/run/kubernetes/{{ item }}"
+    src: ./roles/vault/config/files/ca.crt
+    dest: /opt/kubernetes/tls/ca.crt
     mode: 0644
-  with_items:
-  - ca.crt
-  - node.kubernetes.ipool.me.key
-  - node.kubernetes.ipool.me.crt
-  notify: Restart kubernetes node service

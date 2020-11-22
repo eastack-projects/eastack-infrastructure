@@ -28,6 +28,7 @@
     - kube-apiserver
     - kube-controller-manager
     - kube-scheduler
+    - kubectl
   notify: Restart kubernetes server service
 
 - name: Add kubernetes systemd service

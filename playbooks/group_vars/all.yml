@@ -1,2 +1,6 @@
 ---
 name: radix10
+ETCD_PACKAGE: /home/radix10/etcd-v3.3.25-linux-amd64.tar.gz
+KUBERNETES_NODE_PACKAGE: /home/radix10/kubernetes-node-linux-amd64.tar.gz
+KUBERNETES_PACKAGE: /home/radix10/kubernetes-server-linux-amd64.tar.gz
+PAUSE_VERSION: 3.2
