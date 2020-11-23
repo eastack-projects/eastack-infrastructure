@@ -5,5 +5,5 @@
     - common/config
     - coredns/config
     - vault/unseal
-    - kubernetes/server/gencert
+    - kubernetes/server/prepare
     - kubernetes/server/setup

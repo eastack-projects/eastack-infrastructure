@@ -5,7 +5,7 @@
     - coredns/config
     - common/config
     - vault/unseal
-    - harbor/gencert
+    - harbor/prepare
     - docker/setup
     - kubernetes/node/prepare
     - kubernetes/node/setup

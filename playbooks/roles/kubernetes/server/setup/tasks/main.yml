@@ -67,7 +67,7 @@
 
 - name: Copy kubernetes certificate
   copy:
-    src: "./roles/kubernetes/server/gencert/files/{{ item }}"
+    src: "./roles/kubernetes/server/prepare/files/{{ item }}"
     dest: "/opt/kubernetes/tls/{{ item }}"
     mode: 0644
   with_items:

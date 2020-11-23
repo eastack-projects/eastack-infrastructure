@@ -1,0 +1,8 @@
+---
+- name: Include vault keys
+  include_vars:
+    file: ./roles/vault/config/files/sys-init-result.json
+    name: sys_init_result
+
+- include_tasks: peer.yml
+- include_tasks: client.yml

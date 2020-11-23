@@ -23,12 +23,12 @@
 
 - name: Copy harbor certificate
   copy:
-    src: "./roles/harbor/gencert/files/{{ HARBOR_FQDN }}.{{ item }}"
-    dest: "/opt/harbor/tls/{{ HARBOR_FQDN }}.{{ item }}"
+    src: "./roles/harbor/prepare/files/{{ item }}"
+    dest: "/opt/harbor/tls/{{ item }}"
     mode: 0644
   with_items:
-    - crt
-    - key
+    - "{{ HARBOR_FQDN }}.crt"
+    - "{{ HARBOR_FQDN }}.key"
 
 - name: Generate harbor.yml
   shell: ./generate-harbor-yml.py

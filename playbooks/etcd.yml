@@ -5,5 +5,5 @@
     - common/config
     - coredns/config
     - vault/unseal
-    - etcd/gencert
+    - etcd/prepare
     - etcd/setup

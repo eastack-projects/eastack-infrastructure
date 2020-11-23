@@ -1,0 +1,93 @@
+---
+- name: List mounts
+  uri:
+    method: GET
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    validate_certs: no
+    url: https://Vault:8200/v1/sys/mounts
+  register: mounts
+
+- name: Mount kubernetes front proxy intermediate pki secret engine
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    validate_certs: no
+    url: https://Vault:8200/v1/sys/mounts/pki_int_kubernetes_front_proxy
+    body_format: json
+    status_code: 204
+    body:
+      type: pki
+  when: not mounts.json.data is search("pki_int_kubernetes_front_proxy")
+
+- name: Tune kubernetes front proxy pki intermediate secret engine
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    validate_certs: no
+    url: https://Vault:8200/v1/sys/mounts/pki_int_kubernetes_front_proxy/tune
+    body_format: json
+    status_code: 204
+    body:
+      max_lease_ttl: "{{ PKI_TTL }}"
+
+- name: Generate kubernetes front proxy intermediate ca csr
+  uri:
+    method: POST
+    validate_certs: no
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    url: https://Vault:8200/v1/pki_int_kubernetes_front_proxy/intermediate/generate/exported
+    body_format: json
+    body:
+      common_name: front-proxy-ca
+  register: certificate_csr
+
+- name: Persistent kubernetes front proxy intermediate ca csr result
+  become: no
+  local_action:
+    module: copy
+    content: "{{ certificate_csr.json.data.csr }}"
+    dest: ./roles/kubernetes/server/prepare/files/front-proxy-ca.csr
+
+- name: Persistent kubernetes front proxy intermediate ca private key result
+  become: no
+  local_action:
+    module: copy
+    content: "{{ certificate_csr.json.data.private_key }}"
+    dest: ./roles/kubernetes/server/prepare/files/front-proxy-ca.key
+
+- name: Sign kubernetes front proxy intermediate ca
+  uri:
+    method: POST
+    validate_certs: no
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    url: https://Vault:8200/v1/pki/root/sign-intermediate
+    body_format: json
+    body:
+      csr: "{{ lookup('file', './roles/kubernetes/server/prepare/files/front-proxy-ca.csr') }}"
+      common_name: front-proxy-ca
+      ttl: "{{ PKI_TTL }}"
+  register: certificate_crt
+
+- name: Persistent kubernetes front proxy intermediate ca certificate result
+  become: no
+  local_action:
+    module: copy
+    content: "{{ certificate_crt.json.data.certificate }}"
+    dest: ./roles/kubernetes/server/prepare/files/front-proxy-ca.crt
+
+- name: Set signed kubernetes front proxy intermediate ca
+  uri:
+    method: POST
+    validate_certs: no
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    url: https://Vault:8200/v1/pki_int_kubernetes_front_proxy/intermediate/set-signed
+    body_format: json
+    status_code: 204
+    body:
+      certificate: "{{ lookup('file', './roles/kubernetes/server/prepare/files/front-proxy-ca.crt') }}"

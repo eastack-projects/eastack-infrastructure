@@ -2,7 +2,7 @@
 Description=CoreDNS
 Documentation=https://coredns.io/
 After=network.target
-Requites=network.target
+Requires=network.target
 
 [Service]
 WorkingDirectory=/var/lib/coredns

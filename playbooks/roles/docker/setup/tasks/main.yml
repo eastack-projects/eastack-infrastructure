@@ -20,12 +20,12 @@
 
 - name: Copy certificate and private key
   copy:
-    src: "./roles/harbor/gencert/files/{{ item.src }}"
+    src: "./roles/harbor/prepare/files/{{ item.src }}"
     dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/{{ item.dest }}"
     mode: 0644
   with_items:
-    - { src: harbor.ipool.me.crt , dest: harbor.ipool.me.crt }
-    - { src: harbor.ipool.me.key , dest: harbor.ipool.me.key }
+    - { src: "{{ HARBOR_FQDN }}.crt" , dest: "{{ HARBOR_FQDN }}.crt" }
+    - { src: "{{ HARBOR_FQDN }}.key" , dest: "{{ HARBOR_FQDN }}.key" }
   notify: Restart docker service
 
 - name: Copy daemon.json

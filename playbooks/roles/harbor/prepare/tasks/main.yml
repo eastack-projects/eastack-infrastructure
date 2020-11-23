@@ -4,47 +4,44 @@
     file: ./roles/vault/config/files/sys-init-result.json
     name: sys_init_result
 
-- name: Add gitlab role
+- name: Add harbor role
   uri:
     method: POST
     validate_certs: no
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/roles/gitlab.ipool.me
+    url: https://Vault:8200/v1/pki_int/roles/harbor.ipool.me
     body_format: json
     status_code: 204
     body:
-      allowed_domains: gitlab.ipool.me
+      allowed_domains: harbor.ipool.me
       allow_any_name: true
       allow_subdomains: yes
       max_ttl: "{{ PKI_TTL }}"
 
-- name: Generate gitlab certificate
+- name: Generate harbor certificate
   uri:
     method: POST
     validate_certs: no
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/issue/gitlab.ipool.me
+    url: https://Vault:8200/v1/pki_int/issue/harbor.ipool.me
     body_format: json
     status_code: 200
     body:
-      common_name: gitlab.ipool.me
+      common_name: harbor.ipool.me
   register: certificate
 
-- name: Persistent gitlab certificate
+- name: Persistent harbor certificate
   become: no
   local_action:
     module: copy
     content: "{{ certificate.json.data.certificate }}"
-    dest: "./roles/gitlab/prepare/{{ GITLAB_FQDN }}.crt"
-    mode: 0644
+    dest: "./roles/harbor/prepare/files/{{ HARBOR_FQDN }}.crt"
 
-- name: Persistent gitlab key
+- name: Persistent harbor private key
   become: no
   local_action:
     module: copy
     content: "{{ certificate.json.data.private_key }}"
-    dest: "./roles/gitlab/prepare/{{ GITLAB_FQDN }}.key"
-    mode: 0644
-
+    dest: "./roles/harbor/prepare/files/{{ HARBOR_FQDN }}.key"

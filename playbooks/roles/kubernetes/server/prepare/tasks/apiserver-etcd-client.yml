@@ -1,0 +1,47 @@
+---
+- name: Add apiserver etcd client role
+  uri:
+    method: POST
+    validate_certs: no
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    url: https://Vault:8200/v1/pki_int/roles/client.etcd.apiserver.kubernetes.ipool.me
+    body_format: json
+    status_code: 204
+    body:
+      key_usage: ["DigitalSignature", "KeyEncipherment"]
+      ext_key_usage: ["ClientAuth"]
+      organization: system:masters
+      common_name: kube-apiserver-etcd-client
+      allow_any_name: true
+      max_ttl: "{{ PKI_TTL }}"
+
+- name: Generate apiserver etcd client certificate
+  uri:
+    method: POST
+    validate_certs: no
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    url: https://Vault:8200/v1/pki_int/issue/client.etcd.apiserver.kubernetes.ipool.me
+    body_format: json
+    status_code: 200
+    body:
+      common_name: kube-apiserver-etcd-client
+      organization: system:masters
+  register: client_certificate
+
+- name: Persistent apiserver etcd client certificate
+  become: no
+  local_action:
+    module: copy
+    content: "{{ client_certificate.json.data.certificate }}"
+    dest: ./roles/kubernetes/server/prepare/files/apiserver-etcd-client.crt
+    mode: 0644
+
+- name: Persistent apiserver etcd client key
+  become: no
+  local_action:
+    module: copy
+    content: "{{ client_certificate.json.data.private_key }}"
+    dest: ./roles/kubernetes/server/prepare/files/apiserver-etcd-client.key
+    mode: 0644

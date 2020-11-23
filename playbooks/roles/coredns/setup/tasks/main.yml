@@ -1,31 +1,31 @@
 ---
-- name: Create coredns temporary directory
+- name: Create coredns install package directory
   file:
-    path: /tmp/coredns
+    path: /opt/coredns/package
     state: directory
 
 - name: Extract coredns package
   unarchive:
     src: "{{ COREDNS_PACKAGE }}"
-    dest: /tmp/coredns
-    creates: /tmp/coredns/coredns
+    dest: /opt/coredns/package
+    creates: /opt/coredns/package/coredns
 
 - name: Install coredns
   copy:
-    src: /tmp/coredns/coredns
+    src: /opt/coredns/package/coredns
     dest: /usr/bin/coredns
     remote_src: yes
     mode: 0755
   notify: Enable and restart coredns service
 
-- name: Copy systemd unit
+- name: Copy coredns systemd service file
   copy:
     src: coredns.service
     dest: /etc/systemd/system
     mode: 0644
   notify: Enable and restart coredns service
 
-- name: Copy config file
+- name: Copy coredns config file
   copy:
     src: "{{ item }}"
     dest: /var/lib/coredns/

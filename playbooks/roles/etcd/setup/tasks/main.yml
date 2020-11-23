@@ -51,7 +51,7 @@
 
 - name: Copy self-signed certificate
   copy:
-    src: "./roles/etcd/gencert/files/{{ item }}"
+    src: "./roles/etcd/prepare/files/{{ item }}"
     dest: "/opt/etcd/tls/{{ item }}"
     mode: 0644
   with_items:
