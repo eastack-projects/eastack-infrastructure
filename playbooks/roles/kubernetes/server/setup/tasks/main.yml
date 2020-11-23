@@ -125,3 +125,9 @@
     - auto-approve-csrs-for-group.yml
     - auto-approve-renewals-for-nodes.yml
     - create-csrs-for-bootstrapping.yml
+
+- name: Add kubectl complete for bash
+  lineinfile:
+    dest: /root/.bashrc
+    line: source <(kubectl completion bash)
+    state: present

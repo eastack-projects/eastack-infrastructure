@@ -7,5 +7,6 @@ vagrantfiles/.cache/**
 *.crt
 *.csr
 *.key
+*.pub
 
 sys-init-result.json
