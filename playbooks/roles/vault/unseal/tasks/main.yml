@@ -22,4 +22,4 @@
     body:
       key: "{{ item }}"
   with_items: "{{ sys_init_result['keys'] }}"
-  when: not seal_status.json.data is search("cluster_id")
+  when: not seal_status.json is search("cluster_id")
