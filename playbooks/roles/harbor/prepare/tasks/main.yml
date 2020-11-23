@@ -4,13 +4,13 @@
   local_action:
     module: stat
     path: "./roles/harbor/prepare/files/{{ HARBOR_FQDN }}.key"
-  register: certificate
+  register: certificate_file
 
 - name: Include vault keys
   include_vars:
     file: ./roles/vault/config/files/sys-init-result.json
     name: sys_init_result
-  when: not certificate.stat.exists
+  when: not certificate_file.stat.exists
 
 - name: Add harbor role
   uri:
@@ -26,7 +26,7 @@
       allow_any_name: true
       allow_subdomains: yes
       max_ttl: "{{ PKI_TTL }}"
-  when: not certificate.stat.exists
+  when: not certificate_file.stat.exists
 
 - name: Generate harbor certificate
   uri:
@@ -40,7 +40,7 @@
     body:
       common_name: "{{ HARBOR_FQDN }}"
   register: certificate
-  when: not certificate.stat.exists
+  when: not certificate_file.stat.exists
 
 - name: Persistent harbor certificate
   become: no
@@ -48,7 +48,7 @@
     module: copy
     content: "{{ certificate.json.data.certificate }}"
     dest: "./roles/harbor/prepare/files/{{ HARBOR_FQDN }}.crt"
-  when: not certificate.stat.exists
+  when: not certificate_file.stat.exists
 
 - name: Persistent harbor private key
   become: no
@@ -56,4 +56,4 @@
     module: copy
     content: "{{ certificate.json.data.private_key }}"
     dest: "./roles/harbor/prepare/files/{{ HARBOR_FQDN }}.key"
-  when: not certificate.stat.exists
+  when: not certificate_file.stat.exists
