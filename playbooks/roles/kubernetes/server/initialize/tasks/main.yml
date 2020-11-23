@@ -20,7 +20,7 @@
 - name: Generate bootstrap-kubeconfig.yml
   become: no
   local_action:
-    model: template
+    module: template
     src: bootstrap-kubeconfig.yml
     dest: ./roles/kubernetes/server/gentoken/files/bootstrap-kubeconfig.yml
     mode: 0644
