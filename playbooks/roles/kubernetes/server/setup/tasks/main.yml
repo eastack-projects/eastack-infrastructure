@@ -112,15 +112,7 @@
 - name: Copy cluster role binding yml for tls bootstraping
   copy:
     src: "{{ item }}"
-    dest: "/tmp/{{ item }}"
-  with_items:
-    - auto-approve-csrs-for-group.yml
-    - auto-approve-renewals-for-nodes.yml
-    - create-csrs-for-bootstrapping.yml
-
-- name: Initializing cluster role binding
-  shell:
-    cmd: "kubectl apply -f /tmp/{{ item }}"
+    dest: "/root/{{ item }}"
   with_items:
     - auto-approve-csrs-for-group.yml
     - auto-approve-renewals-for-nodes.yml
