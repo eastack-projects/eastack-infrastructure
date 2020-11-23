@@ -18,7 +18,7 @@
 
 - name: Add kubelet and kube-proxy systemd service
   copy:
-    src: "{{ item }}/{{ item }}.service"
+    src: "{{ item }}.service"
     dest: "/lib/systemd/system/{{ item }}.service"
     mode: 0644
   with_items:
@@ -46,7 +46,7 @@
 
 - name: Copy bootstrap kubelet kubeconfig
   copy:
-    src: ./roles/kubernetes/server/gentoken/files/bootstrap-kubeconfig.yml
+    src: ./roles/kubernetes/server/prepare/files/bootstrap-kubeconfig.yml
     dest: /etc/kubernetes/bootstrap-kubelet.conf
 
 - name: Pull Pause docker image

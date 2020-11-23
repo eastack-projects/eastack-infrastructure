@@ -22,5 +22,5 @@
   local_action:
     module: template
     src: bootstrap-kubeconfig.yml
-    dest: ./roles/kubernetes/server/gentoken/files/bootstrap-kubeconfig.yml
+    dest: ./roles/kubernetes/server/prepare/files/bootstrap-kubeconfig.yml
     mode: 0644
