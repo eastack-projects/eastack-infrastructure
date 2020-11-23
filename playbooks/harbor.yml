@@ -4,5 +4,6 @@
   roles:
   - common/config
   - coredns/config
+  - harbor/prepare
   - harbor/setup
   - docker/setup
