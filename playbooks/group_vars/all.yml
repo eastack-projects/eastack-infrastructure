@@ -1,7 +1,18 @@
 ---
+# common land
 name: radix10
-ETCD_PACKAGE: /home/radix10/Downloads/etcd-v3.3.25-linux-amd64.tar.gz
-KUBERNETES_NODE_PACKAGE: /home/radix10/Downloads/kubernetes-node-linux-amd64.tar.gz
-KUBERNETES_PACKAGE: /home/radix10/Downloads/kubernetes-server-linux-amd64.tar.gz
-PAUSE_VERSION: 3.2
 PKI_TTL: 7200h
+
+# for etcd
+ETCD_PACKAGE: /home/radix10/Downloads/etcd-v3.3.25-linux-amd64.tar.gz
+
+# for kubernetes server
+KUBERNETES_PACKAGE: /home/radix10/Downloads/kubernetes-server-linux-amd64.tar.gz
+
+# for kubernetes node
+KUBERNETES_NODE_PACKAGE: /home/radix10/Downloads/kubernetes-node-linux-amd64.tar.gz
+PAUSE_VERSION: 3.2
+
+# for harbor
+HARBOR_FQDN: harbor.ipool.me
+HARBOR_PACK: /home/radix10/Downloads/harbor.tar.gz
