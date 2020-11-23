@@ -1,8 +1,16 @@
 ---
+- name: Check harbor private key stat
+  become: no
+  local_action:
+    module: stat
+    path: "./roles/harbor/prepare/files/{{ HARBOR_FQDN }}.key"
+  register: certificate
+
 - name: Include vault keys
   include_vars:
     file: ./roles/vault/config/files/sys-init-result.json
     name: sys_init_result
+  when: not certificate.stat.exists
 
 - name: Add harbor role
   uri:
@@ -10,14 +18,15 @@
     validate_certs: no
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/roles/harbor.ipool.me
+    url: "https://Vault:8200/v1/pki_int/roles/{{ HARBOR_FQDN }}"
     body_format: json
     status_code: 204
     body:
-      allowed_domains: harbor.ipool.me
+      allowed_domains: "{{ HARBOR_FQDN }}"
       allow_any_name: true
       allow_subdomains: yes
       max_ttl: "{{ PKI_TTL }}"
+  when: not certificate.stat.exists
 
 - name: Generate harbor certificate
   uri:
@@ -25,12 +34,13 @@
     validate_certs: no
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/issue/harbor.ipool.me
+    url: "https://Vault:8200/v1/pki_int/issue/{{ HARBOR_FQDN }}"
     body_format: json
     status_code: 200
     body:
-      common_name: harbor.ipool.me
+      common_name: "{{ HARBOR_FQDN }}"
   register: certificate
+  when: not certificate.stat.exists
 
 - name: Persistent harbor certificate
   become: no
@@ -38,6 +48,7 @@
     module: copy
     content: "{{ certificate.json.data.certificate }}"
     dest: "./roles/harbor/prepare/files/{{ HARBOR_FQDN }}.crt"
+  when: not certificate.stat.exists
 
 - name: Persistent harbor private key
   become: no
@@ -45,3 +56,4 @@
     module: copy
     content: "{{ certificate.json.data.private_key }}"
     dest: "./roles/harbor/prepare/files/{{ HARBOR_FQDN }}.key"
+  when: not certificate.stat.exists
