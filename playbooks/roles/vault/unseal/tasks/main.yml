@@ -4,6 +4,15 @@
     file: ./roles/vault/config/files/sys-init-result.json
     name: sys_init_result
 
+- name: Get vault seal status
+  uri:
+    method: GET
+    headers:
+      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+    validate_certs: no
+    url: https://Vault:8200/v1/sys/seal-status
+  register: seal-status
+
 - name: Unseal vault
   uri:
     method: PUT
@@ -13,3 +22,4 @@
     body:
       key: "{{ item }}"
   with_items: "{{ sys_init_result['keys'] }}"
+  when: not seal-status.json.data is search("cluster_id")
