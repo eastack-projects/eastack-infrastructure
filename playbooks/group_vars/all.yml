@@ -8,7 +8,7 @@ MAX_PKI_TTL: 21600h
 ETCD_PACKAGE: /home/radix10/Downloads/etcd-v3.3.25-linux-amd64.tar.gz
 
 # for kubernetes server
-KUBERNETES_PACKAGE: /home/radix10/Downloads/kubernetes-server-linux-amd64.tar.gz
+KUBERNETES_PACKAGE: /home/radix10/desktop/docker-downloader/downloads/kubernetes-server-linux-amd64.tar.gz
 
 # for kubernetes node
 KUBERNETES_NODE_PACKAGE: /home/radix10/Downloads/kubernetes-node-linux-amd64.tar.gz
