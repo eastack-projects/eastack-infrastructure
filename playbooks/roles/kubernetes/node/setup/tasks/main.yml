@@ -42,7 +42,11 @@
   with_items:
     - { src: config.yaml, dest: /var/lib/kubelet/config.yaml }
     - { src: flags.env, dest: /var/lib/kubelet/kubeadm-flags.env}
-    - { src: bootstrap-kubelet.conf, dest: /etc/kubernetes/bootstrap-kubelet.conf}
+
+- name: Copy bootstrap-kubelet.conf
+  copy:
+    src: bootstrap-kubelet.conf
+    dest: /etc/kubernetes/bootstrap-kubelet.conf
 
 - name: Copy bootstrap kubelet kubeconfig
   copy:
@@ -64,6 +68,11 @@
 - name: Create kubernetes pki directory
   file:
     path: /var/run/kubernetes
+    state: directory
+
+- name: Create kubernetes pki directory
+  file:
+    path: /etc/kubernetes/manifests
     state: directory
 
 - name: Copy ca certificate

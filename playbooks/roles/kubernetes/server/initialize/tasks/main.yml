@@ -17,10 +17,10 @@
   shell:
     cmd: kubectl apply -f /root/token.yml
 
-- name: Generate bootstrap-kubeconfig.yml
+- name: Generate bootstrap-kubelet.conf
   become: no
   local_action:
     module: template
     src: bootstrap-kubeconfig.yml
-    dest: ./roles/kubernetes/server/prepare/files/bootstrap-kubeconfig.yml
+    dest: ./roles/kubernetes/node/setup/files/bootstrap-kubelet.conf
     mode: 0644
