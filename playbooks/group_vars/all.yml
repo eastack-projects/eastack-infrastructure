@@ -2,6 +2,7 @@
 # common land
 name: radix10
 PKI_TTL: 7200h
+MAX_PKI_TTL: 21600h
 
 # for etcd
 ETCD_PACKAGE: /home/radix10/Downloads/etcd-v3.3.25-linux-amd64.tar.gz

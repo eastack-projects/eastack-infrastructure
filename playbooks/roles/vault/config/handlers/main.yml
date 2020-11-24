@@ -61,9 +61,9 @@
     body_format: json
     status_code: 204
     body:
-      description: 根证书
-      max_lease_ttl: "{{ PKI_TTL }}"
-      default_lease_ttl: "{{ PKI_TTL }}"
+      description: Root certificate
+      max_lease_ttl: "{{ MAX_PKI_TTL }}"
+      default_lease_ttl: "{{ MAX_PKI_TTL }}"
   listen: Initializing the vault
 
 # Submit ca certificate
@@ -104,8 +104,8 @@
     body_format: json
     status_code: 204
     body:
-      description: 中间证书
-      max_lease_ttl: "{{ PKI_TTL }}"
+      description: Intermediate certificate
+      max_lease_ttl: "{{ MAX_PKI_TTL }}"
       default_lease_ttl: "{{ PKI_TTL }}"
   listen: Initializing the vault
 

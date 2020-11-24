@@ -31,7 +31,9 @@
     body_format: json
     status_code: 204
     body:
-      max_lease_ttl: "{{ PKI_TTL }}"
+      description: Kubernetes front proxy certificate
+      max_lease_ttl: "{{ MAX_PKI_TTL }}"
+      default_lease_ttl: "{{ PKI_TTL }}"
 
 - name: Generate kubernetes front proxy intermediate ca csr
   uri:
@@ -70,7 +72,6 @@
     body:
       csr: "{{ lookup('file', './roles/kubernetes/server/prepare/files/front-proxy-ca.csr') }}"
       common_name: front-proxy-ca
-      ttl: "{{ PKI_TTL }}"
   register: certificate_crt
 
 - name: Persistent kubernetes front proxy intermediate ca certificate result

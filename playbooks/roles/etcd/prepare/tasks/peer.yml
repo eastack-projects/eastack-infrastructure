@@ -11,7 +11,6 @@
     body:
       allow_any_name: true
       allowed_domains: peer.etcd.ipool.me
-      max_ttl: "{{ PKI_TTL }}"
 
 - name: Generate etcd peer certificate
   uri:

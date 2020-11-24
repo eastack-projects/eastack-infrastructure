@@ -14,7 +14,6 @@
       organization: system:masters
       common_name: kube-apiserver-kubelet-client
       allow_any_name: true
-      max_ttl: "{{ PKI_TTL }}"
 
 - name: Generate apiserver kubelet client  certificate
   uri:

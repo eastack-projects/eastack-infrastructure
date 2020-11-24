@@ -13,7 +13,6 @@
       ext_key_usage: ["ClientAuth"]
       allowed_domains: front-proxy-client
       allow_any_name: true
-      max_ttl: "{{ PKI_TTL }}"
 
 - name: Generate kubernetes front proxy client certificate
   uri:

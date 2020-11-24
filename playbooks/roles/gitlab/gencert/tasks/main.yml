@@ -17,7 +17,6 @@
       allowed_domains: gitlab.ipool.me
       allow_any_name: true
       allow_subdomains: yes
-      max_ttl: "{{ PKI_TTL }}"
 
 - name: Generate gitlab certificate
   uri:

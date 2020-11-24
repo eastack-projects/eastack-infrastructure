@@ -14,7 +14,6 @@
       organization: system:masters
       common_name: kubernetes-admin
       allow_any_name: true
-      max_ttl: "{{ PKI_TTL }}"
 
 - name: Generate admin certificate
   uri:

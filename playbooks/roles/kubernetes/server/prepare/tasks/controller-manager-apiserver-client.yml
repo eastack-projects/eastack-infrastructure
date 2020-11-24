@@ -14,7 +14,6 @@
       enforce_hostnames: false
       common_name: system:kube-controller-manager
       allow_any_name: true
-      max_ttl: "{{ PKI_TTL }}"
 
 - name: Generate controller-manager apiserver client certificate
   uri:

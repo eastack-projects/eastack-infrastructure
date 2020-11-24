@@ -25,7 +25,6 @@
       allowed_domains: "{{ HARBOR_FQDN }}"
       allow_any_name: true
       allow_subdomains: yes
-      max_ttl: "{{ PKI_TTL }}"
   when: not certificate_file.stat.exists
 
 - name: Generate harbor certificate

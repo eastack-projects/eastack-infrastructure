@@ -13,7 +13,6 @@
       ext_key_usage: ["ServerAuth"]
       allowed_domains: apiserver.kubernetes.ipool.me
       allow_any_name: true
-      max_ttl: "{{ PKI_TTL }}"
 
 - name: Generate kubernetes apiserver certificate
   uri:
