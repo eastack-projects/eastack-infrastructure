@@ -13,6 +13,7 @@
   with_items:
     - /opt/kubernetes/package
     - /var/lib/kubelet
+    - /var/lib/kube-proxy
     - /etc/kubernetes/manifests
 
 - name: Create kubelet and kube-proxy systemd service directory
