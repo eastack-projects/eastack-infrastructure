@@ -21,6 +21,6 @@
   become: no
   local_action:
     module: template
-    src: bootstrap-kubeconfig.yml
-    dest: ./roles/kubernetes/node/setup/files/bootstrap-kubelet.conf
+    src: bootstrap-kubelet.yml
+    dest: ./roles/kubernetes/server/initialize/files/bootstrap-kubelet.yml
     mode: 0644

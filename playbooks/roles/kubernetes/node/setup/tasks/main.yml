@@ -54,7 +54,7 @@
 
 - name: Copy bootstrap-kubelet.conf
   copy:
-    src: ./roles/kubernetes/server/initialize/files/bootstrap-kubeconfig.yml
+    src: ./roles/kubernetes/server/initialize/files/bootstrap-kubelet.yml
     dest: /etc/kubernetes/bootstrap-kubelet.conf
 
 - name: Pull Pause docker image
