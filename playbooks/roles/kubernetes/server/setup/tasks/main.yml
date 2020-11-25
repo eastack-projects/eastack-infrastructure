@@ -43,10 +43,10 @@
     - kube-scheduler.service
   notify: Restart kubernetes server service
 
-- name: Add kubernetes apiserver environment file
+- name: Add kubernetes server service configuration
   template:
     src: "{{ item }}"
-    dest: "/etc/systemd/system/kube-{{ item }}.service.d/10-{{ item }}.conf"
+    dest: "/etc/systemd/system/kube-{{ item }}.service.d/10-{{ item }}.service"
     mode: 0644
   with_items:
     - apiserver

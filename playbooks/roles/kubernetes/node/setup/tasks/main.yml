@@ -2,13 +2,13 @@
 - name: Extract kubernetes package
   unarchive:
     src: "{{ KUBERNETES_NODE_PACKAGE }}"
-    dest: /tmp/kubernetes
-    creates: /tmp/kubernetes/node
+    dest: /opt/kubernetes/package
+    creates: /opt/kubernetes/package/node
     extra_opts: [ "--strip-components=1" ]
 
-- name: Install kubelet and kube-proxy components
+- name: Install kubelet and kube-proxy
   copy:
-    src: "/tmp/kubernetes/node/bin/{{ item }}"
+    src: "/opt/kubernetes/package/node/bin/{{ item }}"
     dest: "/usr/bin/{{ item }}"
     remote_src: yes
     mode: 0755
@@ -16,41 +16,45 @@
     - kubelet
     - kube-proxy
 
-- name: Add kubelet and kube-proxy systemd service
+- name: Add kubernetes node service
   copy:
-    src: "{{ item }}.service"
-    dest: "/lib/systemd/system/{{ item }}.service"
+    src: "{{ item }}"
+    dest: "/lib/systemd/system/{{ item }}"
     mode: 0644
   with_items:
-    - kubelet
-    - kube-proxy
+    - kubelet.service
+    - kube-proxy.service
 
-- name: Add kubelet and kube-proxy systemd service conf
+- name: Add kubernetes node service configuration
   template:
-    src: "{{ item }}/{{ item }}.service"
-    dest: "/etc/systemd/system/{{ item }}.service.d/10-{{ item }}.conf"
+    src: "{{ item }}"
+    dest: "/etc/systemd/system/{{ item }}.d/10-{{ item }}"
     mode: 0644
   with_items:
-    - kubelet
-    - kube-proxy
+    - kubelet.service
+    - kube-proxy.service
 
 - name: Copy kubelet config file
   template:
-    src: "kubelet/{{ item.src }}"
+    src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     mode: 0644
   with_items:
     - { src: config.yaml, dest: /var/lib/kubelet/config.yaml }
     - { src: flags.env, dest: /var/lib/kubelet/kubeadm-flags.env}
 
+- name: Copy kube-proxy config file
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: 0644
+  with_items:
+    - { src: config.conf, dest: /var/lib/kube-proxy/config.conf }
+    - { src: kubeconfig.conf, dest: /var/lib/kube-proxy/kubeconfig.conf }
+
 - name: Copy bootstrap-kubelet.conf
   copy:
-    src: bootstrap-kubelet.conf
-    dest: /etc/kubernetes/bootstrap-kubelet.conf
-
-- name: Copy bootstrap kubelet kubeconfig
-  copy:
-    src: ./roles/kubernetes/server/prepare/files/bootstrap-kubeconfig.yml
+    src: ./roles/kubernetes/server/initialize/files/bootstrap-kubeconfig.yml
     dest: /etc/kubernetes/bootstrap-kubelet.conf
 
 - name: Pull Pause docker image
@@ -58,25 +62,3 @@
     name: "registry.aliyuncs.com/google_containers/pause:{{ PAUSE_VERSION }}"
     repository: "k8s.gcr.io/pause:{{ PAUSE_VERSION }}"
     source: pull
-
-- name: Create kubelet work directory
-  file:
-    path: /var/lib/kubelet
-    state: directory
-    mode: 0755
-
-- name: Create kubernetes pki directory
-  file:
-    path: /var/run/kubernetes
-    state: directory
-
-- name: Create kubernetes pki directory
-  file:
-    path: /etc/kubernetes/manifests
-    state: directory
-
-- name: Copy ca certificate
-  copy:
-    src: ./roles/vault/config/files/ca.crt
-    dest: /opt/kubernetes/tls/ca.crt
-    mode: 0644

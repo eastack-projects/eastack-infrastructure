@@ -20,3 +20,4 @@ kubernetes-node:: 192.168.33.60
 
 * [ ] kubernetes 集群搭建
 * [ ] 还有太多细节值得完善
+* [ ] clean file

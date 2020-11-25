@@ -1,6 +1,0 @@
-# Note: This dropin only works with kubeadm and kubelet v1.11+
-[Service]
-Environment="KUBELET_PROXY_ARGS=--config=/var/lib/kube-proxy/kubeconfig.conf --hostname-override=kubeadm"
-EnvironmentFile=-/etc/default/kubelet
-ExecStart=
-ExecStart=/usr/bin/kube-proxy $KUBELET_PROXY_ARGS
