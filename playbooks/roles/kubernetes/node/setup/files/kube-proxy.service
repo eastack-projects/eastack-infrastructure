@@ -1,10 +1,11 @@
 [Unit]
 Description=Kubernetes Kube-Proxy Server
 Documentation=https://github.com/GoogleCloudPlatfor/kubernetes
-After=network.service
-Requires=network.service
+After=network.target
+Requires=network.target
 
 [Service]
+WorkingDirectory=/var/lib/kubelet
 ExecStart=/usr/bin/kube-proxy
 Restart=on-failure
 LimitNOFILE=65535
