@@ -46,7 +46,7 @@
 - name: Add kubernetes server service configuration
   template:
     src: "{{ item }}"
-    dest: "/etc/systemd/system/kube-{{ item }}.service.d/10-{{ item }}.service"
+    dest: "/etc/systemd/system/kube-{{ item }}.service.d/10-{{ item }}.conf"
     mode: 0644
   with_items:
     - apiserver
