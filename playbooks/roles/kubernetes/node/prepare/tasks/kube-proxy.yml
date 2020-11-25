@@ -25,7 +25,7 @@
     body_format: json
     status_code: 200
     body:
-      common_name: system:kube-kube-proxy
+      common_name: system:kube-proxy
   register: certificate
 
 - name: Persistent kube-proxy apiserver client certificate
