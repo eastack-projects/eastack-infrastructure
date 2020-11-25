@@ -1,46 +1,46 @@
 ---
-- name: Add proxier apiserver client role
+- name: Add kube-proxy apiserver client role
   uri:
     method: POST
     validate_certs: no
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/roles/client.apiserver.proxier.kubernetes.ipool.me
+    url: https://Vault:8200/v1/pki_int/roles/client.apiserver.kube-proxy.kubernetes.ipool.me
     body_format: json
     status_code: 204
     body:
       key_usage: ["DigitalSignature", "KeyEncipherment"]
       ext_key_usage: ["ClientAuth"]
       enforce_hostnames: false
-      common_name: system:node-proxier
+      common_name: system:kube-proxy
       allow_any_name: true
 
-- name: Generate proxier apiserver client certificate
+- name: Generate kube-proxy apiserver client certificate
   uri:
     method: POST
     validate_certs: no
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/issue/client.apiserver.proxier.kubernetes.ipool.me
+    url: https://Vault:8200/v1/pki_int/issue/client.apiserver.kube-proxy.kubernetes.ipool.me
     body_format: json
     status_code: 200
     body:
-      common_name: system:kube-proxier
+      common_name: system:kube-kube-proxy
   register: certificate
 
-- name: Persistent proxier apiserver client certificate
+- name: Persistent kube-proxy apiserver client certificate
   become: no
   local_action:
     module: copy
     content: "{{ certificate.json.data.certificate }}"
-    dest: ./roles/kubernetes/node/prepare/files/proxier-apiserver-client.crt
+    dest: ./roles/kubernetes/node/prepare/files/kube-proxy-apiserver-client.crt
     mode: 0644
 
-- name: Persistent proxier apiserver client certificate
+- name: Persistent kube-proxy apiserver client certificate
   become: no
   local_action:
     module: copy
     content: "{{ certificate.json.data.private_key }}"
-    dest: ./roles/kubernetes/node/prepare/files/proxier-apiserver-client.key
+    dest: ./roles/kubernetes/node/prepare/files/kube-proxy-apiserver-client.key
     mode: 0644
 
