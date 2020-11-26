@@ -12,16 +12,11 @@
     state: directory
   with_items:
     - /opt/kubernetes/package
+    - /opt/kubernetes/tls
     - /var/lib/kubelet
     - /var/lib/kube-proxy
     - /etc/kubernetes/manifests
-
-- name: Create kubelet and kube-proxy systemd service directory
-  file:
-    path: /etc/systemd/system/{{ item }}.service.d
-    state: directory
-  with_items:
-    - kubelet
-    - kube-proxy
+    - /etc/systemd/system/kubelet.service.d
+    - /etc/systemd/system/kube-proxy.service.d
 
 - include_tasks: kube-proxy.yml

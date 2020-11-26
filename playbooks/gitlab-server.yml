@@ -1,0 +1,8 @@
+- name: Initialize gitlab server
+  become: yes
+  hosts: gitlab-server
+  roles:
+    - common/config
+    - coredns/config
+    - gitlab/server/prepare
+    - gitlab/server/setup

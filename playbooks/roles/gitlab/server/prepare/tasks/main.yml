@@ -10,11 +10,11 @@
     validate_certs: no
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/roles/gitlab.ipool.me
+    url: "https://Vault:8200/v1/pki_int/roles/{{ GITLAB_FQDN }}"
     body_format: json
     status_code: 204
     body:
-      allowed_domains: gitlab.ipool.me
+      allowed_domains: "{{ GITLAB_FQDN }}"
       allow_any_name: true
       allow_subdomains: yes
 
@@ -24,11 +24,12 @@
     validate_certs: no
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/issue/gitlab.ipool.me
+    url: "https://Vault:8200/v1/pki_int/issue/{{ GITLAB_FQDN }}"
     body_format: json
     status_code: 200
     body:
-      common_name: gitlab.ipool.me
+      common_name: "{{ GITLAB_FQDN }}"
+      ip_sans: "{{ ansible_facts.enp0s8.ipv4.address }}"
   register: certificate
 
 - name: Persistent gitlab certificate
@@ -36,7 +37,7 @@
   local_action:
     module: copy
     content: "{{ certificate.json.data.certificate }}"
-    dest: "./roles/gitlab/prepare/{{ GITLAB_FQDN }}.crt"
+    dest: "./roles/gitlab/server/prepare/{{ GITLAB_FQDN }}.crt"
     mode: 0644
 
 - name: Persistent gitlab key
@@ -44,6 +45,5 @@
   local_action:
     module: copy
     content: "{{ certificate.json.data.private_key }}"
-    dest: "./roles/gitlab/prepare/{{ GITLAB_FQDN }}.key"
+    dest: "./roles/gitlab/server/prepare/{{ GITLAB_FQDN }}.key"
     mode: 0644
-

@@ -17,3 +17,7 @@ PAUSE_VERSION: 3.2
 # for harbor
 HARBOR_FQDN: harbor.ipool.me
 HARBOR_PACK: /home/radix10/Downloads/harbor.tar.gz
+
+# for coredns
+CORE_DNS: 192.168.123.200
+FALLBACK_DNS: 114.114.114.114

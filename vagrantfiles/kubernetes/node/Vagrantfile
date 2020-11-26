@@ -10,8 +10,9 @@ Vagrant.configure("2") do |config|
     kubernetes.vm.synced_folder "../../.apt-cache/var/cache/apt", "/var/cache/apt"
     kubernetes.vm.synced_folder "../../.apt-cache/var/lib/apt", "/var/lib/apt"
     kubernetes.vm.synced_folder "../../.apt-cache/etc/apt", "/etc/apt"
+
     kubernetes.vm.provider "virtualbox" do |vb|
-      vb.memory = "4096"
+      vb.memory = "1024"
     end
 
     kubernetes.vm.provision :ansible do |ansible|

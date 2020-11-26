@@ -27,7 +27,7 @@
 
 - name: Add kubernetes node service configuration
   template:
-    src: "{{ item }}"
+    src: "{{ item }}.service"
     dest: "/etc/systemd/system/{{ item }}.service.d/10-{{ item }}.conf"
     mode: 0644
   with_items:
@@ -52,10 +52,15 @@
     - { src: config.conf, dest: /var/lib/kube-proxy/config.conf }
     - { src: kubeconfig.conf, dest: /var/lib/kube-proxy/kubeconfig.conf }
 
-- name: Copy bootstrap-kubelet.conf
+- name: copy bootstrap-kubelet.conf
   copy:
     src: ./roles/kubernetes/server/initialize/files/bootstrap-kubelet.yml
     dest: /etc/kubernetes/bootstrap-kubelet.conf
+
+- name: copy ca certificate
+  copy:
+    src: ./roles/vault/config/files/ca.crt
+    dest: /etc/kubernetes/tls/ca.crt
 
 - name: Pull Pause docker image
   docker_image:

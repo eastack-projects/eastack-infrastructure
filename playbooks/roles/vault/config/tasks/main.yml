@@ -1,12 +1,4 @@
 ---
-- name: Update vault ip address
-  become: no
-  local_action:
-    module: replace
-    path: ./roles/coredns/config/defaults/main.yml
-    regexp: 'VAULT_IP:.*'
-    replace: "VAULT_IP: {{ ansible_facts.enp0s8.ipv4.address }}"
-
 - name: Add default vault address to bashrc
   lineinfile:
     dest: /root/.bashrc

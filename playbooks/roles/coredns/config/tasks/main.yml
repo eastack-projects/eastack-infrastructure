@@ -19,11 +19,11 @@
   replace:
     path: /etc/hosts
     regexp: '.* Vault Vault$'
-    replace: "{{ VAULT_IP }} Vault Vault"
+    replace: "{{ hostvars['vault'].ansible_facts.enp0s8.ipv4.address }} Vault Vault"
     backup: yes
 
 - name: Makesure appened vault hosts entry
   lineinfile:
     dest: /etc/hosts
-    line: "{{ VAULT_IP }} Vault Vault"
+    line: "{{ hostvars['vault'].ansible_facts.enp0s8.ipv4.address }} Vault Vault"
     state: present

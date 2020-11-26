@@ -1,6 +1,6 @@
 - name: Initialize kubernetes server
   become: yes
-  hosts: all
+  hosts: kubernetes-server
   roles:
     - common/config
     - coredns/config
