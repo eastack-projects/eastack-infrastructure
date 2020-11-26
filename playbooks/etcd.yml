@@ -1,6 +1,6 @@
 - name: Initialize etcd cluster
   become: yes
-  hosts: all
+  hosts: etcd
   roles:
     - common/config
     - coredns/config

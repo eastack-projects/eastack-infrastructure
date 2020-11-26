@@ -2,8 +2,11 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
+  etcds = []
   (1..3).each do |i|
     config.vm.define "etcd#{i}" do |etcd|
+      etcds.push("etcd#{i}")
+
       etcd.vm.box = "ubuntu/focal64"
       etcd.vm.box_check_update = false
 
@@ -11,11 +14,14 @@ Vagrant.configure("2") do |config|
       etcd.vm.hostname = "etcd#{i}"
 
       etcd.vm.provider "virtualbox" do |vb|
-        vb.memory = "512"
+        vb.memory = "256"
       end
 
       etcd.vm.provision :ansible do |ansible|
         ansible.playbook = "playbook.yml"
+        ansible.groups = {
+          "etcd" => etcds
+        }
       end
     end
   end

@@ -1,6 +1,6 @@
 - name: Initialize harbor
   become: yes
-  hosts: all
+  hosts: harbor
   roles:
   - common/config
   - coredns/config

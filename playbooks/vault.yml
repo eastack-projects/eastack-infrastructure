@@ -1,6 +1,6 @@
 - name: Initialize vault
   become: yes
-  hosts: all
+  hosts: vault
   roles:
     - vault/setup
     - coredns/config
