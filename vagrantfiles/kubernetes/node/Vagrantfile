@@ -1,19 +1,21 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/focal64"
-  config.vm.box_check_update = false
-  config.vm.network "public_network", ip: "192.168.123.206"
-  config.vm.hostname = "kubernetes-node"
-  config.vm.synced_folder "../../.apt-cache/var/cache/apt", "/var/cache/apt"
-  config.vm.synced_folder "../../.apt-cache/var/lib/apt", "/var/lib/apt"
-  config.vm.synced_folder "../../.apt-cache/etc/apt", "/etc/apt"
-  config.vm.provider "virtualbox" do |vb|
-    vb.memory = "4096"
-  end
-  config.vm.provision :ansible do |ansible|
-    ansible.playbook = "../playbooks/kubernetes-node.yml"
+  config.vm.define "kubernetes-node" do |kubernetes|
+    kubernetes.vm.box = "ubuntu/focal64"
+    kubernetes.vm.box_check_update = false
+    kubernetes.vm.network "public_network", ip: "192.168.123.206"
+    kubernetes.vm.hostname = "kubernetes-node"
+    kubernetes.vm.synced_folder "../../.apt-cache/var/cache/apt", "/var/cache/apt"
+    kubernetes.vm.synced_folder "../../.apt-cache/var/lib/apt", "/var/lib/apt"
+    kubernetes.vm.synced_folder "../../.apt-cache/etc/apt", "/etc/apt"
+    kubernetes.vm.provider "virtualbox" do |vb|
+      vb.memory = "4096"
+    end
+
+    kubernetes.vm.provision :ansible do |ansible|
+      ansible.playbook = "playbook.yml"
+    end
   end
 end

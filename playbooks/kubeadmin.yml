@@ -1,5 +1,0 @@
-- name: Initialize kubeadmin
-  become: yes
-  hosts: all
-  roles:
-    - common/config

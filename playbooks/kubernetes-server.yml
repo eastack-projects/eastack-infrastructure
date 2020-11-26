@@ -7,4 +7,4 @@
     - vault/unseal
     - kubernetes/server/prepare
     - kubernetes/server/setup
-    - kubernetes/server/initialize
+#    - kubernetes/server/initialize

@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  (1..1).each do |i|
+  (1..3).each do |i|
     config.vm.define "etcd#{i}" do |etcd|
       etcd.vm.box = "ubuntu/focal64"
       etcd.vm.box_check_update = false
@@ -15,7 +15,7 @@ Vagrant.configure("2") do |config|
       end
 
       etcd.vm.provision :ansible do |ansible|
-        ansible.playbook = "../../playbooks/etcd.yml"
+        ansible.playbook = "playbook.yml"
       end
     end
   end
