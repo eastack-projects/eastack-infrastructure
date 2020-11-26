@@ -8,12 +8,8 @@ Vagrant.configure("2") do |config|
     coredns.vm.network "private_network", ip: "192.168.33.10"
     coredns.vm.hostname = "coredns"
 
-    coredns.vm.synced_folder "../.cache/var/cache/apt", "/var/cache/apt"
-    coredns.vm.synced_folder "../.cache/var/lib/apt", "/var/lib/apt"
-    coredns.vm.synced_folder "../.cache/etc/apt", "/etc/apt"
-
     coredns.vm.provider "virtualbox" do |vb|
-      vb.memory = "256"
+      vb.memory = "512"
     end
 
     coredns.vm.provision :ansible do |ansible|

@@ -31,7 +31,7 @@
   local_action:
     module: copy
     content: "{{ certificate.json.data.certificate }}"
-    dest: ./roles/etcd/prepare/files/client.crt
+    dest: "./roles/etcd/prepare/files/{{ansible_facts.hostname}}-client.crt"
     mode: 0644
 
 - name: Persistent client key
@@ -39,5 +39,5 @@
   local_action:
     module: copy
     content: "{{ certificate.json.data.private_key }}"
-    dest: ./roles/etcd/prepare/files/client.key
+    dest: "./roles/etcd/prepare/files/{{ansible_facts.hostname}}-client.key"
     mode: 0644
