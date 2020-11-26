@@ -3,7 +3,7 @@
   replace:
     path: /etc/systemd/resolved.conf
     regexp: '#DNS='
-    replace: "DNS={{ CORE_DNS }}"
+    replace: "DNS={{ hostvars['coredns'].ansible_facts.enp0s8.ipv4.address }}"
     backup: yes
   notify: Restart systemd-resolved service
 
