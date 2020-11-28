@@ -38,7 +38,7 @@
     status_code: 200
     body:
       common_name: "{{ HARBOR_FQDN }}"
-      ip_sans: "{{ ansible_facts.enp0s8.ipv4.address }}"
+      ip_sans: "{{ ansible_host }}"
   register: certificate
   when: not certificate_file.stat.exists
 

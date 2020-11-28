@@ -29,7 +29,7 @@
     status_code: 200
     body:
       common_name: "{{ GITLAB_FQDN }}"
-      ip_sans: "{{ ansible_facts.enp0s8.ipv4.address }}"
+      ip_sans: "{{ ansible_host }}"
   register: certificate
 
 - name: Persistent gitlab certificate

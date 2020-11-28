@@ -1,10 +1,10 @@
-ETCD_ARGS="--name {{ ansible_facts.hostname }} \
-  --initial-advertise-peer-urls https://{{ ansible_facts.enp0s8.ipv4.address }}:2380 \
-  --listen-peer-urls https://{{ ansible_facts.enp0s8.ipv4.address }}:2380 \
-  --listen-client-urls https://{{ ansible_facts.enp0s8.ipv4.address }}:2379,http://127.0.0.1:2379 \
-  --advertise-client-urls https://{{ ansible_facts.enp0s8.ipv4.address }}:2379 \
+ETCD_ARGS="--name {{ ansible_hostname }} \
+  --initial-advertise-peer-urls https://{{ ansible_host }}:2380 \
+  --listen-peer-urls https://{{ ansible_host }}:2380 \
+  --listen-client-urls https://{{ ansible_host }}:2379,http://127.0.0.1:2379 \
+  --advertise-client-urls https://{{ ansible_host }}:2379 \
   --initial-cluster-token etcd-cluster-1 \
-  --initial-cluster {% for host in groups['etcd'] %}{{ host }}=https://{{ hostvars[host].ansible_facts.enp0s8.ipv4.address }}:2380{{ "," if not loop.last }}{% endfor %} \
+  --initial-cluster {% for host in groups['etcd'] %}{{ host }}=https://{{ hostvars[host].ansible_host }}:2380{{ "," if not loop.last }}{% endfor %} \
   --initial-cluster-state new \
   --client-cert-auth \
   --trusted-ca-file=/opt/etcd/tls/ca.crt \

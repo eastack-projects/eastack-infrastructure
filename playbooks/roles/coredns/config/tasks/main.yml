@@ -3,7 +3,7 @@
   replace:
     path: /etc/systemd/resolved.conf
     regexp: '#DNS='
-    replace: "DNS={{ hostvars['coredns'].ansible_facts.enp0s8.ipv4.address }}"
+    replace: "DNS={{ hostvars.coredns.ansible_host }}"
     backup: yes
   notify: Restart systemd-resolved service
 
@@ -19,11 +19,11 @@
   replace:
     path: /etc/hosts
     regexp: '.* Vault Vault$'
-    replace: "{{ hostvars['vault'].ansible_facts.enp0s8.ipv4.address }} Vault Vault"
+    replace: "{{ hostvars.vault.ansible_host }} Vault Vault"
     backup: yes
 
 - name: Makesure appened vault hosts entry
   lineinfile:
     dest: /etc/hosts
-    line: "{{ hostvars['vault'].ansible_facts.enp0s8.ipv4.address }} Vault Vault"
+    line: "{{ hostvars.vault.ansible_host }} Vault Vault"
     state: present

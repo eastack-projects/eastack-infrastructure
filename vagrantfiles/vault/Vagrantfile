@@ -2,11 +2,13 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
+  host_ip = "192.168.33.20"
+
   config.vm.define "vault" do |vault|
     vault.vm.box = "ubuntu/focal64"
     vault.vm.box_check_update = false
 
-    vault.vm.network "private_network", ip: "192.168.33.20"
+    vault.vm.network "private_network", ip: host_ip
     vault.vm.hostname = "vault"
 
     vault.vm.synced_folder "../.cache/var/cache/apt", "/var/cache/apt"
@@ -20,6 +22,9 @@ Vagrant.configure("2") do |config|
 
     vault.vm.provision :ansible do |ansible|
       ansible.playbook = "playbook.yml"
+      ansible.host_vars = {
+        vault.vm.hostname => {"ansible_host" => host_ip, "ansible_port" => 22}
+      }
     end
   end
 end

@@ -23,7 +23,7 @@
     status_code: 200
     body:
       common_name: peer.etcd.ipool.me
-      ip_sans: "{{ ansible_facts.enp0s8.ipv4.address }}"
+      ip_sans: "{{ ansible_host }}"
   register: certificate
 
 - name: Persistent etcd peer certificate

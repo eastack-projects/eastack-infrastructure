@@ -2,11 +2,12 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
+  host_ip = "192.168.33.50"
   config.vm.define "gitlab-server" do |gitlab|
     gitlab.vm.box = "ubuntu/focal64"
     gitlab.vm.box_check_update = false
 
-    gitlab.vm.network "private_network", ip: "192.168.33.50"
+    gitlab.vm.network "private_network", ip: host_ip
     gitlab.vm.hostname = "gitlab-server"
 
     gitlab.vm.synced_folder "../../.cache/var/cache/apt", "/var/cache/apt"
@@ -19,6 +20,9 @@ Vagrant.configure("2") do |config|
 
     gitlab.vm.provision :ansible do |ansible|
       ansible.playbook = "playbook.yml"
+      ansible.host_vars = {
+        gitlab.vm.hostname => {"ansible_host" => host_ip, "ansible_port" => 22}
+      }
     end
   end
 end
