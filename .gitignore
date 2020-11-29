@@ -10,3 +10,4 @@ vagrantfiles/.cache/**
 *.pub
 
 sys-init-result.json
+bootstrap-kubelet.yml
