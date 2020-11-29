@@ -1,20 +1,19 @@
 ---
-- name: Add apt signing key
-  apt_key:
-    url: https://apt.releases.hashicorp.com/gpg
-    state: present
+- name: Create vault package directory
+  file:
+    path: /opt/vault/package
+    state: directory
+    mode: 0755
 
-- name: Add hashicorp repository
-  apt_repository:
-    repo: deb [arch=amd64] https://apt.releases.hashicorp.com buster main
-    state: present
+- name: Copy vault deb package
+  copy:
+    src: "{{ VAULT_PACK }}"
+    dest: /opt/vault/package/vault.deb
     mode: 0644
 
 - name: Install Vault
   apt:
-    update_cache: yes
-    name:
-      - vault
+    deb: /opt/vault/package/vault.deb
 
 - name: Generate an CA private key with the default values (4096 bits, RSA) and a passphrase
   become: no
@@ -22,7 +21,7 @@
     module: openssl_privatekey
     path: "./roles/vault/setup/files/{{ VAULT_FQDN }}.key"
     cipher: aes256
-    passphrase: 
+    passphrase:
 
 - name: Generate an CA Certificate Signing Request
   become: no
