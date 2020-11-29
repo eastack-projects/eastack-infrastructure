@@ -60,7 +60,7 @@
 - name: copy ca certificate
   copy:
     src: ./roles/vault/config/files/ca.crt
-    dest: /etc/kubernetes/tls/ca.crt
+    dest: /opt/kubernetes/tls/ca.crt
 
 - name: Pull Pause docker image
   docker_image:

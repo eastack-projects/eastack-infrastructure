@@ -1,3 +1,9 @@
+- name: Config kubernetes server
+  become: yes
+  hosts: kubernetes_server
+  roles:
+    - kubernetes/server/config
+
 - name: Initialize kubernetes node
   become: yes
   hosts: kubernetes_node
