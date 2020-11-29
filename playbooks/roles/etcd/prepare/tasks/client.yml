@@ -2,10 +2,9 @@
 - name: Add etcd client role
   uri:
     method: POST
-    validate_certs: no
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/roles/client.etcd.ipool.me
+    url: https://vault.ipool.me:8200/v1/pki_int/roles/client.etcd.ipool.me
     body_format: json
     status_code: 204
     body:
@@ -15,10 +14,9 @@
 - name: Generate etcd client certificate
   uri:
     method: POST
-    validate_certs: no
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/issue/client.etcd.ipool.me
+    url: https://vault.ipool.me:8200/v1/pki_int/issue/client.etcd.ipool.me
     body_format: json
     status_code: 200
     body:
@@ -26,18 +24,14 @@
       ip_sans: "{{ ansible_host }}"
   register: certificate
 
-- name: Persistent client certificate
-  become: no
-  local_action:
-    module: copy
+- name: Persistent etcd client certificate
+  copy:
     content: "{{ certificate.json.data.certificate }}"
-    dest: "./roles/etcd/prepare/files/{{ansible_facts.hostname}}-client.crt"
+    dest: /opt/etcd/tls/client.crt
     mode: 0644
 
-- name: Persistent client key
-  become: no
-  local_action:
-    module: copy
+- name: Persistent etcd client key
+  copy:
     content: "{{ certificate.json.data.private_key }}"
-    dest: "./roles/etcd/prepare/files/{{ansible_facts.hostname}}-client.key"
+    dest: /opt/etcd/tls/client.key
     mode: 0644

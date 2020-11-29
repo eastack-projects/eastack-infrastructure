@@ -1,0 +1,4 @@
+zone "ipool.me" {
+	type master;
+	file "/etc/bind/db.ipool.me";
+};

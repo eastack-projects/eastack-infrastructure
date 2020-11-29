@@ -2,6 +2,15 @@
   become: yes
   hosts: vault
   roles:
+    - common/config/timezone
+    - common/config/update
+    - common/config/dns
     - vault/setup
-    - coredns/config
+    - common/config/ca
     - vault/config
+
+- name: Update dns record
+  become: yes
+  hosts: bind9
+  roles:
+    - bind9/setup

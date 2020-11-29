@@ -5,7 +5,7 @@
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
     validate_certs: no
-    url: https://Vault:8200/v1/sys/mounts
+    url: https://vault.ipool.me:8200/v1/sys/mounts
   register: mounts
 
 - name: Mount kubernetes front proxy intermediate pki secret engine
@@ -14,7 +14,7 @@
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
     validate_certs: no
-    url: https://Vault:8200/v1/sys/mounts/pki_int_kubernetes_front_proxy
+    url: https://vault.ipool.me:8200/v1/sys/mounts/pki_int_kubernetes_front_proxy
     body_format: json
     status_code: 204
     body:
@@ -27,7 +27,7 @@
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
     validate_certs: no
-    url: https://Vault:8200/v1/sys/mounts/pki_int_kubernetes_front_proxy/tune
+    url: https://vault.ipool.me:8200/v1/sys/mounts/pki_int_kubernetes_front_proxy/tune
     body_format: json
     status_code: 204
     body:
@@ -41,7 +41,7 @@
     validate_certs: no
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int_kubernetes_front_proxy/intermediate/generate/exported
+    url: https://vault.ipool.me:8200/v1/pki_int_kubernetes_front_proxy/intermediate/generate/exported
     body_format: json
     body:
       common_name: front-proxy-ca
@@ -67,7 +67,7 @@
     validate_certs: no
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki/root/sign-intermediate
+    url: https://vault.ipool.me:8200/v1/pki/root/sign-intermediate
     body_format: json
     body:
       csr: "{{ lookup('file', './roles/kubernetes/server/prepare/files/front-proxy-ca.csr') }}"
@@ -87,7 +87,7 @@
     validate_certs: no
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int_kubernetes_front_proxy/intermediate/set-signed
+    url: https://vault.ipool.me:8200/v1/pki_int_kubernetes_front_proxy/intermediate/set-signed
     body_format: json
     status_code: 204
     body:

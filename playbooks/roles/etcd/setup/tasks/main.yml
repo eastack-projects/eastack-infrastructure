@@ -1,15 +1,4 @@
 ---
-- name: Create etcd directory
-  file:
-    path: "{{ item }}"
-    state: directory
-    mode: 0755
-  with_items:
-    - /etc/etcd
-    - /var/lib/etcd
-    - /opt/etcd
-    - /opt/etcd/tls
-
 - name: Extract etcd package
   unarchive:
     src: "{{ ETCD_PACKAGE }}"
@@ -48,14 +37,3 @@
     dest: /opt/etcd/tls/
     mode: 0644
   notify: Enable and restart etcd service
-
-- name: Copy etcd certificate
-  copy:
-    src: "./roles/etcd/prepare/files/{{ ansible_facts.hostname }}-{{item}}"
-    dest: "/opt/etcd/tls/{{ ansible_facts.hostname }}-{{ item }}"
-    mode: 0644
-  with_items:
-    - peer.crt
-    - peer.key
-    - client.crt
-    - client.key

@@ -1,4 +1,14 @@
 ---
+- name: Create etcd directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  with_items:
+    - /etc/etcd
+    - /var/lib/etcd
+    - /opt/etcd/tls
+
 - name: Include vault keys
   include_vars:
     file: ./roles/vault/config/files/sys-init-result.json

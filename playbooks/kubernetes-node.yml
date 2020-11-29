@@ -1,9 +1,11 @@
 - name: Initialize kubernetes node
   become: yes
-  hosts: kubernetes-node
+  hosts: kubernetes_node
   roles:
-    - coredns/config
-    - common/config
+    - common/config/timezone
+    - common/config/update
+    - common/config/dns
+    - common/config/ca
     - vault/unseal
     - harbor/prepare
     - docker/setup

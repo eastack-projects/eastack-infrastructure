@@ -9,15 +9,13 @@
     method: GET
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    validate_certs: no
-    url: https://Vault:8200/v1/sys/seal-status
+    url: https://vault.ipool.me:8200/v1/sys/seal-status
   register: seal_status
 
 - name: Unseal vault
   uri:
     method: PUT
-    validate_certs: no
-    url: https://Vault:8200/v1/sys/unseal
+    url: https://vault.ipool.me:8200/v1/sys/unseal
     body_format: json
     body:
       key: "{{ item }}"

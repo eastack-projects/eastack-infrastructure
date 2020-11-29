@@ -1,7 +1,0 @@
-- name: Initialize gitlab runner
-  become: yes
-  hosts: gitlab-runner
-  roles:
-    - common/config
-    - coredns/config
-    - docker/setup

@@ -1,0 +1,6 @@
+---
+- name: Enable and restart bind9 service
+  systemd:
+    name: bind9
+    state: restarted
+    enabled: yes

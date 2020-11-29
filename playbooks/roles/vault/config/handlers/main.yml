@@ -3,7 +3,7 @@
   uri:
     method: PUT
     validate_certs: no
-    url: https://Vault:8200/v1/sys/init
+    url: https://vault.ipool.me:8200/v1/sys/init
     body_format: json
     body:
       secret_shares: 10
@@ -30,7 +30,7 @@
   uri:
     method: PUT
     validate_certs: no
-    url: https://Vault:8200/v1/sys/unseal
+    url: https://vault.ipool.me:8200/v1/sys/unseal
     body_format: json
     body:
       key: "{{ item }}"
@@ -44,7 +44,7 @@
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
     validate_certs: no
-    url: https://Vault:8200/v1/sys/mounts/pki
+    url: https://vault.ipool.me:8200/v1/sys/mounts/pki
     body_format: json
     status_code: 204
     body:
@@ -57,7 +57,7 @@
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
     validate_certs: no
-    url: https://Vault:8200/v1/sys/mounts/pki/tune
+    url: https://vault.ipool.me:8200/v1/sys/mounts/pki/tune
     body_format: json
     status_code: 204
     body:
@@ -73,11 +73,11 @@
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
     validate_certs: no
-    url: https://Vault:8200/v1/pki/config/ca
+    url: https://vault.ipool.me:8200/v1/pki/config/ca
     body_format: json
     status_code: 204
     body:
-      pem_bundle: "{{ lookup('file', './roles/vault/setup/files/tls.key') + '\n' +  lookup('file', './roles/vault/setup/files/tls.crt') }}"
+      pem_bundle: "{{ lookup('file', './roles/vault/setup/files/{{ VAULT_FQDN }}.key') + '\n' +  lookup('file', './roles/vault/setup/files/{{ VAULT_FQDN }}.crt') }}"
   listen: Initializing the vault
 
 # Mount intermediate ca
@@ -87,7 +87,7 @@
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
     validate_certs: no
-    url: https://Vault:8200/v1/sys/mounts/pki_int
+    url: https://vault.ipool.me:8200/v1/sys/mounts/pki_int
     body_format: json
     status_code: 204
     body:
@@ -100,7 +100,7 @@
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
     validate_certs: no
-    url: https://Vault:8200/v1/sys/mounts/pki_int/tune
+    url: https://vault.ipool.me:8200/v1/sys/mounts/pki_int/tune
     body_format: json
     status_code: 204
     body:
@@ -116,7 +116,7 @@
     validate_certs: no
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/intermediate/generate/exported
+    url: https://vault.ipool.me:8200/v1/pki_int/intermediate/generate/exported
     body_format: json
     body:
       common_name: ipool.me
@@ -145,7 +145,7 @@
     validate_certs: no
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki/root/sign-intermediate
+    url: https://vault.ipool.me:8200/v1/pki/root/sign-intermediate
     body_format: json
     body:
       csr: "{{ lookup('file', './roles/vault/config/files/ca.csr') }}"
@@ -166,7 +166,7 @@
     validate_certs: no
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/intermediate/set-signed
+    url: https://vault.ipool.me:8200/v1/pki_int/intermediate/set-signed
     body_format: json
     status_code: 204
     body:

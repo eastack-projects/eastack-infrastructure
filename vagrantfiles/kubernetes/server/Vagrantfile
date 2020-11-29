@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.define "kubernetes-server" do |kubernetes|
+  config.vm.define "kubernetes_server" do |kubernetes|
     host_ip = "192.168.33.60"
     kubernetes.vm.box = "ubuntu/focal64"
     kubernetes.vm.box_check_update = false

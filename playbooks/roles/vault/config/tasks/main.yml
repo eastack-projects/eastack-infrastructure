@@ -2,7 +2,7 @@
 - name: Add default vault address to bashrc
   lineinfile:
     dest: /root/.bashrc
-    line: export VAULT_ADDR='https://Vault:8200'
+    line: export VAULT_ADDR='https://vault.ipool.me:8200'
     state: present
 
 - name: Enable vault service

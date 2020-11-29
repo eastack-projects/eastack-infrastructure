@@ -5,7 +5,7 @@
     validate_certs: no
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/roles/admin.kubernetes.ipool.me
+    url: https://vault.ipool.me:8200/v1/pki_int/roles/admin.kubernetes.ipool.me
     body_format: json
     status_code: 204
     body:
@@ -21,7 +21,7 @@
     validate_certs: no
     headers:
       X-Vault-Token: "{{ sys_init_result['root_token'] }}"
-    url: https://Vault:8200/v1/pki_int/issue/admin.kubernetes.ipool.me
+    url: https://vault.ipool.me:8200/v1/pki_int/issue/admin.kubernetes.ipool.me
     body_format: json
     status_code: 200
     body:

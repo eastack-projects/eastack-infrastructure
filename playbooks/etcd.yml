@@ -2,8 +2,10 @@
   become: yes
   hosts: etcd
   roles:
-    - common/config
-    - coredns/config
+    - common/config/timezone
+    - common/config/update
+    - common/config/dns
+    - common/config/ca
     - vault/unseal
     - etcd/prepare
     - etcd/setup

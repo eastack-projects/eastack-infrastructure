@@ -1,0 +1,8 @@
+- name: Initialize bind9
+  become: yes
+  hosts: bind9
+  roles:
+  - common/config/timezone
+  - common/config/update
+  - bind9/setup
+  - common/config/dns

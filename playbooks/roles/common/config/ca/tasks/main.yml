@@ -1,0 +1,12 @@
+---
+- name: Copy ca certificate
+  copy:
+    src: "roles/vault/setup/files/{{ item }}"
+    dest: "/usr/local/share/ca-certificates/{{ item }}"
+  with_items:
+    - "{{ VAULT_FQDN }}.crt"
+    - "{{ VAULT_FQDN }}.key"
+
+- name: Update ca certificate
+  shell:
+    cmd: update-ca-certificates

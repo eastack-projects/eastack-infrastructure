@@ -1,7 +1,0 @@
-- name: Initialize coredns
-  become: yes
-  hosts: coredns
-  roles:
-  - common/config
-  - coredns/setup
-  - coredns/config

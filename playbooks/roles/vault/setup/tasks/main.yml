@@ -16,11 +16,40 @@
     name:
       - vault
 
-- name: Fetch vault certificate
-  fetch:
-    src: "/opt/vault/tls/{{ item }}"
-    dest: "./roles/vault/setup/files/{{ item }}"
-    flat: yes
+- name: Generate an CA private key with the default values (4096 bits, RSA) and a passphrase
+  become: no
+  local_action:
+    module: openssl_privatekey
+    path: "./roles/vault/setup/files/{{ VAULT_FQDN }}.key"
+    cipher: aes256
+    passphrase: 
+
+- name: Generate an CA Certificate Signing Request
+  become: no
+  local_action:
+    module: openssl_csr
+    path: "./roles/vault/setup/files/{{ VAULT_FQDN }}.csr"
+    privatekey_path: "roles/vault/setup/files/{{ VAULT_FQDN }}.key"
+    common_name: "{{ VAULT_FQDN }}"
+    basic_constraints: 'CA:TRUE'
+    country_name: "CN"
+    email_address: "admin@radix10.me"
+    locality_name: "Beijing"
+    state_or_province_name: "Beijing"
+
+- name: Generate a Self Signed CA Certificate
+  become: no
+  local_action:
+    module: openssl_certificate
+    privatekey_path: "roles/vault/setup/files/{{ VAULT_FQDN }}.key"
+    csr_path: "roles/vault/setup/files/{{ VAULT_FQDN }}.csr"
+    path: "roles/vault/setup/files/{{ VAULT_FQDN }}.crt"
+    provider: selfsigned
+
+- name: Copy Self Signed CA Certificate
+  copy:
+    src: "roles/vault/setup/files/{{ item.src }}"
+    dest: "/opt/vault/tls/{{ item.dest }}"
   with_items:
-    - tls.crt
-    - tls.key
+    - { src: "{{ VAULT_FQDN }}.key", dest: tls.key }
+    - { src: "{{ VAULT_FQDN }}.crt", dest: tls.crt }
