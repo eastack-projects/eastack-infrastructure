@@ -7,13 +7,8 @@ Vagrant.configure("2") do |config|
   config.vm.define "harbor" do |harbor|
     harbor.vm.box = "ubuntu/focal64"
     harbor.vm.box_check_update = false
-
     harbor.vm.hostname = "harbor"
     harbor.vm.network "private_network", ip: host_ip
-
-    harbor.vm.synced_folder "../.cache/var/cache/apt", "/var/cache/apt"
-    harbor.vm.synced_folder "../.cache/var/lib/apt", "/var/lib/apt"
-    harbor.vm.synced_folder "../.cache/etc/apt", "/etc/apt"
 
     harbor.vm.provider "virtualbox" do |vb|
       vb.memory = "1024"

@@ -7,14 +7,8 @@ Vagrant.configure("2") do |config|
   config.vm.define "vault" do |vault|
     vault.vm.box = "ubuntu/focal64"
     vault.vm.box_check_update = false
-
     vault.vm.network "private_network", ip: host_ip
     vault.vm.hostname = "vault"
-
-    vault.vm.synced_folder "../.cache/var/cache/apt", "/var/cache/apt"
-    vault.vm.synced_folder "../.cache/var/lib/apt", "/var/lib/apt"
-    vault.vm.synced_folder "../.cache/etc/apt", "/etc/apt"
-
     vault.vm.provider "virtualbox" do |vb|
       vb.gui = false
       vb.memory = "512"

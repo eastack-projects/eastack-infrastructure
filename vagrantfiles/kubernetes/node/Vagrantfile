@@ -9,7 +9,6 @@ Vagrant.configure("2") do |config|
     kubernetes.vm.box_check_update = false
     kubernetes.vm.network "private_network", ip: host_ip
     kubernetes.vm.hostname = "kubernetes-node"
-
     kubernetes.vm.provider "virtualbox" do |vb|
       vb.memory = "1024"
     end

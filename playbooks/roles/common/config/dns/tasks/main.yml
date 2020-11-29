@@ -5,7 +5,6 @@
     regexp: '#DNS='
     replace: "DNS={{ hostvars.bind9.ansible_host }}"
     backup: yes
-  notify: Restart systemd-resolved service
 
 - name: Config Fallback DNS
   replace:
@@ -13,4 +12,8 @@
     regexp: '#FallbackDNS='
     replace: "FallbackDNS={{ FALLBACK_DNS }}"
     backup: yes
-  notify: Restart systemd-resolved service
+
+- name: Restart systemd-resolved service
+  systemd:
+    name: systemd-resolved
+    state: restarted
