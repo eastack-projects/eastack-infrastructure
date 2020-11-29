@@ -21,3 +21,4 @@ kubernetes-node:: 192.168.33.60
 * [ ] kubernetes 集群搭建
 * [ ] 还有太多细节值得完善
 * [ ] clean file
+* [ ] token 是直接生成到服务端和还是先存到本地，需要看有没有其他任务用到

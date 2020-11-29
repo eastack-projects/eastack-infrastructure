@@ -54,7 +54,7 @@
 
 - name: copy bootstrap-kubelet.conf
   copy:
-    src: ./roles/kubernetes/server/initialize/files/bootstrap-kubelet.yml
+    src: ./roles/kubernetes/server/config/files/bootstrap-kubelet.yml
     dest: /etc/kubernetes/bootstrap-kubelet.conf
 
 - name: copy ca certificate

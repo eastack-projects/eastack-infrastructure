@@ -109,15 +109,6 @@
     dest: /root/.kube/config
     mode: 0644
 
-- name: Copy cluster role binding yml for tls bootstraping
-  copy:
-    src: "{{ item }}"
-    dest: "/root/{{ item }}"
-  with_items:
-    - auto-approve-csrs-for-group.yml
-    - auto-approve-renewals-for-nodes.yml
-    - create-csrs-for-bootstrapping.yml
-
 - name: Add kubectl complete for bash
   lineinfile:
     dest: /root/.bashrc
