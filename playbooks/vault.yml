@@ -5,6 +5,7 @@
     - common/config/timezone
     - common/config/update
     - common/config/dns
+    - common/config/apt
     - vault/setup
     - common/config/ca
     - vault/config

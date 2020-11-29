@@ -1,0 +1,1 @@
+Acquire::http { Proxy "http://{{ APT_PROXY }}:3142"; };

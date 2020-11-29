@@ -4,5 +4,6 @@
   roles:
   - common/config/timezone
   - common/config/update
+  - common/config/apt
   - bind9/setup
   - common/config/dns

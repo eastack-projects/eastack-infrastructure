@@ -11,6 +11,7 @@
     - common/config/timezone
     - common/config/update
     - common/config/dns
+    - common/config/apt
     - common/config/ca
     - vault/unseal
     - harbor/prepare
