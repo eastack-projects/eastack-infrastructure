@@ -1,12 +1,12 @@
 - name: Config kubernetes server
   become: yes
-  hosts: kubernetes_server
+  hosts: kubernetes-server
   roles:
     - kubernetes/server/config
 
 - name: Initialize kubernetes node
   become: yes
-  hosts: kubernetes_node
+  hosts: kubernetes-node
   roles:
     - common/config/timezone
     - common/config/update

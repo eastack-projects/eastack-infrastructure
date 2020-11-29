@@ -3,12 +3,12 @@
 
 Vagrant.configure("2") do |config|
   host_ip = "192.168.33.10"
+
   config.vm.define "bind9" do |bind9|
     bind9.vm.box = "ubuntu/focal64"
     bind9.vm.box_check_update = false
     bind9.vm.network "private_network", ip: host_ip
     bind9.vm.hostname = "bind9"
-
     bind9.vm.provider "virtualbox" do |vb|
       vb.memory = "512"
     end

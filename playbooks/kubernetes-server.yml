@@ -1,6 +1,6 @@
 - name: Initialize kubernetes server
   become: yes
-  hosts: kubernetes_server
+  hosts: kubernetes-server
   roles:
     - common/config/timezone
     - common/config/update

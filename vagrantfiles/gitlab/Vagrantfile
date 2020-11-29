@@ -8,7 +8,7 @@ Vagrant.configure("2") do |config|
     gitlab.vm.box_check_update = false
 
     gitlab.vm.network "private_network", ip: host_ip
-    gitlab.vm.hostname = "gitlab-server"
+    gitlab.vm.hostname = "gitlab"
 
     gitlab.vm.synced_folder "../../.cache/var/cache/apt", "/var/cache/apt"
     gitlab.vm.synced_folder "../../.cache/var/lib/apt", "/var/lib/apt"
