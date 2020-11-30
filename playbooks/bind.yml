@@ -1,0 +1,9 @@
+- name: Initialize bind
+  become: yes
+  hosts: bind
+  roles:
+    - common/config/timezone
+    - common/config/update
+    - common/config/apt
+    - bind/setup
+    - common/config/dns

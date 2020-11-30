@@ -12,6 +12,6 @@
 
 - name: Update dns record
   become: yes
-  hosts: bind9
+  hosts: bind
   roles:
-    - bind9/setup
+    - bind/setup

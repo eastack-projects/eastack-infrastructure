@@ -3,7 +3,7 @@
   replace:
     path: /etc/systemd/resolved.conf
     regexp: '#DNS='
-    replace: "DNS={{ hostvars.bind9.ansible_host }}"
+    replace: "DNS={{ hostvars.bind.ansible_host }}"
     backup: yes
 
 - name: Config Fallback DNS

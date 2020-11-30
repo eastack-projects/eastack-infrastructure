@@ -1,16 +1,16 @@
 ---
-- name: Install bind9
+- name: Install bind
   apt:
     update_cache: yes
     name:
-      - bind9
+      - bind
 
 - name: Update dns config
   template:
     src: "{{ item }}"
     dest: "/etc/bind/{{ item }}"
     mode: 0644
-  notify: Enable and restart bind9 service
+  notify: Enable and restart bind service
   with_items:
     - db.ipool.me
     - named.conf.local

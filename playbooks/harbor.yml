@@ -2,11 +2,11 @@
   become: yes
   hosts: harbor
   roles:
-  - common/config/timezone
-  - common/config/update
-  - common/config/dns
-  - common/config/apt
-  - common/config/ca
-  - docker/setup
-  - harbor/prepare
-  - harbor/setup
+    - common/config/timezone
+    - common/config/update
+    - common/config/dns
+    - common/config/apt
+    - common/config/ca
+    - docker/setup
+    - harbor/prepare
+    - harbor/setup

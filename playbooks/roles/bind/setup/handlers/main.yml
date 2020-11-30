@@ -1,0 +1,6 @@
+---
+- name: Enable and restart bind service
+  systemd:
+    name: bind
+    state: restarted
+    enabled: yes
