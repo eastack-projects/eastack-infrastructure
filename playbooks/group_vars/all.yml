@@ -18,12 +18,13 @@ PAUSE_VERSION: 3.2
 HARBOR_FQDN: harbor.ipool.me
 HARBOR_PACK: /home/radix10/Downloads/harbor.tar.gz
 
-# for bind9
+# for bind
 FALLBACK_DNS: 114.114.114.114
 
 # for vault
 VAULT_FQDN: vault.ipool.me
 VAULT_PACK: /home/radix10/Downloads/vault_1.6.0_amd64.deb
+VAULT_OFFLINE_INSTALL: False
 
 # for apt
 APT_PROXY: 192.168.123.101

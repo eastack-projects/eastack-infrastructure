@@ -1,19 +1,9 @@
 ---
-- name: Create vault package directory
-  file:
-    path: /opt/vault/package
-    state: directory
-    mode: 0755
+- include_tasks: online-install.yml
+  when: not VAULT_OFFLINE_INSTALL
 
-- name: Copy vault deb package
-  copy:
-    src: "{{ VAULT_PACK }}"
-    dest: /opt/vault/package/vault.deb
-    mode: 0644
-
-- name: Install Vault
-  apt:
-    deb: /opt/vault/package/vault.deb
+- include_tasks: offline-install.yml
+  when: VAULT_OFFLINE_INSTALL
 
 - name: Generate an CA private key with the default values (4096 bits, RSA) and a passphrase
   become: no
