@@ -3,7 +3,7 @@
   apt:
     update_cache: yes
     name:
-      - bind
+      - bind9
 
 - name: Update dns config
   template:
