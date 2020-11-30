@@ -9,9 +9,10 @@ $TTL    7d
                                       86400         ; Retry
                                     2419200         ; Expire
                                      604800 )       ; Negative Cache TTL
-                  IN      NS      ns1
-                  IN      NS      ns2
-                  MX      10      mail
-{{ VAULT_FQDN }}. IN      A       {{ hostvars.vault.ansible_host if hostvars.vault is defined else "127.0.0.1" }}
-ns1               IN      A       127.0.0.1
-ns2               IN      A       127.0.0.2
+                   IN      NS      ns1
+                   IN      NS      ns2
+                   MX      10      mail
+ns1                IN      A       127.0.0.1
+ns2                IN      A       127.0.0.2
+{{ VAULT_FQDN }}.  IN      A       {{ hostvars.vault.ansible_host if hostvars.vault is defined else "127.0.0.1" }}
+{{ GITLAB_FQDN }}. IN      A       {{ hostvars.gitlab.ansible_host if hostvars.gitlab is defined else "127.0.0.1" }}
