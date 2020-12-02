@@ -4,7 +4,7 @@
 Vagrant.configure("2") do |config|
   host_vars = {}
 
-  (1..2).each do |i|
+  (1..1).each do |i|
     config.vm.define "etcd#{i}" do |etcd|
       host_ip = "192.168.33.3#{i}"
       host_vars.store("etcd#{i}", {"ansible_host" => host_ip, "ansible_port" => 22})

@@ -2,22 +2,26 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  host_ip = "192.168.33.70"
+  host_vars = {}
 
-  config.vm.define "kubernetes-node" do |kubernetes|
-    kubernetes.vm.box = "ubuntu/focal64"
-    kubernetes.vm.box_check_update = false
-    kubernetes.vm.network "private_network", ip: host_ip
-    kubernetes.vm.hostname = "kubernetes-node"
-    kubernetes.vm.provider "virtualbox" do |vb|
-      vb.memory = "1024"
-    end
+  (1..2).each do |i|
+    config.vm.define "kubernetes-node#{i}" do |kubernetes|
+      host_ip = "192.168.33.7#{i}"
+      host_vars.store("kubernetes-node#{i}", {"ansible_host" => host_ip, "ansible_port" => 22})
 
-    kubernetes.vm.provision :ansible do |ansible|
-      ansible.playbook = "playbook.yml"
-      ansible.host_vars = {
-        kubernetes.vm.hostname => {"ansible_host" => host_ip, "ansible_port" => 22}
-      }
+      kubernetes.vm.box = "ubuntu/focal64"
+      kubernetes.vm.box_check_update = false
+      kubernetes.vm.network "private_network", ip: host_ip
+      kubernetes.vm.hostname = "kubernetes-node#{i}"
+      kubernetes.vm.provider "virtualbox" do |vb|
+        vb.memory = "1024"
+      end
+
+      kubernetes.vm.provision :ansible do |ansible|
+        ansible.playbook = "playbook.yml"
+        ansible.groups = { "kubernetes-node" => host_vars.keys }
+        ansible.host_vars = host_vars
+      end
     end
   end
 end

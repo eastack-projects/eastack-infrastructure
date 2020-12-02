@@ -67,3 +67,15 @@
     name: "registry.aliyuncs.com/google_containers/pause:{{ PAUSE_VERSION }}"
     repository: "k8s.gcr.io/pause:{{ PAUSE_VERSION }}"
     source: pull
+
+- include_tasks: cni.yml
+
+#- name: Enable and restart kubelet and kube-proxy service
+#  systemd:
+#    name: "{{ item }}"
+#    state: restarted
+#    enabled: yes
+#  with_items:
+#    - kube-proxy
+#    - kubelet
+#

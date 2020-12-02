@@ -1,0 +1,6 @@
+---
+- name: Install cni plugin
+  unarchive:
+    src: "{{ CNI_PACKAGE }}"
+    dest: /opt/cni/bin
+    creates: /opt/cni/bin/portmap
