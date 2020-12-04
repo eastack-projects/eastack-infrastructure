@@ -10,10 +10,10 @@
     src: "{{ item }}"
     dest: "/etc/bind/{{ item }}"
     mode: 0644
-  notify: Enable and restart bind service
   with_items:
     - db.ipool.me
     - named.conf.local
+  notify: Enable and restart bind service
 
 - name: Stop and disable systemd-resolved service
   systemd:
