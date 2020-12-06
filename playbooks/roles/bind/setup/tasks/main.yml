@@ -20,3 +20,10 @@
     name: systemd-resolved
     state: stopped
     enabled: no
+
+- name: Change /etc/resolv.conf
+  replace:
+    path: /etc/resolv.conf
+    regexp: 127.0.0.53
+    replace: 127.0.0.1
+    backup: yes

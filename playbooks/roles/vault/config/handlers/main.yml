@@ -1,4 +1,10 @@
 ---
+- name: Waits vault service started
+  wait_for:
+    host: "{{ VAULT_FQDN }}"
+    port: 8200
+  listen: Initializing the vault
+
 - name: Initializing the vault
   uri:
     method: PUT

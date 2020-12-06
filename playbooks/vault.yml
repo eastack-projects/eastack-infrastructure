@@ -1,3 +1,9 @@
+- name: Update dns record
+  become: yes
+  hosts: bind
+  roles:
+    - bind/setup
+
 - name: Initialize vault
   become: yes
   hosts: vault
@@ -9,9 +15,3 @@
     - vault/setup
     - common/config/ca
     - vault/config
-
-- name: Update dns record
-  become: yes
-  hosts: bind
-  roles:
-    - bind/setup
