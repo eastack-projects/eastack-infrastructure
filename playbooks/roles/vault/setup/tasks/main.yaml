@@ -1,9 +1,9 @@
 ---
 - include_tasks: online-install.yml
-  when: not VAULT_OFFLINE_INSTALL
+  when: VAULT_OFFLINE_INSTALL
 
 - include_tasks: offline-install.yml
-  when: VAULT_OFFLINE_INSTALL
+  when: not VAULT_OFFLINE_INSTALL
 
 - name: Generate an CA private key with the default values (4096 bits, RSA) and a passphrase
   become: no

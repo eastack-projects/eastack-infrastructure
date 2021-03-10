@@ -26,3 +26,5 @@ kubernetes-node:: 192.168.33.7[0-9]
 * [ ] 还有太多细节值得完善
 * [ ] clean file
 * [ ] token 是直接生成到服务端和还是先存到本地，需要看有没有其他任务用到
+* [ ] github releast 下载可以借助https://ghproxy.com等实现
+* [ ] 差个高配服务器。。

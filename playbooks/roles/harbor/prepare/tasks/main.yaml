@@ -1,0 +1,13 @@
+---
+- include_tasks: download.yml
+
+- name: Check harbor private key stat
+  become: no
+  local_action:
+    module: stat
+    path: "./roles/harbor/prepare/files/{{ HARBOR_FQDN }}.key"
+  register: certificate_file
+
+- include_tasks: download.yml
+  when: not certificate_file.stat.exists
+

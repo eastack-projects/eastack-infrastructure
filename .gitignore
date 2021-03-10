@@ -11,3 +11,6 @@ vagrantfiles/.cache/**
 
 sys-init-result.json
 bootstrap-kubelet.yml
+
+resources/*
+!resources/.gitkeep

@@ -1,4 +1,6 @@
 ---
+- include_tasks: download.yml
+
 - name: Create etcd directory
   file:
     path: "{{ item }}"

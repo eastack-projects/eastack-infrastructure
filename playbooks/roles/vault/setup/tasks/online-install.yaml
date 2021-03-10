@@ -8,7 +8,6 @@
   apt_repository:
     repo: deb [arch=amd64] https://apt.releases.hashicorp.com buster main
     state: present
-    mode: 0644
 
 - name: Install Vault
   apt:

@@ -4,6 +4,7 @@
     file: ./roles/vault/config/files/sys-init-result.json
     name: sys_init_result
 
+- include_tasks: download.yml
 - include_tasks: apiserver.yml
 - include_tasks: apiserver-etcd-client.yml
 - include_tasks: apiserver-kubelet-client.yml

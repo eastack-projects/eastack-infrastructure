@@ -70,12 +70,12 @@
 
 - include_tasks: cni.yml
 
-#- name: Enable and restart kubelet and kube-proxy service
-#  systemd:
-#    name: "{{ item }}"
-#    state: restarted
-#    enabled: yes
-#  with_items:
-#    - kube-proxy
-#    - kubelet
-#
+- name: Enable and restart kubelet and kube-proxy service
+  systemd:
+    name: "{{ item }}"
+    state: restarted
+    enabled: yes
+  with_items:
+    - kube-proxy
+    - kubelet
+

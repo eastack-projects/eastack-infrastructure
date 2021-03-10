@@ -3,7 +3,7 @@
   file:
     path: "{{ item }}"
     state: directory
-    mode: 0775
+    mode: 0755
   with_items:
     - /opt/harbor/tls
     - /opt/harbor/data
