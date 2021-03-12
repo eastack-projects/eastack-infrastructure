@@ -1,32 +1,7 @@
 ---
-- name: Load kernel module br_netfilter
-  modprobe:
-    name: br_netfilter
-    state: present
-
-- name: Config kernel parameter
-  sysctl:
-    name: "{{ item }}"
-    value: '1'
-    state: present
-    reload: yes
-  with_items:
-    - net.bridge.bridge-nf-call-iptables
-    - net.bridge.bridge-nf-call-ip6tables
-
-- name: Create directory
-  file:
-    path: "{{ item }}"
-    state: directory
-  with_items:
-    - /opt/kubernetes/package
-    - /opt/cni/package
-    - /opt/cni/bin
-    - /opt/kubernetes/tls
-    - /var/lib/kubelet
-    - /var/lib/kube-proxy
-    - /etc/kubernetes/manifests
-    - /etc/systemd/system/kubelet.service.d
-    - /etc/systemd/system/kube-proxy.service.d
-
-- include_tasks: kube-proxy.yml
+- include_tasks:
+    file: download-node-package.yaml
+    apply:
+      become: no
+- include_tasks: config-kernel.yaml
+- include_tasks: gen-kube-proxy-cert.yaml

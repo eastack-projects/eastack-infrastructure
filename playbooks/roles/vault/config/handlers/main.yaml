@@ -1,11 +1,11 @@
 ---
 - name: Waits vault service started
   wait_for:
-    host: "{{ VAULT_FQDN }}"
+    host: localhost
     port: 8200
   listen: Initializing the vault
 
-- name: Initializing the vault
+- name: Init the vault
   uri:
     method: PUT
     validate_certs: no
@@ -22,14 +22,14 @@
   local_action:
     module: copy
     content: "{{ result.json }}"
-    dest: ./roles/vault/config/files/sys-init-result.json
+    dest: ./roles/vault/config/files/vault-init-result.json
   listen: Initializing the vault
 
 # Unseal
-- name: Include vault keys
+- name: Include Vault keys
   include_vars:
-    file: ./roles/vault/config/files/sys-init-result.json
-    name: sys_init_result
+    file: ./roles/vault/config/files/vault-init-result.json
+    name: vault_init_result
   listen: Initializing the vault
 
 - name: Unseal vault
@@ -40,15 +40,15 @@
     body_format: json
     body:
       key: "{{ item }}"
-  with_items: "{{ sys_init_result['keys'] }}"
+  with_items: "{{ vault_init_result['keys'] }}"
   listen: Initializing the vault
 
-# Mount pki secret engine
-- name: Mount pki secret engine
+# Mount PKI secret engine
+- name: Mount PKI secret engine
   uri:
     method: POST
     headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
     validate_certs: no
     url: https://vault.ipool.me:8200/v1/sys/mounts/pki
     body_format: json
@@ -57,11 +57,11 @@
       type: pki
   listen: Initializing the vault
 
-- name: Tune pki secret engine
+- name: Tune PKI secret engine
   uri:
     method: POST
     headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
     validate_certs: no
     url: https://vault.ipool.me:8200/v1/sys/mounts/pki/tune
     body_format: json
@@ -72,12 +72,12 @@
       default_lease_ttl: "{{ MAX_PKI_TTL }}"
   listen: Initializing the vault
 
-# Submit ca certificate
-- name: Submit ca certificate
+# Submit CA certificate
+- name: Submit CA certificate
   uri:
     method: POST
     headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
     validate_certs: no
     url: https://vault.ipool.me:8200/v1/pki/config/ca
     body_format: json
@@ -87,11 +87,11 @@
   listen: Initializing the vault
 
 # Mount intermediate ca
-- name: Mount pki intermediate secret engine
+- name: Mount PKI intermediate secret engine
   uri:
     method: POST
     headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
     validate_certs: no
     url: https://vault.ipool.me:8200/v1/sys/mounts/pki_int
     body_format: json
@@ -100,11 +100,11 @@
       type: pki
   listen: Initializing the vault
 
-- name: Tune pki intermediate secret engine
+- name: Tune PKI intermediate secret engine
   uri:
     method: POST
     headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
     validate_certs: no
     url: https://vault.ipool.me:8200/v1/sys/mounts/pki_int/tune
     body_format: json
@@ -115,13 +115,13 @@
       default_lease_ttl: "{{ PKI_TTL }}"
   listen: Initializing the vault
 
-# Generate intermediate ca
-- name: Generate intermediate ca csr
+# Generate intermediate CA
+- name: Generate intermediate CA csr
   uri:
     method: POST
     validate_certs: no
     headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
     url: https://vault.ipool.me:8200/v1/pki_int/intermediate/generate/exported
     body_format: json
     body:
@@ -129,41 +129,41 @@
   register: intermediate_ca_csr
   listen: Initializing the vault
 
-- name: Persistent peer intermediate ca csr result
+- name: Persistent peer intermediate CA CSR result
   become: no
   local_action:
     module: copy
     content: "{{ intermediate_ca_csr.json.data.csr }}"
-    dest: ./roles/vault/config/files/ca.csr
+    dest: ./roles/vault/config/files/vault_int_ca.csr
   listen: Initializing the vault
 
-- name: Persistent intermediate ca private key result
+- name: Persistent intermediate CA private key result
   become: no
   local_action:
     module: copy
     content: "{{ intermediate_ca_csr.json.data.private_key }}"
-    dest: ./roles/vault/config/files/ca.key
+    dest: ./roles/vault/config/files/vault_int_ca.key
   listen: Initializing the vault
 
-- name: Sign intermediate ca
+- name: Sign intermediate CA
   uri:
     method: POST
     validate_certs: no
     headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
     url: https://vault.ipool.me:8200/v1/pki/root/sign-intermediate
     body_format: json
     body:
-      csr: "{{ lookup('file', './roles/vault/config/files/ca.csr') }}"
+      csr: "{{ lookup('file', './roles/vault/config/files/vault_int_ca.csr') }}"
   register: intermediate_ca_crt
   listen: Initializing the vault
 
-- name: Persistent intermediate ca certificate result
+- name: Persistent intermediate CA certificate result
   become: no
   local_action:
     module: copy
     content: "{{ intermediate_ca_crt.json.data.certificate }}"
-    dest: ./roles/vault/config/files/ca.crt
+    dest: ./roles/vault/config/files/vault_int_ca.crt
   listen: Initializing the vault
 
 - name: Set sign intermediate
@@ -171,10 +171,10 @@
     method: POST
     validate_certs: no
     headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
     url: https://vault.ipool.me:8200/v1/pki_int/intermediate/set-signed
     body_format: json
     status_code: 204
     body:
-      certificate: "{{ lookup('file', './roles/vault/config/files/ca.crt') }}"
+      certificate: "{{ lookup('file', './roles/vault/config/files/vault_int_ca.crt') }}"
   listen: Initializing the vault

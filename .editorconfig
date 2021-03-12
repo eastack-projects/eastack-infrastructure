@@ -1,7 +1,6 @@
 root = true
 
-[*.yml,*.yaml]
+[*.yaml]
 indent_style = space
 indent_size = 2
-continuation_indent_size = continuation_indent_size8
 trim_trailing_whitespace = true

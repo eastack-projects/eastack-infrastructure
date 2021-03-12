@@ -7,3 +7,9 @@
     - common/config/apt
     - bind/setup
     - common/config/dns
+
+- name: Update DNS record
+  become: yes
+  hosts: bind
+  roles:
+    - bind/config

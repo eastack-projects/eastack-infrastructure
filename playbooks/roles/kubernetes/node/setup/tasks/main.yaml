@@ -1,4 +1,19 @@
 ---
+- name: Create directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /opt/kubernetes/package
+    - /opt/cni/package
+    - /opt/cni/bin
+    - /opt/kubernetes/tls
+    - /var/lib/kubelet
+    - /var/lib/kube-proxy
+    - /etc/kubernetes/manifests
+    - /etc/systemd/system/kubelet.service.d
+    - /etc/systemd/system/kube-proxy.service.d
+
 - name: Extract kubernetes package
   unarchive:
     src: "{{ KUBERNETES_NODE_PACKAGE }}"
@@ -27,39 +42,39 @@
 
 - name: Add kubernetes node service configuration
   template:
-    src: "{{ item }}.service"
-    dest: "/etc/systemd/system/{{ item }}.service.d/10-{{ item }}.conf"
+    src: "{{ item.src }}"
+    dest: "/etc/systemd/system/{{ item.dest }}.service.d/10-{{ item.dest }}.conf"
     mode: 0644
   with_items:
-    - kubelet
-    - kube-proxy
+    - { src: kubelet.service.j2 , dest: kubelet }
+    - { src: kube-proxy.service.j2 , dest: kube-proxy }
 
 - name: Copy kubelet config file
   template:
     src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
+    dest: "/var/lib/kubelet/{{ item.dest }}"
     mode: 0644
   with_items:
-    - { src: config.yaml, dest: /var/lib/kubelet/config.yaml }
-    - { src: flags.env, dest: /var/lib/kubelet/kubeadm-flags.env}
+    - { src: config.yaml.j2, dest: config.yaml }
+    - { src: flags.env.j2, dest: kubeadm-flags.env }
 
 - name: Copy kube-proxy config file
   template:
     src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
+    dest: "/var/lib/kube-proxy/{{ item.dest }}"
     mode: 0644
   with_items:
-    - { src: config.conf, dest: /var/lib/kube-proxy/config.conf }
-    - { src: kubeconfig.conf, dest: /var/lib/kube-proxy/kubeconfig.conf }
+    - { src: config.conf.j2, dest: config.conf }
+    - { src: kubeconfig.conf.j2, dest: kubeconfig.conf }
 
-- name: copy bootstrap-kubelet.conf
+- name: Copy bootstrap-kubelet.conf
   copy:
-    src: ./roles/kubernetes/server/config/files/bootstrap-kubelet.yml
+    src: ./roles/kubernetes/server/config/files/bootstrap-kubelet.yaml
     dest: /etc/kubernetes/bootstrap-kubelet.conf
 
-- name: copy ca certificate
+- name: Copy ca certificate
   copy:
-    src: ./roles/vault/config/files/ca.crt
+    src: ./roles/vault/config/files/vault_int_ca.crt
     dest: /opt/kubernetes/tls/ca.crt
 
 - name: Pull Pause docker image
@@ -68,7 +83,7 @@
     repository: "k8s.gcr.io/pause:{{ PAUSE_VERSION }}"
     source: pull
 
-- include_tasks: cni.yml
+- include_tasks: cni.yaml
 
 - name: Enable and restart kubelet and kube-proxy service
   systemd:

@@ -1,2 +1,4 @@
 ---
-# handlers file for ca
+- name: Update CA certificate
+  shell:
+    cmd: update-ca-certificates

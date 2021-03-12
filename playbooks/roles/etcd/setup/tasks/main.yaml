@@ -1,4 +1,13 @@
 ---
+- name: Create etcd directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  with_items:
+    - /etc/etcd
+    - /var/lib/etcd
+
 - name: Extract etcd package
   unarchive:
     src: "{{ ETCD_PACKAGE }}"
@@ -33,7 +42,7 @@
 
 - name: Copy ca certificate
   copy:
-    src: ./roles/vault/config/files/ca.crt
-    dest: /opt/etcd/tls/
+    src: ./roles/vault/config/files/vault_int_ca.crt
+    dest: /opt/etcd/tls/ca.crt
     mode: 0644
   notify: Enable and restart etcd service

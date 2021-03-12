@@ -1,3 +1,9 @@
+- name: Update DNS record
+  become: yes
+  hosts: bind
+  roles:
+    - bind/config
+
 - name: Initialize harbor
   become: yes
   hosts: harbor

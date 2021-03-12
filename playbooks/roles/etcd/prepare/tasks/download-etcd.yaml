@@ -1,0 +1,15 @@
+---
+- name: Create etcd packages directory
+  become: no
+  local_action:
+    module: file
+    path: "{{ RESOURCES_PATH }}/etcd"
+    state: directory
+    mode: 0755
+
+- name: Download etcd node binary package
+  become: no
+  local_action:
+    module: get_url
+    url: "{{ ETCD_DOWNLOAD_URL }}"
+    dest:  "{{ ETCD_PACKAGE }}"

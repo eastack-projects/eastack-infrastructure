@@ -7,10 +7,10 @@
 
 - name: Copy vault deb package
   copy:
-    src: "{{ VAULT_PACK }}"
+    src: "{{ VAULT_PACKAGE }}"
     dest: /opt/vault/package/vault.deb
     mode: 0644
 
-- name: Install Vault
+- name: Install vault
   apt:
     deb: /opt/vault/package/vault.deb

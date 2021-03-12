@@ -9,7 +9,7 @@ vagrantfiles/.cache/**
 *.key
 *.pub
 
-sys-init-result.json
+vault-init-result.json
 bootstrap-kubelet.yml
 
 resources/*

@@ -1,5 +1,5 @@
 ---
-- name: Generate sa rsa private key
+- name: Generate sa RSA private key
   become: no
   local_action:
     module: shell
@@ -7,7 +7,7 @@
     args:
       chdir: ./roles/kubernetes/server/prepare/files
 
-- name: Generate sa rsa public key
+- name: Generate sa RSA public key
   become: no
   local_action:
     module: shell

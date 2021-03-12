@@ -3,16 +3,16 @@
   uri:
     method: GET
     headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
     validate_certs: no
     url: https://vault.ipool.me:8200/v1/sys/mounts
   register: mounts
 
-- name: Mount kubernetes front proxy intermediate pki secret engine
+- name: Mount kubernetes front proxy intermediate PKI secret engine
   uri:
     method: POST
     headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
     validate_certs: no
     url: https://vault.ipool.me:8200/v1/sys/mounts/pki_int_kubernetes_front_proxy
     body_format: json
@@ -21,11 +21,11 @@
       type: pki
   when: not mounts.json.data is search("pki_int_kubernetes_front_proxy")
 
-- name: Tune kubernetes front proxy pki intermediate secret engine
+- name: Tune kubernetes front proxy PKI intermediate secret engine
   uri:
     method: POST
     headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
     validate_certs: no
     url: https://vault.ipool.me:8200/v1/sys/mounts/pki_int_kubernetes_front_proxy/tune
     body_format: json
@@ -40,14 +40,14 @@
     method: POST
     validate_certs: no
     headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
     url: https://vault.ipool.me:8200/v1/pki_int_kubernetes_front_proxy/intermediate/generate/exported
     body_format: json
     body:
       common_name: front-proxy-ca
   register: certificate_csr
 
-- name: Persistent kubernetes front proxy intermediate ca csr result
+- name: Persistent kubernetes front proxy intermediate ca CSR result
   become: no
   local_action:
     module: copy
@@ -66,7 +66,7 @@
     method: POST
     validate_certs: no
     headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
     url: https://vault.ipool.me:8200/v1/pki/root/sign-intermediate
     body_format: json
     body:
@@ -86,7 +86,7 @@
     method: POST
     validate_certs: no
     headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
     url: https://vault.ipool.me:8200/v1/pki_int_kubernetes_front_proxy/intermediate/set-signed
     body_format: json
     status_code: 204

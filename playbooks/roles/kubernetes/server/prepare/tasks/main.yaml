@@ -1,16 +1,11 @@
 ---
-- name: Include vault keys
-  include_vars:
-    file: ./roles/vault/config/files/sys-init-result.json
-    name: sys_init_result
-
-- include_tasks: download.yml
-- include_tasks: apiserver.yml
-- include_tasks: apiserver-etcd-client.yml
-- include_tasks: apiserver-kubelet-client.yml
-- include_tasks: controller-manager-apiserver-client.yml
-- include_tasks: scheduler-apiserver-client.yml
-- include_tasks: front-proxy-ca.yml
-- include_tasks: front-proxy-client.yml
-- include_tasks: sa.yml
-- include_tasks: admin.yml
+- include_tasks: download.yaml
+- include_tasks: apiserver.yaml
+- include_tasks: apiserver-etcd-client.yaml
+- include_tasks: apiserver-kubelet-client.yaml
+- include_tasks: controller-manager-apiserver-client.yaml
+- include_tasks: scheduler-apiserver-client.yaml
+- include_tasks: front-proxy-ca.yaml
+- include_tasks: front-proxy-client.yaml
+- include_tasks: sa.yaml
+- include_tasks: admin.yaml

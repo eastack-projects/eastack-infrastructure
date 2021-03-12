@@ -1,23 +1,28 @@
 ---
 - name: Create kubernetes packages directory
-  file:
+  become: no
+  local_action:
+    module: file
     path: "{{ RESOURCES_PATH }}/kubernetes"
     state: directory
     mode: 0755
 
 - name: Download kubernetes server binary package
+  become: no
   local_action:
     module: get_url
     url: "{{ KUBERNETES_SERVER_DOWNLOAD_URL }}"
     dest:  "{{ KUBERNETES_SERVER_PACKAGE }}"
 
 - name: Download flannel manifests
+  become: no
   local_action:
     module: get_url
     url: "{{ FLANNEL_MANIFESTS_DOWNLOAD_URL }}"
     dest: "{{ FLANNEL_MANIFESTS_FILE }}"
 
 - name: Patch flannel manifests for vagrant
+  become: no
   local_action:
     module: replace
     path: "{{ FLANNEL_MANIFESTS_FILE }}"

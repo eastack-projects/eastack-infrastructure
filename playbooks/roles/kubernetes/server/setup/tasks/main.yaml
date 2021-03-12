@@ -14,12 +14,12 @@
 
 - name: Extract kubernetes package
   unarchive:
-    src: "{{ KUBERNETES_PACKAGE }}"
+    src: "{{ KUBERNETES_SERVER_PACKAGE }}"
     dest: /tmp/kubernetes
     creates: /tmp/kubernetes/server
     extra_opts: [ "--strip-components=1" ]
 
-- name: Install Kubernetes components
+- name: Install kubernetes components
   copy:
     remote_src: yes
     src: "/tmp/kubernetes/server/bin/{{ item }}"
@@ -45,24 +45,25 @@
 
 - name: Add kubernetes server service configuration
   template:
-    src: "{{ item }}.service"
-    dest: "/etc/systemd/system/kube-{{ item }}.service.d/10-{{ item }}.conf"
+    src: "{{ item.src }}"
+    dest: "/etc/systemd/system/kube-{{ item.dest }}.service.d/10-{{ item.dest }}.conf"
     mode: 0644
   with_items:
-    - apiserver
-    - controller-manager
-    - scheduler
+    - { src: apiserver.service.j2, dest: apiserver }
+    - { src: controller-manager.service.j2, dest: controller-manager }
+    - { src: scheduler.service.j2, dest: scheduler }
   notify: Restart kubernetes server service
 
 - name: Add kubernetes conf file
   template:
-    src: "{{ item }}"
-    dest: "/etc/kubernetes/{{ item }}"
+    src: "{{ item.src }}"
+    dest: "/etc/kubernetes/{{ item.dest }}"
     mode: 0644
   with_items:
-    - controller-manager.conf
-    - scheduler.conf
-    - admin.conf
+    - { src: apiserver.service.j2, dest: apiserver }
+    - { src: controller-manager.conf.j2, dest: controller-manager }
+    - { src: scheduler.conf.j2, dest: scheduler.conf }
+    - { src: admin.conf.j2, dest: admin.conf }
   notify: Restart kubernetes server service
 
 - name: Copy kubernetes certificate
@@ -85,19 +86,19 @@
     - sa.pub
   notify: Restart kubernetes server service
 
-- name: Copy ca certificate
+- name: Copy CA certificate
   copy:
-    src: "./roles/vault/config/files/{{ item }}"
-    dest: "/opt/kubernetes/tls/{{ item }}"
+    src: "./roles/vault/config/files/{{ item.src }}"
+    dest: "/opt/kubernetes/tls/{{ item.dest }}"
     mode: 0644
   with_items:
-    - ca.crt
-    - ca.key
+    - { src: vault_int_ca.crt, dest: ca.crt }
+    - { src: vault_int_ca.key, dest: ca.key }
   notify: Restart kubernetes server service
 
-- name: Copy etcd ca certificate
+- name: Copy etcd CA certificate
   copy:
-    src: ./roles/vault/config/files/ca.crt
+    src: ./roles/vault/config/files/vault_int_ca.crt
     dest: /opt/etcd/tls/ca.crt
     mode: 0644
   notify: Restart kubernetes server service

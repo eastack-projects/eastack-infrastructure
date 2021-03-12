@@ -1,20 +1,4 @@
 ---
-- include_tasks: download.yml
-
-- name: Create etcd directory
-  file:
-    path: "{{ item }}"
-    state: directory
-    mode: 0755
-  with_items:
-    - /etc/etcd
-    - /var/lib/etcd
-    - /opt/etcd/tls
-
-- name: Include vault keys
-  include_vars:
-    file: ./roles/vault/config/files/sys-init-result.json
-    name: sys_init_result
-
-- include_tasks: peer.yml
-- include_tasks: client.yml
+- include_tasks: download-etcd.yaml
+- include_tasks: gen-peer-cert.yaml
+- include_tasks: gen-client-cert.yaml

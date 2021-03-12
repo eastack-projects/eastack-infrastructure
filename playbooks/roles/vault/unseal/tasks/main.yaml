@@ -1,23 +1,25 @@
 ---
 - name: Include vault keys
   include_vars:
-    file: ./roles/vault/config/files/sys-init-result.json
-    name: sys_init_result
+    file: ./roles/vault/config/files/vault-init-result.json
+    name: vault_init_result
 
 - name: Get vault seal status
   uri:
+    validate_certs: no
     method: GET
     headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
     url: https://vault.ipool.me:8200/v1/sys/seal-status
   register: seal_status
 
 - name: Unseal vault
   uri:
+    validate_certs: no
     method: PUT
     url: https://vault.ipool.me:8200/v1/sys/unseal
     body_format: json
     body:
       key: "{{ item }}"
-  with_items: "{{ sys_init_result['keys'] }}"
+  with_items: "{{ vault_init_result['keys'] }}"
   when: not seal_status.json is search("cluster_id")

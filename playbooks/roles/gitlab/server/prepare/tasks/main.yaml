@@ -1,15 +1,10 @@
 ---
-- name: Include vault keys
-  include_vars:
-    file: ./roles/vault/config/files/sys-init-result.json
-    name: sys_init_result
-
 - name: Add gitlab role
   uri:
     method: POST
     validate_certs: no
     headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
     url: "https://vault.ipool.me:8200/v1/pki_int/roles/{{ GITLAB_FQDN }}"
     body_format: json
     status_code: 204
@@ -23,7 +18,7 @@
     method: POST
     validate_certs: no
     headers:
-      X-Vault-Token: "{{ sys_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
     url: "https://vault.ipool.me:8200/v1/pki_int/issue/{{ GITLAB_FQDN }}"
     body_format: json
     status_code: 200

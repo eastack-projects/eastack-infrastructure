@@ -4,7 +4,7 @@
     src: 30proxy
     dest: /etc/apt/apt.conf.d/30proxy
     mode: 0644
-  when: APT_CACHEABLE
+  when: ENABLE_APT_CACHE
 
 - name: Config apt source mirror
   copy:

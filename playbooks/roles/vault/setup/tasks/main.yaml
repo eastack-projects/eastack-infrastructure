@@ -1,41 +1,20 @@
 ---
-- include_tasks: online-install.yml
+- name: Online install vault
+  include_tasks:
+    file: offline-install.yaml
   when: VAULT_OFFLINE_INSTALL
 
-- include_tasks: offline-install.yml
+- name: Offline install vault
+  include_tasks:
+    file: online-install.yaml
   when: not VAULT_OFFLINE_INSTALL
 
-- name: Generate an CA private key with the default values (4096 bits, RSA) and a passphrase
-  become: no
-  local_action:
-    module: openssl_privatekey
-    path: "./roles/vault/setup/files/{{ VAULT_FQDN }}.key"
-    cipher: aes256
-    passphrase:
+- include_tasks:
+    file: generate-ca-key.yaml
+    apply:
+      become: no
 
-- name: Generate an CA Certificate Signing Request
-  become: no
-  local_action:
-    module: openssl_csr
-    path: "./roles/vault/setup/files/{{ VAULT_FQDN }}.csr"
-    privatekey_path: "roles/vault/setup/files/{{ VAULT_FQDN }}.key"
-    common_name: "{{ VAULT_FQDN }}"
-    basic_constraints: 'CA:TRUE'
-    country_name: "CN"
-    email_address: "admin@radix10.me"
-    locality_name: "Beijing"
-    state_or_province_name: "Beijing"
-
-- name: Generate a Self Signed CA Certificate
-  become: no
-  local_action:
-    module: openssl_certificate
-    privatekey_path: "roles/vault/setup/files/{{ VAULT_FQDN }}.key"
-    csr_path: "roles/vault/setup/files/{{ VAULT_FQDN }}.csr"
-    path: "roles/vault/setup/files/{{ VAULT_FQDN }}.crt"
-    provider: selfsigned
-
-- name: Copy Self Signed CA Certificate
+- name: Copy selfsigned ca certificate
   copy:
     src: "roles/vault/setup/files/{{ item.src }}"
     dest: "/opt/vault/tls/{{ item.dest }}"

@@ -6,10 +6,11 @@ MAX_PKI_TTL: 21600h
 RESOURCES_PATH: ../resources
 
 # ETCD
-ETCD_DOWNLOAS_URL: https://storage.googleapis.com/etcd/v3.4.15/etcd-v3.4.15-linux-amd64.tar.gz
+ETCD_DOWNLOAD_URL: https://storage.googleapis.com/etcd/v3.4.15/etcd-v3.4.15-linux-amd64.tar.gz
 ETCD_PACKAGE:  "{{ RESOURCES_PATH }}/etcd/etcd-linux-amd64.tar.gz"
 
 # KUBERNETES
+KUBERNETES_CONFIG_DIRECTORY: /etc/kubernetes
 PAUSE_VERSION: 3.2
 # kubernetes server
 KUBERNETES_SERVER_DOWNLOAD_URL: https://dl.k8s.io/v1.21.0-beta.0/kubernetes-server-linux-amd64.tar.gz
@@ -29,17 +30,18 @@ HARBOR_FQDN: harbor.ipool.me
 HARBOR_DOWNLOAD_URL: https://ghproxy.com/https://github.com/goharbor/harbor/releases/download/v2.2.0/harbor-offline-installer-v2.2.0.tgz
 HARBOR_PACKAGE:  "{{ RESOURCES_PATH }}/harbor/harbor-offline-installer.tgz"
 
-# for bind
+# BIND
 FALLBACK_DNS: 114.114.114.114
 
-# for vault
+# VAULT
 VAULT_FQDN: vault.ipool.me
-VAULT_PACK: /home/radix10/downloads/vault_1.6.0_amd64.deb
 VAULT_OFFLINE_INSTALL: True
+VAULT_DOWNLOAD_URL: https://apt.releases.hashicorp.com/pool/amd64/main/vault_1.6.3_amd64.deb
+VAULT_PACKAGE: "{{ RESOURCES_PATH }}/vault/vault.deb"
 
-# for gitlab
+# GITLAB
 GITLAB_FQDN: gitlab.ipool.me
 
-# for apt
+# APT
 APT_CACHE_HOST: 192.168.123.101
-APT_CACHEABLE: False
+ENABLE_APT_CACHE: no

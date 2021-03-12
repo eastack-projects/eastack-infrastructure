@@ -1,0 +1,52 @@
+---
+- name: Check harbor certificate stat
+  stat:
+    path: "./roles/harbor/prepare/files/{{ HARBOR_FQDN }}.crt"
+  register: harbor_cert_stat
+
+- name: Add harbor role
+  uri:
+    method: POST
+    validate_certs: no
+    headers:
+      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
+    url: "https://vault.ipool.me:8200/v1/pki_int/roles/{{ HARBOR_FQDN }}"
+    body_format: json
+    status_code: 204
+    body:
+      allowed_domains: "{{ HARBOR_FQDN }}"
+      allow_any_name: true
+      allow_subdomains: yes
+  when: not harbor_cert_stat.stat.exists
+
+- name: Generate harbor certificate
+  uri:
+    method: POST
+    validate_certs: no
+    headers:
+      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
+    url: "https://vault.ipool.me:8200/v1/pki_int/issue/{{ HARBOR_FQDN }}"
+    body_format: json
+    status_code: 200
+    body:
+      common_name: "{{ HARBOR_FQDN }}"
+      ip_sans: "{{ ansible_host }}"
+  register: certificate
+  when: not harbor_cert_stat.stat.exists
+
+- name: Persistent harbor certificate
+  become: no
+  local_action:
+    module: copy
+    content: "{{ certificate.json.data.certificate }}"
+    dest: "./roles/harbor/prepare/files/{{ HARBOR_FQDN }}.crt"
+  when: not harbor_cert_stat.stat.exists
+
+- name: Persistent harbor private key
+  become: no
+  local_action:
+    module: copy
+    content: "{{ certificate.json.data.private_key }}"
+    dest: "./roles/harbor/prepare/files/{{ HARBOR_FQDN }}.key"
+  when: not harbor_cert_stat.stat.exists
+
