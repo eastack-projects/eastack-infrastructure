@@ -11,12 +11,12 @@ ETCD_PACKAGE:  "{{ RESOURCES_PATH }}/etcd/etcd-linux-amd64.tar.gz"
 
 # KUBERNETES
 KUBERNETES_CONFIG_DIRECTORY: /etc/kubernetes
-PAUSE_VERSION: 3.2
+PAUSE_VERSION: 3.3
 # kubernetes server
-KUBERNETES_SERVER_DOWNLOAD_URL: https://dl.k8s.io/v1.21.0-beta.0/kubernetes-server-linux-amd64.tar.gz
+KUBERNETES_SERVER_DOWNLOAD_URL: https://dl.k8s.io/v1.20.4/kubernetes-server-linux-amd64.tar.gz
 KUBERNETES_SERVER_PACKAGE: "{{ RESOURCES_PATH }}/kubernetes/kubernetes-server-linux-amd64.tar.gz"
 # kubernetes node
-KUBERNETES_NODE_DOWNLOAD_URL: https://dl.k8s.io/v1.21.0-beta.0/kubernetes-node-linux-amd64.tar.gz
+KUBERNETES_NODE_DOWNLOAD_URL: https://dl.k8s.io/v1.20.4/kubernetes-node-linux-amd64.tar.gz
 KUBERNETES_NODE_PACKAGE: "{{ RESOURCES_PATH }}/kubernetes/kubernetes-node-linux-amd64.tar.gz"
 # cni plugins
 CNI_PLUGINS_DOWNLOAD_URL: https://ghproxy.com/https://github.com/containernetworking/plugins/releases/download/v0.9.1/cni-plugins-linux-amd64-v0.9.1.tgz

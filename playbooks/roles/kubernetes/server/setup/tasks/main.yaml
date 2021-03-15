@@ -60,8 +60,8 @@
     dest: "/etc/kubernetes/{{ item.dest }}"
     mode: 0644
   with_items:
-    - { src: apiserver.service.j2, dest: apiserver }
-    - { src: controller-manager.conf.j2, dest: controller-manager }
+    - { src: apiserver.service.j2, dest: apiserver.service }
+    - { src: controller-manager.conf.j2, dest: controller-manager.conf }
     - { src: scheduler.conf.j2, dest: scheduler.conf }
     - { src: admin.conf.j2, dest: admin.conf }
   notify: Restart kubernetes server service

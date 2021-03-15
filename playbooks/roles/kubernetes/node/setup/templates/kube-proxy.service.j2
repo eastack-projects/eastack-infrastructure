@@ -1,4 +1,4 @@
 [Service]
-Environment="KUBE_PROXY_ARGS=--config=/var/lib/kube-proxy/config.conf"
+Environment="KUBE_PROXY_ARGS=--config=/var/lib/kube-proxy/config.yaml"
 ExecStart=
 ExecStart=/usr/bin/kube-proxy $KUBE_PROXY_ARGS

@@ -46,8 +46,8 @@
     dest: "/etc/systemd/system/{{ item.dest }}.service.d/10-{{ item.dest }}.conf"
     mode: 0644
   with_items:
-    - { src: kubelet.service.j2 , dest: kubelet }
-    - { src: kube-proxy.service.j2 , dest: kube-proxy }
+    - { src: kubelet.service.j2, dest: kubelet }
+    - { src: kube-proxy.service.j2, dest: kube-proxy }
 
 - name: Copy kubelet config file
   template:
@@ -55,8 +55,8 @@
     dest: "/var/lib/kubelet/{{ item.dest }}"
     mode: 0644
   with_items:
-    - { src: config.yaml.j2, dest: config.yaml }
-    - { src: flags.env.j2, dest: kubeadm-flags.env }
+    - { src: kubelet-config.yaml.j2, dest: config.yaml }
+    - { src: kubelet-flags.env.j2, dest: kubelet-flags.env }
 
 - name: Copy kube-proxy config file
   template:
@@ -64,7 +64,7 @@
     dest: "/var/lib/kube-proxy/{{ item.dest }}"
     mode: 0644
   with_items:
-    - { src: config.conf.j2, dest: config.conf }
+    - { src: kube-proxy-config.yaml.j2, dest: config.yaml }
     - { src: kubeconfig.conf.j2, dest: kubeconfig.conf }
 
 - name: Copy bootstrap-kubelet.conf
