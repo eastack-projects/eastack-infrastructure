@@ -20,6 +20,26 @@ gitlab:: 192.168.33.50
 kubernetes-server:: 192.168.33.60
 kubernetes-node:: 192.168.33.7[0-9]
 
+== notes
+
+.coredns deployment
+[source, bash]
+----
+git clone https://github.com/coredns/deployment.git
+# 10.96.0.10 在 playbooks/roles/kubernetes/node/setup/templates/kubelet-config.yaml.j2
+./deploy.sh -s -i 10.96.0.10 > coredns-deployment.yaml
+kubectl replace --force -f coredns-deployment.yaml 
+----
+
+.nginx ingress
+[source, bash]
+----
+git clone https://github.com/coredns/deployment.git
+# 10.96.0.10 在 playbooks/roles/kubernetes/node/setup/templates/kubelet-config.yaml.j2
+./deploy.sh -s -i 10.96.0.10 > coredns-deployment.yaml
+kubectl replace --force -f coredns-deployment.yaml 
+----
+
 == To Do
 
 * [x] kubernetes 集群搭建
