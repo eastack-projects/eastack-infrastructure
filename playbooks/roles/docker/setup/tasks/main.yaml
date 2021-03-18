@@ -4,6 +4,7 @@
     update_cache: yes
     name:
       - docker-compose
+      - socat
 
 - name: Create docker cert directory
   file:
