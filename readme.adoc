@@ -22,6 +22,12 @@ kubernetes-node:: 192.168.33.7[0-9]
 
 == notes
 
+.test etcd cluster
+[source, bash]
+----
+etcdctl --cacert=ca.crt --cert=client.crt --key=client.key put hello world
+----
+
 .coredns deployment
 [source, bash]
 ----
@@ -45,8 +51,17 @@ kubectl replace --force -f coredns-deployment.yaml
 * [x] kubernetes 集群搭建
 * [ ] 还有太多细节值得完善
 * [ ] clean file
-* [ ] token 是直接生成到服务端和还是先存到本地，需要看有没有其他任务用到
 * [ ] github releast 下载可以借助https://ghproxy.com等实现
-* [ ] 差个高配服务器。。
+* [ ] 差个高配服务器,,,,啊
 * [ ] 命名与可维护性
-* [ ] 都在服务器上好，本地尽可能啥都不存
+* [x] token 是直接生成到服务端和还是先存到本地，需要看有没有其他任务用到
+* [x] 都在服务器上好，本地尽可能啥都不存
+* [ ] 想上OpenStack然后配合Terraform、Packer、Ansible做到全面IAC。
+
+准备文件
+
+二进制安装
+
+生成证书
+
+修改配置

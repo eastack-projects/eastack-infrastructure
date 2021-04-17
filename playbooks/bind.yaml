@@ -1,4 +1,4 @@
-- name: Initialize bind
+- name: Setup bind
   become: yes
   hosts: bind
   roles:

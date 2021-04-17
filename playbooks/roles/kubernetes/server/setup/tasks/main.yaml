@@ -1,17 +1,3 @@
-- name: Create kubernetes directory
-  file:
-    path: "{{ item }}"
-    state: directory
-  with_items:
-    - /root/.kube
-    - /opt/kubernetes/tls
-    - /opt/etcd/tls
-    - /etc/kubernetes
-    - /tmp/kubernetes
-    - /etc/systemd/system/kube-apiserver.service.d
-    - /etc/systemd/system/kube-controller-manager.service.d
-    - /etc/systemd/system/kube-scheduler.service.d
-
 - name: Extract kubernetes package
   unarchive:
     src: "{{ KUBERNETES_SERVER_PACKAGE }}"
@@ -32,7 +18,7 @@
     - kubectl
   notify: Restart kubernetes server service
 
-- name: Add kubernetes systemd service
+- name: Add kubernetes basic systemd service
   copy:
     src: "{{ item }}"
     dest: "/lib/systemd/system/{{ item }}"
@@ -43,7 +29,7 @@
     - kube-scheduler.service
   notify: Restart kubernetes server service
 
-- name: Add kubernetes server service configuration
+- name: Add kubernetes custom server service
   template:
     src: "{{ item.src }}"
     dest: "/etc/systemd/system/kube-{{ item.dest }}.service.d/10-{{ item.dest }}.conf"
@@ -54,54 +40,11 @@
     - { src: scheduler.service.j2, dest: scheduler }
   notify: Restart kubernetes server service
 
-- name: Add kubernetes conf file
-  template:
-    src: "{{ item.src }}"
-    dest: "/etc/kubernetes/{{ item.dest }}"
-    mode: 0644
-  with_items:
-    - { src: apiserver.service.j2, dest: apiserver.service }
-    - { src: controller-manager.conf.j2, dest: controller-manager.conf }
-    - { src: scheduler.conf.j2, dest: scheduler.conf }
-    - { src: admin.conf.j2, dest: admin.conf }
-  notify: Restart kubernetes server service
-
-- name: Copy kubernetes certificate
-  copy:
-    src: "./roles/kubernetes/server/prepare/files/{{ item }}"
-    dest: "/opt/kubernetes/tls/{{ item }}"
-    mode: 0644
-  with_items:
-    - apiserver.crt
-    - apiserver.key
-    - apiserver-etcd-client.crt
-    - apiserver-etcd-client.key
-    - apiserver-kubelet-client.crt
-    - apiserver-kubelet-client.key
-    - front-proxy-ca.crt
-    - front-proxy-ca.key
-    - front-proxy-client.crt
-    - front-proxy-client.key
-    - sa.key
-    - sa.pub
-  notify: Restart kubernetes server service
-
-- name: Copy CA certificate
-  copy:
-    src: "./roles/vault/config/files/{{ item.src }}"
-    dest: "/opt/kubernetes/tls/{{ item.dest }}"
-    mode: 0644
-  with_items:
-    - { src: vault_int_ca.crt, dest: ca.crt }
-    - { src: vault_int_ca.key, dest: ca.key }
-  notify: Restart kubernetes server service
-
-- name: Copy etcd CA certificate
-  copy:
-    src: ./roles/vault/config/files/vault_int_ca.crt
-    dest: /opt/etcd/tls/ca.crt
-    mode: 0644
-  notify: Restart kubernetes server service
+- include_tasks: template-controller-manager-conf.yaml
+- include_tasks: template-admain-conf.yaml
+- include_tasks: template-scheduler-conf.yaml
+- include_tasks: copy-int-ca.yaml
+- include_tasks: copy-etcd-ca.yaml
 
 - name: Copy kubectl config
   copy:

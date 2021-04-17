@@ -1,19 +1,4 @@
 ---
-- name: Create directory
-  file:
-    path: "{{ item }}"
-    state: directory
-  with_items:
-    - /opt/kubernetes/package
-    - /opt/cni/package
-    - /opt/cni/bin
-    - /opt/kubernetes/tls
-    - /var/lib/kubelet
-    - /var/lib/kube-proxy
-    - /etc/kubernetes/manifests
-    - /etc/systemd/system/kubelet.service.d
-    - /etc/systemd/system/kube-proxy.service.d
-
 - name: Extract kubernetes package
   unarchive:
     src: "{{ KUBERNETES_NODE_PACKAGE }}"
@@ -58,6 +43,22 @@
     - { src: kubelet-config.yaml.j2, dest: config.yaml }
     - { src: kubelet-flags.env.j2, dest: kubelet-flags.env }
 
+- name: Slurp vault_int_ca.crt
+  slurp:
+    src: "{{ VAULT_KEY_DIR }}/vault_int_ca.crt"
+  register: vault_int_ca_crt
+  delegate_to: vault
+
+- name: Slurp kube-proxy-apiserver-client.crt
+  slurp:
+    src: "/opt/kubernetes/tls/kube-proxy-apiserver-client.crt"
+  register: kube_proxy_apiserver_client_crt
+
+- name: Slurp kube-proxy-apiserver-client.key
+  slurp:
+    src: "/opt/kubernetes/tls/kube-proxy-apiserver-client.key"
+  register: kube_proxy_apiserver_client_key
+
 - name: Copy kube-proxy config file
   template:
     src: "{{ item.src }}"
@@ -67,14 +68,9 @@
     - { src: kube-proxy-config.yaml.j2, dest: config.yaml }
     - { src: kubeconfig.conf.j2, dest: kubeconfig.conf }
 
-- name: Copy bootstrap-kubelet.conf
-  copy:
-    src: ./roles/kubernetes/server/config/files/bootstrap-kubelet.yaml
-    dest: /etc/kubernetes/bootstrap-kubelet.conf
-
 - name: Copy ca certificate
   copy:
-    src: ./roles/vault/config/files/vault_int_ca.crt
+    content: "{{ vault_int_ca_crt['content'] | b64decode }}"
     dest: /opt/kubernetes/tls/ca.crt
 
 - name: Pull Pause docker image
@@ -93,4 +89,3 @@
   with_items:
     - kube-proxy
     - kubelet
-

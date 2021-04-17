@@ -1,7 +1,7 @@
 apiVersion: v1
 clusters:
 - cluster:
-    certificate-authority-data: {{ lookup('file', './roles/vault/config/files/vault_int_ca.crt') |string | b64encode }}
+    certificate-authority-data: {{ vault_int_ca_crt['content'] }}
     server: https://{{ ansible_host }}:6443
   name: kubernetes
 contexts:
@@ -15,5 +15,5 @@ preferences: {}
 users:
 - name: system:kube-scheduler
   user:
-    client-certificate-data: {{ lookup('file', './roles/kubernetes/server/prepare/files/scheduler-apiserver-client.crt') | string | b64encode }}
-    client-key-data: {{ lookup('file', './roles/kubernetes/server/prepare/files/scheduler-apiserver-client.key') | string | b64encode }}
+    client-certificate-data: {{ scheduler_apiserver_client_crt['content'] }}
+    client-key-data: {{ scheduler_apiserver_client_key['content'] }}

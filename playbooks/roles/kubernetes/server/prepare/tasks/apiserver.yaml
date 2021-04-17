@@ -2,10 +2,9 @@
 - name: Add apiserver role
   uri:
     method: POST
-    validate_certs: no
     headers:
       X-Vault-Token: "{{ vault_init_result['root_token'] }}"
-    url: https://vault.ipool.me:8200/v1/pki_int/roles/apiserver.kubernetes.ipool.me
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int_ipool/roles/apiserver.kubernetes.ipool.me"
     body_format: json
     status_code: 204
     body:
@@ -17,10 +16,9 @@
 - name: Generate kubernetes apiserver certificate
   uri:
     method: POST
-    validate_certs: no
     headers:
       X-Vault-Token: "{{ vault_init_result['root_token'] }}"
-    url: https://vault.ipool.me:8200/v1/pki_int/issue/apiserver.kubernetes.ipool.me
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int_ipool/issue/apiserver.kubernetes.ipool.me"
     body_format: json
     status_code: 200
     body:
@@ -30,17 +28,13 @@
   register: apiserver_certificate
 
 - name: Persistent apiserver certificate
-  become: no
-  local_action:
-    module: copy
+  copy:
     content: "{{ apiserver_certificate.json.data.certificate }}"
-    dest: ./roles/kubernetes/server/prepare/files/apiserver.crt
+    dest: /opt/kubernetes/tls/apiserver.crt
     mode: 0644
 
 - name: Persistent apiserver key
-  become: no
-  local_action:
-    module: copy
+  copy:
     content: "{{ apiserver_certificate.json.data.private_key }}"
-    dest: ./roles/kubernetes/server/prepare/files/apiserver.key
+    dest: /opt/kubernetes/tls/apiserver.key
     mode: 0644

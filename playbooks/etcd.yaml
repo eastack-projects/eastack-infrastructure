@@ -13,6 +13,6 @@
     - common/config/dns
     - common/config/apt
     - common/config/ca
-    - vault/unseal
+    - common/config/unseal
     - etcd/prepare
     - etcd/setup

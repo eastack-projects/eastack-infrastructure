@@ -1,0 +1,29 @@
+- name: Slurp vault_int_ca.crt
+  slurp:
+    src: "{{ VAULT_KEY_DIR }}/vault_int_ca.crt"
+  register: vault_int_ca_crt
+  delegate_to: vault
+
+- name: Base64 decode vault_int_ca_crt
+  set_fact:
+    vault_int_ca_crt: "{{ vault_int_ca_crt['content'] | b64decode}}"
+
+- name: Copy CA crt
+  copy:
+    content: "{{ vault_int_ca_crt }}"
+    dest: "/opt/kubernetes/tls/ca.crt"
+
+- name: Slurp vault_int_ca.key
+  slurp:
+    src: "{{ VAULT_KEY_DIR }}/vault_int_ca.key"
+  register: vault_int_ca_key
+  delegate_to: vault
+- name: Base64 decode vault_int_ca_key
+  set_fact:
+    vault_int_ca_key: "{{ vault_int_ca_key['content'] | b64decode}}"
+
+- name: Copy CA key
+  copy:
+    content: "{{ vault_int_ca_key }}"
+    dest: "/opt/kubernetes/tls/ca.key"
+  notify: Restart kubernetes server service

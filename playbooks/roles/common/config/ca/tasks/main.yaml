@@ -1,9 +1,15 @@
 ---
-- name: Copy CA certificate
+- name: Slurp vault ca cert
+  slurp:
+    src: "{{ VAULT_KEY_DIR }}/tls.crt"
+  register: vault_ca_crt
+  delegate_to: vault
+
+- name: Copy CA cert
   copy:
-    src: "roles/vault/setup/files/{{ item }}"
-    dest: "/usr/local/share/ca-certificates/{{ item }}"
-  with_items:
-    - "{{ VAULT_FQDN }}.crt"
-    - "{{ VAULT_FQDN }}.key"
-  notify: Update CA certificate
+    content: "{{ vault_ca_crt['content'] | b64decode }}"
+    dest: "/usr/local/share/ca-certificates/{{ VAULT_FQDN }}.crt"
+
+- name: Update CA certificate
+  shell:
+    cmd: update-ca-certificates

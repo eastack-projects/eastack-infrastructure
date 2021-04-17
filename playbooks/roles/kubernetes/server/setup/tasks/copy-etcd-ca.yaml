@@ -1,0 +1,15 @@
+- name: Slurp vault_int_ca.crt
+  slurp:
+    src: "{{ VAULT_KEY_DIR }}/vault_int_ca.crt"
+  register: vault_int_ca_crt
+  delegate_to: vault
+- name: Base64 decode vault_int_ca_crt
+  set_fact:
+    vault_int_ca_crt: "{{ vault_int_ca_crt['content'] | b64decode}}"
+
+- name: Copy etcd CA certificate
+  copy:
+    content: "{{ vault_int_ca_crt }}"
+    dest: /opt/etcd/tls/ca.crt
+    mode: 0644
+  notify: Restart kubernetes server service

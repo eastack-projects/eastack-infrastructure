@@ -1,18 +1,15 @@
 ---
-- name: Add default vault address to bashrc
-  lineinfile:
-    dest: /root/.bashrc
-    line: export VAULT_ADDR='https://vault.ipool.me:8200'
-    state: present
-
-- name: Enable vault service
+- name: Enable and start vault service
   systemd:
     name: vault
-    daemon_reload: yes
     enabled: yes
-  notify: Initializing the vault
+    state: restarted
 
-- name: Start vault service
-  systemd:
-    name: vault
-    state: started
+- name: Check vault init stat
+  stat:
+    path: "{{ VAULT_KEY_DIR }}/init-result.json"
+  register: vault_init
+
+- name: Try init vault
+  include_tasks: init.yaml
+  when: not vault_init.stat.exists

@@ -1,0 +1,22 @@
+- name: Slurp vault_int_ca.crt
+  slurp:
+    src: "{{ VAULT_KEY_DIR }}/vault_int_ca.crt"
+  register: vault_int_cs_crt
+  delegate_to: vault
+
+- name: Slurp admin.crt
+  slurp:
+    src: "/opt/kubernetes/tls/admin.crt"
+  register: admin_crt
+
+- name: Slurp admin.key
+  slurp:
+    src: "/opt/kubernetes/tls/admin.key"
+  register: admin_key
+
+- name: Add admin.conf
+  template:
+    src: admin.conf.j2
+    dest: /etc/kubernetes/admin.conf
+    mode: 0644
+  notify: Restart kubernetes server service

@@ -1,37 +1,31 @@
 ---
-- name: Check Vault CA key stat
-  become: no
-  local_action:
-    module: stat
-    path: "./roles/vault/setup/files/{{ VAULT_FQDN }}.key"
-  register: vault_ca_key
+- name: Generate an CA private
+  openssl_privatekey:
+    path: "{{ VAULT_KEY_DIR }}/tls.key"
+    group: vault
+    owner: vault
+    mode: 0600
 
-- name: Generate an CA private key with the default values (4096 bits, RSA) and a passphrase
-  local_action:
-    module: openssl_privatekey
-    path: "./roles/vault/setup/files/{{ VAULT_FQDN }}.key"
-    cipher: aes256
-    passphrase:
-  when: not vault_ca_key.stat.exists
-
-- name: Generate an CA Certificate Signing Request
-  local_action:
-    module: openssl_csr
-    path: "./roles/vault/setup/files/{{ VAULT_FQDN }}.csr"
-    privatekey_path: "roles/vault/setup/files/{{ VAULT_FQDN }}.key"
+- name: Generate an CA certificate signing request
+  openssl_csr:
+    path: "{{ VAULT_KEY_DIR }}/tls.csr"
+    privatekey_path: "{{ VAULT_KEY_DIR }}/tls.key"
     common_name: "{{ VAULT_FQDN }}"
     basic_constraints: 'CA:TRUE'
     email_address: "admin@eastack.me"
     country_name: "CN"
     state_or_province_name: "ShanDong"
     locality_name: "JiNan"
-  when: not vault_ca_key.stat.exists
+    group: vault
+    owner: vault
+    mode: 0600
 
-- name: Generate a Self Signed CA Certificate
-  local_action:
-    module: openssl_certificate
-    privatekey_path: "roles/vault/setup/files/{{ VAULT_FQDN }}.key"
-    csr_path: "roles/vault/setup/files/{{ VAULT_FQDN }}.csr"
-    path: "roles/vault/setup/files/{{ VAULT_FQDN }}.crt"
+- name: Generate a self signed CA certificate
+  openssl_certificate:
+    privatekey_path: "{{ VAULT_KEY_DIR }}/tls.key"
+    csr_path: "{{ VAULT_KEY_DIR }}/tls.csr"
+    path: "{{ VAULT_KEY_DIR }}/tls.crt"
     provider: selfsigned
-  when: not vault_ca_key.stat.exists
+    group: vault
+    owner: vault
+    mode: 0600

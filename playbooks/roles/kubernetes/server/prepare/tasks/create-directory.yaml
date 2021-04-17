@@ -1,0 +1,13 @@
+- name: Create kubernetes directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /root/.kube
+    - /opt/kubernetes/tls
+    - /opt/etcd/tls
+    - /etc/kubernetes
+    - /tmp/kubernetes
+    - /etc/systemd/system/kube-apiserver.service.d
+    - /etc/systemd/system/kube-controller-manager.service.d
+    - /etc/systemd/system/kube-scheduler.service.d

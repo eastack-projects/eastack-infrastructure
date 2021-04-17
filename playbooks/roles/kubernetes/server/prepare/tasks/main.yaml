@@ -1,5 +1,6 @@
 ---
 - include_tasks: download.yaml
+- include_tasks: create-directory.yaml
 - include_tasks: apiserver.yaml
 - include_tasks: apiserver-etcd-client.yaml
 - include_tasks: apiserver-kubelet-client.yaml

@@ -1,12 +1,12 @@
 ---
-- name: Configuring DNS
+- name: Configure DNS
   replace:
     path: /etc/systemd/resolved.conf
     regexp: '#DNS='
     replace: "DNS={{ hostvars.bind.ansible_host }}"
     backup: yes
 
-- name: Configuring fallback DNS
+- name: Configure fallback DNS
   replace:
     path: /etc/systemd/resolved.conf
     regexp: '#FallbackDNS='

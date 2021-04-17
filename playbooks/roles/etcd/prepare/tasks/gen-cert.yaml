@@ -1,0 +1,13 @@
+---
+- name: Waits vault service started
+  wait_for:
+    host: "{{ VAULT_FQDN }}"
+    port: "{{ VAULT_PORT }}"
+
+- name: Create etcd cert directory
+  file:
+    path: /opt/etcd/tls
+    state: directory
+    mode: 0755
+- include_tasks: gen-peer-cert.yaml
+- include_tasks: gen-client-cert.yaml

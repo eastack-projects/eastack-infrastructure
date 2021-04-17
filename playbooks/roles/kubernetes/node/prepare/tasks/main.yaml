@@ -1,4 +1,19 @@
 ---
+- name: Create directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /opt/kubernetes/package
+    - /opt/cni/package
+    - /opt/cni/bin
+    - /opt/kubernetes/tls
+    - /var/lib/kubelet
+    - /var/lib/kube-proxy
+    - /etc/kubernetes/manifests
+    - /etc/systemd/system/kubelet.service.d
+    - /etc/systemd/system/kube-proxy.service.d
+
 - include_tasks:
     file: download-node-package.yaml
     apply:

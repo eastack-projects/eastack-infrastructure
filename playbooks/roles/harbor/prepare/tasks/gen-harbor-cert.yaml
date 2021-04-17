@@ -7,10 +7,9 @@
 - name: Add harbor role
   uri:
     method: POST
-    validate_certs: no
     headers:
       X-Vault-Token: "{{ vault_init_result['root_token'] }}"
-    url: "https://vault.ipool.me:8200/v1/pki_int/roles/{{ HARBOR_FQDN }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int_ipool/roles/{{ HARBOR_FQDN }}"
     body_format: json
     status_code: 204
     body:
@@ -22,10 +21,9 @@
 - name: Generate harbor certificate
   uri:
     method: POST
-    validate_certs: no
     headers:
       X-Vault-Token: "{{ vault_init_result['root_token'] }}"
-    url: "https://vault.ipool.me:8200/v1/pki_int/issue/{{ HARBOR_FQDN }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int_ipool/issue/{{ HARBOR_FQDN }}"
     body_format: json
     status_code: 200
     body:

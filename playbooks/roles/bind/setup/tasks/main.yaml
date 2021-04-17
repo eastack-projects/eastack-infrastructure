@@ -4,16 +4,3 @@
     update_cache: yes
     name:
       - bind9
-
-- name: Stop and disable systemd-resolved service
-  systemd:
-    name: systemd-resolved
-    state: stopped
-    enabled: no
-
-- name: Config local DNS configuration
-  replace:
-    path: /etc/resolv.conf
-    regexp: 127.0.0.53
-    replace: 127.0.0.1
-    backup: yes

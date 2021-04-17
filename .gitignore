@@ -10,7 +10,7 @@ vagrantfiles/.cache/**
 *.pub
 
 vault-init-result.json
-bootstrap-kubelet.yml
+bootstrap-kubelet.yaml
 
 resources/*
 !resources/.gitkeep

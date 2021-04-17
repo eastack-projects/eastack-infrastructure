@@ -1,17 +1,10 @@
 ---
-- name: Create etcd cert directory
-  file:
-    path: /opt/etcd/tls
-    state: directory
-    mode: 0755
-
 - name: Add etcd peer role
   uri:
     method: POST
-    validate_certs: no
     headers:
       X-Vault-Token: "{{ vault_init_result['root_token'] }}"
-    url: https://vault.ipool.me:8200/v1/pki_int/roles/peer.etcd.ipool.me
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int_ipool/roles/peer.etcd.ipool.me"
     body_format: json
     status_code: 204
     body:
@@ -21,15 +14,14 @@
 - name: Generate etcd peer certificate
   uri:
     method: POST
-    validate_certs: no
     headers:
       X-Vault-Token: "{{ vault_init_result['root_token'] }}"
-    url: https://vault.ipool.me:8200/v1/pki_int/issue/peer.etcd.ipool.me
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int_ipool/issue/peer.etcd.ipool.me"
     body_format: json
     status_code: 200
     body:
       common_name: peer.etcd.ipool.me
-      ip_sans: "{{ ansible_host }}"
+      ip_sans: "{{ ansible_host }},127.0.0.1"
   register: certificate
 
 - name: Persistent etcd peer certificate

@@ -4,7 +4,7 @@
   roles:
     - bind/config
 
-- name: Initialize vault
+- name: Setup vault
   become: yes
   hosts: vault
   roles:
@@ -12,6 +12,7 @@
     - common/config/update
     - common/config/dns
     - common/config/apt
+    - vault/prepare
     - vault/setup
     - common/config/ca
     - vault/config

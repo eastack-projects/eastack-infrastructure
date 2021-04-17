@@ -1,9 +1,4 @@
 ---
-- name: Generate random token id and token secret
-  set_fact:
-    token_id: "{{ lookup('password', '/dev/null length=6 chars=ascii_letters') | lower }}"
-    token_secret: "{{ lookup('password', '/dev/null length=16 chars=ascii_letters') | lower }}"
-
 - name: Copy cluster role binding.yaml for tls bootstraping
   copy:
     src: "{{ item }}"
@@ -23,21 +18,3 @@
     - auto-approve-renewals-for-nodes.yaml
     - create-csrs-for-bootstrapping.yaml
     - kube-flannel.yaml
-
-- name: Copy token.yaml
-  template:
-    src: token.yaml.j2
-    dest: /root/token.yaml
-    mode: 0644
-
-- name: Apply token to kubernetes
-  shell:
-    cmd: kubectl apply -f /root/token.yaml
-
-- name: Generate bootstrap-kubelet.conf
-  become: no
-  local_action:
-    module: template
-    src: bootstrap-kubelet.yaml.j2
-    dest: roles/kubernetes/server/config/files/bootstrap-kubelet.yaml
-    mode: 0644

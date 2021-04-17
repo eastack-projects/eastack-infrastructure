@@ -1,4 +1,3 @@
 ---
 - include_tasks: download-etcd.yaml
-- include_tasks: gen-peer-cert.yaml
-- include_tasks: gen-client-cert.yaml
+- include_tasks: gen-cert.yaml

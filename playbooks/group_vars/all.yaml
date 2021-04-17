@@ -1,8 +1,9 @@
 ---
 # common land
-name: radix10
-PKI_TTL: 7200h
-MAX_PKI_TTL: 21600h
+BASE_FQDN: ipool.me
+NAME: radix10
+PKI_TTL: 8760h
+MAX_PKI_TTL: 17520h
 RESOURCES_PATH: ../resources
 
 # ETCD
@@ -37,9 +38,11 @@ FALLBACK_DNS: 114.114.114.114
 
 # VAULT
 VAULT_FQDN: vault.ipool.me
+VAULT_PORT: 8200
 VAULT_OFFLINE_INSTALL: True
-VAULT_DOWNLOAD_URL: https://apt.releases.hashicorp.com/pool/amd64/main/vault_1.6.3_amd64.deb
+VAULT_DOWNLOAD_URL: https://apt.releases.hashicorp.com/pool/amd64/main/vault_1.7.0_amd64.deb
 VAULT_PACKAGE: "{{ RESOURCES_PATH }}/vault/vault.deb"
+VAULT_KEY_DIR: /opt/vault/tls
 
 # GITLAB
 GITLAB_FQDN: gitlab.ipool.me

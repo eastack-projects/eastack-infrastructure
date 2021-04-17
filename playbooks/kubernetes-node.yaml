@@ -19,7 +19,7 @@
     - common/config/dns
     - common/config/apt
     - common/config/ca
-    - vault/unseal
+    - common/config/unseal
     - harbor/prepare
     - docker/setup
     - kubernetes/node/prepare

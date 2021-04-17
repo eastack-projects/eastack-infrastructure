@@ -1,4 +1,9 @@
 ---
+- name: Enable bind service
+  systemd:
+    name: bind9
+    enabled: yes
+
 - name: Update bind configuration
   template:
     src: "{{ item.src }}"
@@ -7,4 +12,4 @@
   with_items:
     - { src: db.ipool.me.j2 , dest: db.ipool.me }
     - { src: named.conf.local.j2 , dest: named.conf.local }
-  notify: Enable and restart bind service
+  notify: Restart bind service
