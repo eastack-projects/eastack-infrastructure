@@ -20,7 +20,6 @@
     - common/config/apt
     - common/config/ca
     - common/config/unseal
-    - harbor/prepare
     - docker/setup
     - kubernetes/node/prepare
     - kubernetes/node/setup
