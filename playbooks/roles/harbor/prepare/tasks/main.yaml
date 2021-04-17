@@ -1,5 +1,5 @@
 ---
-#- include_tasks: download.yaml
+- include_tasks: download.yaml
 
 - name: Check harbor private key stat
   become: no

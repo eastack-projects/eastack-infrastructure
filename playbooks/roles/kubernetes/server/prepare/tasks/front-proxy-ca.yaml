@@ -1,5 +1,5 @@
 ---
-- name: List mounts
+- name: List vault mounts
   uri:
     method: GET
     headers:

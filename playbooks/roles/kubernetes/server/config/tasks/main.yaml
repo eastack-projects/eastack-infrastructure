@@ -11,7 +11,7 @@
 
 - name: Initializing cluster role binding
   shell:
-    cmd: "kubectl apply -f /root/{{ item }}"
+    cmd: "kubectl apply -f {{ item }}"
     chdir: "/root/"
   with_items:
     - auto-approve-csrs-for-group.yaml

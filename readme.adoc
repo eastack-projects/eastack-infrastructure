@@ -57,6 +57,8 @@ kubectl replace --force -f coredns-deployment.yaml
 * [x] token 是直接生成到服务端和还是先存到本地，需要看有没有其他任务用到
 * [x] 都在服务器上好，本地尽可能啥都不存
 * [ ] 想上OpenStack然后配合Terraform、Packer、Ansible做到全面IAC。
+* [ ] 未来目录等规范向minikube靠拢
+* [ ] 创建目录的操作应该和变量声明一样，可能用到前才创建会好一些吧
 
 准备文件
 

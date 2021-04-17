@@ -16,7 +16,7 @@
     - kubelet
     - kube-proxy
 
-- name: Add kubernetes node service
+- name: Add kubernetes node basic service
   copy:
     src: "{{ item }}"
     dest: "/lib/systemd/system/{{ item }}"
@@ -25,7 +25,7 @@
     - kubelet.service
     - kube-proxy.service
 
-- name: Add kubernetes node service configuration
+- name: Add kubernetes node custom service
   template:
     src: "{{ item.src }}"
     dest: "/etc/systemd/system/{{ item.dest }}.service.d/10-{{ item.dest }}.conf"
