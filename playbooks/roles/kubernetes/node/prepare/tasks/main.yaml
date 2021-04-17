@@ -20,3 +20,4 @@
       become: no
 - include_tasks: config-kernel.yaml
 - include_tasks: gen-kube-proxy-cert.yaml
+- include_tasks: config-bootstrap-token.yaml
