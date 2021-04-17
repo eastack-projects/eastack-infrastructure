@@ -16,6 +16,12 @@
     cmd: kubectl apply -f /root/token.yaml
   delegate_to: kubernetes-server
 
+- name: Slurp vault_int_ca.crt
+  slurp:
+    src: "{{ VAULT_KEY_DIR }}/vault_int_ca.crt"
+  register: vault_int_ca_crt
+  delegate_to: vault
+
 - name: Generate bootstrap-kubelet.conf
   template:
     src: bootstrap-kubelet.conf.j2

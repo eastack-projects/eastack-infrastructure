@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Config
 clusters:
 - cluster:
-    certificate-authority-data: {{ lookup('file', './roles/vault/config/files/vault_int_ca.crt') | string | b64encode }}
+    certificate-authority-data: {{ vault_int_ca_crt['content'] }}
     server: https://{{ hostvars['kubernetes-server'].ansible_host }}:6443
   name: bootstrap
 contexts:
