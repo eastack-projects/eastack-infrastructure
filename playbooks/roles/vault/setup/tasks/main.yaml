@@ -9,7 +9,7 @@
     file: offline-install.yaml
   when: VAULT_OFFLINE_INSTALL
 
-- name: Add default vault server
+- name: Set default vault server
   lineinfile:
     dest: /root/.bashrc
     line: export VAULT_ADDR=https://vault.ipool.me:8200
@@ -19,15 +19,6 @@
   stat:
     path: "{{ VAULT_KEY_DIR }}/tls.csr"
   register: vault_ca_key_stat
-
-- name: Clean vault generated key
-  file:
-    path: "{{ VAULT_KEY_DIR }}/{{ item }}"
-    state: absent
-  with_items:
-    - tls.key
-    - tls.crt
-  when: not vault_ca_key_stat.stat.exists
 
 - include_tasks:
     file: generate-ca-key.yaml

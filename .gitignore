@@ -4,11 +4,6 @@
 vagrantfiles/.cache/**
 !vagrantfiles/.cache/.gitkeep
 
-*.crt
-*.csr
-*.key
-*.pub
-
 vault-init-result.json
 bootstrap-kubelet.yaml
 

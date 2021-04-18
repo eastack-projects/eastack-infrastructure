@@ -1,9 +1,4 @@
 ---
-- name: Enable bind service
-  systemd:
-    name: bind9
-    enabled: yes
-
 - name: Update bind configuration
   template:
     src: "{{ item.src }}"

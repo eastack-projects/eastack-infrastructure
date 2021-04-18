@@ -1,5 +1,0 @@
-- name: Unseal vault
-  become: yes
-  hosts: vault
-  roles:
-    - vault/unseal
