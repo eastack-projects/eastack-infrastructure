@@ -1,0 +1,5 @@
+- name: Include setup bind
+  include_tasks: setup.yaml
+
+- name: Include config bind
+  include_tasks: config.yaml

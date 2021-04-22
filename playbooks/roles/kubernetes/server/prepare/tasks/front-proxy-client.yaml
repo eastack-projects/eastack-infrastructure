@@ -3,7 +3,7 @@
   uri:
     method: POST
     headers:
-      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
     url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int_ipool_kubernetes_front_proxy/roles/client.front.proxy.kubernetes.ipool.me"
     body_format: json
     status_code: 204
@@ -17,7 +17,7 @@
   uri:
     method: POST
     headers:
-      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
     url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int_ipool_kubernetes_front_proxy/issue/client.front.proxy.kubernetes.ipool.me"
     body_format: json
     status_code: 200

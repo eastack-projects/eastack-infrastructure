@@ -1,6 +1,5 @@
 ---
 # common land
-BASE_FQDN: ipool.me
 NAME: radix10
 PKI_TTL: 8760h
 MAX_PKI_TTL: 17520h
@@ -8,11 +7,12 @@ RESOURCES_PATH: ../resources
 
 # ETCD
 ETCD_DOWNLOAD_URL: https://storage.googleapis.com/etcd/v3.4.15/etcd-v3.4.15-linux-amd64.tar.gz
-ETCD_PACKAGE:  "{{ RESOURCES_PATH }}/etcd/etcd-linux-amd64.tar.gz"
+ETCD_PACKAGE:  "{{ RESOURCES_PATH }}/etcd/etcd-v3.4.15-linux-amd64.tar.gz"
 
 # KUBERNETES
 KUBERNETES_CONFIG_DIRECTORY: /etc/kubernetes
 PAUSE_VERSION: 3.3
+INGRESS_VERSION: "v0.45.0"
 # kubernetes server
 KUBERNETES_SERVER_DOWNLOAD_URL: https://dl.k8s.io/v1.20.4/kubernetes-server-linux-amd64.tar.gz
 KUBERNETES_SERVER_PACKAGE: "{{ RESOURCES_PATH }}/kubernetes/kubernetes-server-linux-amd64.tar.gz"
@@ -37,17 +37,14 @@ HARBOR_PACKAGE:  "{{ RESOURCES_PATH }}/harbor/harbor-offline-installer.tgz"
 FALLBACK_DNS: 114.114.114.114
 
 # VAULT
-VAULT_FQDN: vault.ipool.me
+VAULT_FQDN: vault
 VAULT_PORT: 8200
-VAULT_OFFLINE_INSTALL: True
-VAULT_DOWNLOAD_URL: https://apt.releases.hashicorp.com/pool/amd64/main/vault_1.7.0_amd64.deb
-VAULT_PACKAGE: "{{ RESOURCES_PATH }}/vault/vault.deb"
-VAULT_KEY_DIR: /opt/vault/tls
+VAULT_CERT_DIR: /etc/vault/pki
+VAULT_CERT_NAME: ca.crt
+VAULT_CSR_NAME: ca.csr
+VAULT_KEY_NAME: ca.key
+VAULT_INITIALIZE_RESULT: initialize_result.json
 
 # GITLAB
 GITLAB_FQDN: gitlab.ipool.me
 EXTERNAL_URL: https://gitlab.ipool.me
-
-# APT
-APT_CACHE_HOST: 192.168.123.101
-ENABLE_APT_CACHE: no

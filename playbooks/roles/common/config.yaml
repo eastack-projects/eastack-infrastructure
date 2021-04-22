@@ -1,0 +1,55 @@
+---
+# Timezone
+- name: Set Timezone
+  timezone:
+    name: Asia/Shanghai
+
+# DNS
+- name: Configure DNS
+  replace:
+    path: /etc/systemd/resolved.conf
+    regexp: '#DNS='
+    replace: "DNS={{ hostvars.bind.ansible_host }}"
+    backup: yes
+
+- name: Configure fallback DNS
+  replace:
+    path: /etc/systemd/resolved.conf
+    regexp: '#FallbackDNS='
+    replace: "FallbackDNS={{ FALLBACK_DNS }}"
+    backup: yes
+
+- name: Restart systemd-resolved service
+  systemd:
+    name: systemd-resolved
+    state: restarted
+
+# APT
+- name: Config apt source mirror
+  copy:
+    src: sources.list
+    dest: /etc/apt/sources.list
+    mode: 0644
+
+- name: Disable Auto Update
+  replace:
+    path: /etc/apt/apt.conf.d/20auto-upgrades
+    regexp: '1'
+    replace: '0'
+    backup: yes
+
+# Certificate
+- name: Slurp vault CA cert
+  slurp:
+    src: "{{ VAULT_CERT_DIR }}/{{ VAULT_CERT_NAME }}"
+  register: vault_ca_crt
+  delegate_to: vault
+
+- name: Copy CA cert
+  copy:
+    content: "{{ vault_ca_crt['content'] | b64decode }}"
+    dest: "/usr/local/share/ca-certificates/{{ VAULT_FQDN }}.crt"
+
+- name: Update CA certificate
+  shell:
+    cmd: update-ca-certificates

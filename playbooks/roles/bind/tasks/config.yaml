@@ -1,0 +1,10 @@
+---
+- name: Update bind configuration
+  template:
+    src: "{{ item.src }}"
+    dest: "/etc/bind/{{ item.dest }}"
+    mode: 0644
+  with_items:
+    - { src: db.lan.j2 , dest: db.ipool.me }
+    - { src: named.conf.local.j2 , dest: named.conf.local }
+  notify: Restart bind service

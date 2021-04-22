@@ -1,6 +1,6 @@
 - name: Slurp vault_int_ca.crt
   slurp:
-    src: "{{ VAULT_KEY_DIR }}/vault_int_ca.crt"
+    src: "{{ VAULT_CERT_DIR }}/vault_int_ca.crt"
   register: vault_int_ca_crt
   delegate_to: vault
 
@@ -11,7 +11,7 @@
 
 - name: Slurp vault_int_ca.key
   slurp:
-    src: "{{ VAULT_KEY_DIR }}/vault_int_ca.key"
+    src: "{{ VAULT_CERT_DIR }}/vault_int_ca.key"
   register: vault_int_ca_key
   delegate_to: vault
 

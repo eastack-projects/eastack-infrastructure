@@ -3,7 +3,7 @@
   become: no
   local_action:
     module: stat
-    path: "{{ VAULT_PACKAGE }}"
+    path: "{{ VAULT_PACKAGE_NAME }}"
   register: etcd_package
 
 - name: Create etcd packages directory

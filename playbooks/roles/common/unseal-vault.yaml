@@ -1,0 +1,33 @@
+---
+- name: Waits vault service started
+  wait_for:
+    host: "{{ VAULT_FQDN }}"
+    port: "{{ VAULT_PORT }}"
+
+- name: Include vault keys
+  slurp:
+    src: "{{ VAULT_CERT_DIR }}/{{ VAULT_INITIALIZE_RESULT }}"
+  register: vault_initialize_result
+  delegate_to: vault
+
+- name: Base64 decode vault_initialize_result
+  set_fact:
+    vault_initialize_result: "{{ vault_initialize_result['content'] | b64decode }}"
+
+- name: Get vault seal status
+  uri:
+    method: GET
+    headers:
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/sys/seal-status"
+  register: seal_status
+
+- name: Unseal vault
+  uri:
+    method: PUT
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/sys/unseal"
+    body_format: json
+    body:
+      key: "{{ item }}"
+  with_items: "{{ vault_initialize_result['keys'] }}"
+  when: not seal_status.json is search("cluster_id")

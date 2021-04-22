@@ -1,0 +1,16 @@
+---
+# download
+- name: Create vault packages directory
+  become: no
+  local_action:
+    module: file
+    path: "{{ RESOURCES_PATH }}/vault"
+    state: directory
+    mode: 0755
+
+- name: Download vault binary package
+  become: no
+  local_action:
+    module: get_url
+    url: "{{ VAULT_DOWNLOAD_URL }}"
+    dest:  "{{ VAULT_PACKAGE_NAME }}"

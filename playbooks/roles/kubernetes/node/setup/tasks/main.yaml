@@ -45,7 +45,7 @@
 
 - name: Slurp vault_int_ca.crt
   slurp:
-    src: "{{ VAULT_KEY_DIR }}/vault_int_ca.crt"
+    src: "{{ VAULT_CERT_DIR }}/vault_int_ca.crt"
   register: vault_int_ca_crt
   delegate_to: vault
 
@@ -68,7 +68,7 @@
     - { src: kube-proxy-config.yaml.j2, dest: config.yaml }
     - { src: kubeconfig.conf.j2, dest: kubeconfig.conf }
 
-- name: Copy ca certificate
+- name: Copy CA certificate
   copy:
     content: "{{ vault_int_ca_crt['content'] | b64decode }}"
     dest: /opt/kubernetes/tls/ca.crt
@@ -77,6 +77,12 @@
   docker_image:
     name: "registry.aliyuncs.com/google_containers/pause:{{ PAUSE_VERSION }}"
     repository: "k8s.gcr.io/pause:{{ PAUSE_VERSION }}"
+    source: pull
+
+- name: Pull nginx ingress docker image
+  docker_image:
+    name: "registry.cn-hangzhou.aliyuncs.com/google_containers/nginx-ingress-controller:{{ INGRESS_VERSION }}"
+    repository: "k8s.gcr.io/ingress-nginx/controller:{{ INGRESS_VERSION }}"
     source: pull
 
 - include_tasks: cni.yaml

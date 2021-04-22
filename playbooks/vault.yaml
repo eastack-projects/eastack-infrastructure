@@ -1,18 +1,23 @@
-- name: Update dns record
-  become: yes
-  hosts: bind
-  roles:
-    - bind/config
-
+#- name: Update dns record
+#  become: yes
+#  hosts: bind
+#  roles:
+#    - bind/config
+#
+#- name: Setup vault
+#  become: yes
+#  hosts: vault
+#  roles:
+#    - common/config/timezone
+#    - common/config/update
+#    - common/config/dns
+#    - common/config/apt
+#    - vault/prepare
+#    - vault/setup
+#    - common/config/ca
+#    - vault/config
 - name: Setup vault
   become: yes
   hosts: vault
   roles:
-    - common/config/timezone
-    - common/config/update
-    - common/config/dns
-    - common/config/apt
-    - vault/prepare
-    - vault/setup
-    - common/config/ca
-    - vault/config
+    - vault

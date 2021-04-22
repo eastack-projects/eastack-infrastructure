@@ -1,0 +1,17 @@
+;
+; BIND data file for ipool.me
+;
+$ORIGIN ipool.me.
+$TTL    7d
+@              IN      SOA     ns1 hostmaster (
+                                          2         ; Serial
+                                     604800         ; Refresh
+                                      86400         ; Retry
+                                    2419200         ; Expire
+                                     604800 )       ; Negative Cache TTL
+                   IN      NS      ns1
+                   IN      NS      ns2
+                   MX      10      mail
+ns1                IN      A       127.0.0.1
+ns2                IN      A       127.0.0.2
+{% for host in groups['all'] %}{{ host }}. IN A {{ hostvars[host].ansible_host }}{{ "\n" if not loop.last else "" }}{% endfor %}

@@ -12,7 +12,7 @@
     state: directory
     mode: 0644
 
-- name: Copy ca certificate
+- name: Copy CA certificate
   copy:
     src: ./roles/vault/config/files/vault_int_ca.crt
     dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/ca.crt"

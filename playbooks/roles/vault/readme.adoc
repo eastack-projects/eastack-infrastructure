@@ -1,0 +1,12 @@
+= Bind9
+
+完成 *Bind9* 安装，并配置 DNS 列表。
+
+根据 inventories 信息和模板 `db.ipool.me.j2` 生成 DNS 记录。
+
+NOTE: 当 inventories 信息有更新时，需要重新执行此 role 以更新DNS记录。
+
+[source, bash]
+----
+ansible-playbook bind.yaml
+----

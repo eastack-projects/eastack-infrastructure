@@ -1,0 +1,20 @@
+---
+- name: Wait vault to be available
+  wait_for:
+    host: "{{ VAULT_FQDN }}"
+    port: "{{ VAULT_PORT }}"
+
+- name: Initialize the vault
+  uri:
+    method: PUT
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/sys/init"
+    body_format: json
+    body:
+      secret_shares: 3
+      secret_threshold: 2
+  register: initialize_result
+
+- name: Persistent initialize result
+  copy:
+    content: "{{ initialize_result.json }}"
+    dest: "{{ VAULT_CERT_DIR }}/{{ VAULT_INITIALIZE_RESULT }}"

@@ -1,0 +1,10 @@
+---
+- name: Online setup vault
+  include_tasks:
+    file: online-setup.yaml
+  when: not VAULT_OFFLINE_INSTALL
+
+- name: Offline setup vault
+  include_tasks:
+    file: offline-setup.yaml
+  when: VAULT_OFFLINE_INSTALL

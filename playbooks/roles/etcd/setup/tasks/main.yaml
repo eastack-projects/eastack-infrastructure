@@ -42,7 +42,7 @@
 
 - name: Slurp vault int crt
   slurp:
-    src: "{{ VAULT_KEY_DIR }}/vault_int_ca.crt"
+    src: "{{ VAULT_CERT_DIR }}/vault_int_ca.crt"
   register: vault_int_crt
   delegate_to: vault
 
@@ -50,7 +50,7 @@
   set_fact:
     vault_int_crt: "{{ vault_int_crt['content'] | b64decode}}"
 
-- name: Copy ca certificate
+- name: Copy CA certificate
   copy:
     content: "{{ vault_int_crt }}"
     dest: /opt/etcd/tls/ca.crt

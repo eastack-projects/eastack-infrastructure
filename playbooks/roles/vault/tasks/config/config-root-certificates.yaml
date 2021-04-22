@@ -1,0 +1,47 @@
+---
+# Enable PKI secret engine
+- name: Mount PKI secret engine
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/sys/mounts/pki"
+    body_format: json
+    status_code: 204
+    body:
+      type: pki
+
+- name: Tune PKI secret engine
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/sys/mounts/pki/tune"
+    body_format: json
+    status_code: 204
+    body:
+      description: Root certificate
+      max_lease_ttl: "{{ MAX_PKI_TTL }}"
+      default_lease_ttl: "{{ MAX_PKI_TTL }}"
+
+# Submit CA certificate
+- name: Slurp vault certificate key
+  slurp:
+    src: "{{ VAULT_CERT_DIR }}/{{ VAULT_KEY_NAME }}"
+  register: vault_key
+
+- name: Slurp vault certificate cert
+  slurp:
+    src: "{{ VAULT_CERT_DIR }}/{{ VAULT_CERT_NAME }}"
+  register: vault_crt
+
+- name: Submit CA certificate
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/config/ca"
+    body_format: json
+    status_code: 204
+    body:
+      pem_bundle: "{{ vault_key['content'] | b64decode ~ '\n' ~ vault_crt['content'] | b64decode }}"

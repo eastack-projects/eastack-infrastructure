@@ -3,7 +3,7 @@
   uri:
     method: GET
     headers:
-      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
     url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/sys/mounts"
   register: mounts
 
@@ -11,7 +11,7 @@
   uri:
     method: POST
     headers:
-      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
     url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/sys/mounts/pki_int_ipool_kubernetes_front_proxy"
     body_format: json
     status_code: 204
@@ -23,7 +23,7 @@
   uri:
     method: POST
     headers:
-      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
     url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/sys/mounts/pki_int_ipool_kubernetes_front_proxy/tune"
     body_format: json
     status_code: 204
@@ -32,23 +32,23 @@
       max_lease_ttl: "{{ MAX_PKI_TTL }}"
       default_lease_ttl: "{{ PKI_TTL }}"
 
-- name: Generate kubernetes front proxy intermediate ca csr
+- name: Generate kubernetes front proxy intermediate CA csr
   uri:
     method: POST
     headers:
-      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
     url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int_ipool_kubernetes_front_proxy/intermediate/generate/exported"
     body_format: json
     body:
       common_name: front-proxy-ca
   register: certificate_csr
 
-- name: Persistent kubernetes front proxy intermediate ca CSR result
+- name: Persistent kubernetes front proxy intermediate CA CSR result
   copy:
     content: "{{ certificate_csr.json.data.csr }}"
     dest: /opt/kubernetes/tls/front-proxy-ca.csr
 
-- name: Persistent kubernetes front proxy intermediate ca private key result
+- name: Persistent kubernetes front proxy intermediate CA private key result
   copy:
     content: "{{ certificate_csr.json.data.private_key }}"
     dest: /opt/kubernetes/tls/front-proxy-ca.key
@@ -66,7 +66,7 @@
   uri:
     method: POST
     headers:
-      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
     url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/root/sign-intermediate"
     body_format: json
     body:
@@ -74,7 +74,7 @@
       common_name: front-proxy-ca
   register: certificate_crt
 
-- name: Persistent kubernetes front proxy intermediate ca certificate result
+- name: Persistent kubernetes front proxy intermediate CA certificate result
   copy:
     content: "{{ certificate_crt.json.data.certificate }}"
     dest: /opt/kubernetes/tls/front-proxy-ca.crt
@@ -92,7 +92,7 @@
   uri:
     method: POST
     headers:
-      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
     url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int_ipool_kubernetes_front_proxy/intermediate/set-signed"
     body_format: json
     status_code: 204

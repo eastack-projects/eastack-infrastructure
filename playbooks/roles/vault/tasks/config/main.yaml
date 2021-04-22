@@ -1,0 +1,36 @@
+---
+- name: Common config
+  include_tasks: ../../../common/config.yaml
+
+- name: Config vault service
+  template:
+    src: "vault.hcl.j2"
+    dest: "/etc/vault.d/vault.hcl"
+    mode: 0644
+    group: vault
+    owner: vault
+
+- name: Enable and start vault service
+  systemd:
+    name: vault
+    enabled: yes
+    state: started
+
+# Initialize vault
+- name: Check vault initialize stat
+  stat:
+    path: "{{ VAULT_CERT_DIR }}/{{ VAULT_INITIALIZE_RESULT }}"
+  register: vault_init
+
+- name: Try initialize vault
+  include_tasks: initialize-vault.yaml
+  when: not vault_init.stat.exists
+
+- name: Unseal vault
+  include_tasks: ../../../common/unseal-vault.yaml
+
+- name: Include root certificate
+  include_tasks: config-root-certificates.yaml
+
+- name: Include intermediate certificate
+  include_tasks: config-intermediate-certificates.yaml

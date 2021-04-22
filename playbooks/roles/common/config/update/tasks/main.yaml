@@ -1,7 +1,0 @@
----
-- name: Disable Auto Update
-  replace:
-    path: /etc/apt/apt.conf.d/20auto-upgrades
-    regexp: '1'
-    replace: '0'
-    backup: yes

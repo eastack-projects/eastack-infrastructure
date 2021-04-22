@@ -1,0 +1,84 @@
+---
+# Mount intermediate engine
+- name: Mount PKI intermediate secret engine
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/sys/mounts/pki_int_ipool"
+    body_format: json
+    status_code: 204
+    body:
+      type: pki
+
+- name: Tune PKI intermediate secret engine
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/sys/mounts/pki_int_ipool/tune"
+    body_format: json
+    status_code: 204
+    body:
+      description: Intermediate certificate
+      max_lease_ttl: "{{ MAX_PKI_TTL }}"
+      default_lease_ttl: "{{ PKI_TTL }}"
+
+# Generate intermediate CA
+- name: Generate intermediate CA csr
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int_ipool/intermediate/generate/exported"
+    body_format: json
+    body:
+      common_name: ipool.me
+  register: intermediate_ca_csr
+
+- name: Persistent peer intermediate CA CSR result
+  copy:
+    content: "{{ intermediate_ca_csr.json.data.csr }}"
+    dest: "{{ VAULT_CERT_DIR }}/vault_int_ca.csr"
+
+- name: Persistent intermediate CA private key result
+  copy:
+    content: "{{ intermediate_ca_csr.json.data.private_key }}"
+    dest: "{{ VAULT_CERT_DIR }}/vault_int_ca.key"
+
+- name: Include vault_int_ca.csr
+  slurp:
+    src: "{{ VAULT_CERT_DIR }}/vault_int_ca.csr"
+  register: vault_int_ca_csr
+
+- name: Sign intermediate CA
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/root/sign-intermediate"
+    body_format: json
+    body:
+      csr: "{{ vault_int_ca_csr['content'] | b64decode }}"
+  register: intermediate_ca_crt
+
+- name: Persistent intermediate CA certificate result
+  copy:
+    content: "{{ intermediate_ca_crt.json.data.certificate }}"
+    dest: "{{ VAULT_CERT_DIR }}/vault_int_ca.crt"
+
+- name: Include vault_int_ca.crt
+  slurp:
+    src: "{{ VAULT_CERT_DIR }}/vault_int_ca.crt"
+  register: vault_int_ca_crt
+
+- name: Set sign intermediate
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int_ipool/intermediate/set-signed"
+    body_format: json
+    status_code: 204
+    body:
+      certificate: "{{ vault_int_ca_crt['content'] | b64decode }}"

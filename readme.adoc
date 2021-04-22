@@ -40,10 +40,8 @@ kubectl replace --force -f coredns-deployment.yaml
 .nginx ingress
 [source, bash]
 ----
-git clone https://github.com/coredns/deployment.git
-# 10.96.0.10 在 playbooks/roles/kubernetes/node/setup/templates/kubelet-config.yaml.j2
-./deploy.sh -s -i 10.96.0.10 > coredns-deployment.yaml
-kubectl replace --force -f coredns-deployment.yaml 
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.45.0/deploy/static/provider/cloud/deploy.yaml
+kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
 ----
 
 == To Do
@@ -59,6 +57,8 @@ kubectl replace --force -f coredns-deployment.yaml
 * [ ] 想上OpenStack然后配合Terraform、Packer、Ansible做到全面IAC。
 * [ ] 未来目录等规范向minikube靠拢
 * [ ] 创建目录的操作应该和变量声明一样，可能用到前才创建会好一些吧
+* [ ] 多个Node使用同一token，会有冲突
+* [ ] 一个ROLE只做一件事
 
 准备文件
 
