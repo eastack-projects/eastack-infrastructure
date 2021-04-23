@@ -1,0 +1,31 @@
+---
+- name: Generate an CA private
+  openssl_privatekey:
+    path: "{{ VAULT_KEY_DIR }}/{{ VAULT_KEY_NAME }}"
+    group: vault
+    owner: vault
+    mode: 0600
+
+- name: Generate an CA certificate signing request
+  openssl_csr:
+    path: "{{ VAULT_KEY_DIR }}/{{ VAULT_CSR_NAME }}"
+    privatekey_path: "{{ VAULT_KEY_DIR }}/{{ VAULT_KEY_NAME }}"
+    common_name: "{{ VAULT_FQDN }}"
+    basic_constraints: 'CA:TRUE'
+    email_address: "admin@eastack.me"
+    country_name: "CN"
+    state_or_province_name: "Earth"
+    locality_name: "Asian"
+    group: vault
+    owner: vault
+    mode: 0600
+
+- name: Generate a self signed CA certificate
+  openssl_certificate:
+    privatekey_path: "{{ VAULT_KEY_DIR }}/{{ VAULT_KEY_NAME }}"
+    csr_path: "{{ VAULT_KEY_DIR }}/{{ VAULT_CSR_NAME }}"
+    path: "{{ VAULT_KEY_DIR }}/{{ VAULT_CERT_NAME }}"
+    provider: selfsigned
+    group: vault
+    owner: vault
+    mode: 0600
