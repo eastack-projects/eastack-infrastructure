@@ -8,13 +8,13 @@
 
 - name: Slurp vault int crt
   slurp:
-    src: "{{ VAULT_CERT_DIR }}/{{ VAULT_INT_CERT_NAME }}"
-  register: vault_int_crt
+    src: "{{ VAULT_CERT_DIR }}/{{ INT_CERT_NAME }}"
+  register: int_crt
   delegate_to: vault
 
 - name: Copy CA certificate
   copy:
-    content: "{{ vault_int_crt['content'] | b64decode }}"
+    content: "{{ int_crt['content'] | b64decode }}"
     dest: "{{ ETCD_PKI_DIR }}/ca.crt"
     mode: 0644
   notify: Enable and restart etcd service

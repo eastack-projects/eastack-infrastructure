@@ -3,14 +3,24 @@
 - name: Slurp vault CA cert
   slurp:
     src: "{{ VAULT_CERT_DIR }}/{{ VAULT_CERT_NAME }}"
-  register: vault_ca_crt
+  register: vault_crt
   delegate_to: vault
 
-# todo 注意FQDN对应
 - name: Copy CA cert
   copy:
-    content: "{{ vault_ca_crt['content'] | b64decode }}"
+    content: "{{ vault_crt['content'] | b64decode }}"
     dest: "/usr/local/share/ca-certificates/{{ VAULT_FQDN }}.crt"
+
+- name: Slurp intermediate certificate
+  slurp:
+    src: "{{ VAULT_CERT_DIR }}/{{ VAULT_CERT_NAME }}"
+  register: int_cert
+  delegate_to: vault
+
+- name: Copy intermediate certificate
+  copy:
+    content: "{{ int_cert['content'] | b64decode }}"
+    dest: "/usr/local/share/ca-certificates/int-cert.crt"
 
 - name: Update CA certificate
   shell:

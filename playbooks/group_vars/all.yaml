@@ -21,9 +21,7 @@ VAULT_PORT: 8200
 VAULT_CERT_DIR: /opt/vault/tls
 VAULT_INITIALIZE_RESULT: initialize_result.json
 VAULT_CERT_NAME: tls.crt
-VAULT_KEY_NAME: tls.key
-ROOT_CERT_NAME: root-tls.crt
-VAULT_INT_CERT_NAME: int-ca.crt
+INT_CERT_NAME: int-ca.crt
 
 # GITLAB
 GITLAB_FQDN: gitlab.lan

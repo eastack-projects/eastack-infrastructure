@@ -1,7 +1,7 @@
 - name: Slurp vault_int_ca.crt
   slurp:
-    src: "{{ VAULT_CERT_DIR }}/{{ VAULT_INT_CERT_NAME }}"
-  register: vault_int_ca_crt
+    src: "{{ VAULT_CERT_DIR }}/{{ INT_CERT_NAME }}"
+  register: int_crt
   delegate_to: vault
 
 - name: Slurp scheduler-apiserver-client.crt

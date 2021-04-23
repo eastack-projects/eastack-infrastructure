@@ -2,3 +2,5 @@ VAULT_OFFLINE_INSTALL: True
 VAULT_DOWNLOAD_URL: https://apt.releases.hashicorp.com/pool/amd64/main/vault_1.7.0_amd64.deb
 VAULT_PACKAGE_NAME: "{{ RESOURCES_PATH }}/vault/vault_1.7.0_amd64.deb"
 VAULT_FQDN: vault
+ROOT_CERT_NAME: root-ca.crt
+VAULT_KEY_NAME: tls.key

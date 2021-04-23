@@ -14,7 +14,7 @@
 
 - name: Copy CA certificate
   copy:
-    src: ./roles/vault/config/files/{{ VAULT_INT_CERT_NAME }}
+    src: ./roles/vault/config/files/{{ INT_CERT_NAME }}
     dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/ca.crt"
     mode: 0644
   notify: Restart docker service
