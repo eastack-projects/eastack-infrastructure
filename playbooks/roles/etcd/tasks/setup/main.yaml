@@ -28,6 +28,6 @@
 
 - name: Add basic etcd systemd service
   template:
-    src: etcd.service
+    src: etcd.service.j2
     dest: /usr/lib/systemd/system/etcd.service
     mode: 0644
