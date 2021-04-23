@@ -29,5 +29,9 @@
   register: vault_initialize_result
   delegate_to: vault
 
+- name: Base64 decode vault initialize result
+  set_fact:
+    vault_initialize_result: "{{ vault_initialize_result['content'] | b64decode }}"
+
 - include_tasks: gen-peer-cert.yaml
 - include_tasks: gen-client-cert.yaml
