@@ -4,7 +4,7 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int_ipool/roles/apiserver.kubernetes.ipool.me"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int/roles/apiserver.kubernetes.ipool.me"
     body_format: json
     status_code: 204
     body:
@@ -18,7 +18,7 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int_ipool/issue/apiserver.kubernetes.ipool.me"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int/issue/apiserver.kubernetes.ipool.me"
     body_format: json
     status_code: 200
     body:

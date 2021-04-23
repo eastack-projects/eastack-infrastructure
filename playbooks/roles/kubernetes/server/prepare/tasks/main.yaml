@@ -1,12 +1,1 @@
----
-- include_tasks: download.yaml
-- include_tasks: create-directory.yaml
-- include_tasks: apiserver.yaml
-- include_tasks: apiserver-etcd-client.yaml
-- include_tasks: apiserver-kubelet-client.yaml
-- include_tasks: controller-manager-apiserver-client.yaml
-- include_tasks: scheduler-apiserver-client.yaml
-- include_tasks: front-proxy-ca.yaml
-- include_tasks: front-proxy-client.yaml
-- include_tasks: sa.yaml
-- include_tasks: admin.yaml
+

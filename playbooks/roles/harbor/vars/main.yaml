@@ -1,0 +1,2 @@
+HARBOR_DOWNLOAD_URL: https://ghproxy.com/https://github.com/goharbor/harbor/releases/download/v2.2.0/harbor-offline-installer-v2.2.0.tgz
+HARBOR_PACKAGE:  "{{ RESOURCES_PATH }}/harbor/harbor-offline-installer.tgz"

@@ -9,3 +9,4 @@ bootstrap-kubelet.yaml
 
 resources/*
 !resources/.gitkeep
+vagrantfiles/bind/.apt/

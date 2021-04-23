@@ -4,8 +4,8 @@ Based Ansible and Vagrant.
 
 == Boot Order
 
-bind
 vault
+bind
 etcd
 kubernetes-server
 kubernetes-node

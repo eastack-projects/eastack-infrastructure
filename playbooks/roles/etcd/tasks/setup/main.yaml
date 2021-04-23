@@ -1,0 +1,33 @@
+---
+- name: Create etcd directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  with_items:
+    - /etc/etcd
+    - /var/lib/etcd
+
+- name: Extract etcd package
+  unarchive:
+    src: "{{ ETCD_PACKAGE_NAME }}"
+    dest: /opt/etcd
+    extra_opts: [ '--strip-components=1' ]
+    creates: /opt/etcd/etcdctl
+
+- name: Copy etcdctl to /usr/bin
+  copy:
+    src: "/opt/etcd/{{ item }}"
+    dest: "/usr/bin/{{ item }}"
+    remote_src: yes
+    mode: 0755
+  with_items:
+    - etcd
+    - etcdctl
+  notify: Enable and restart etcd service
+
+- name: Add basic etcd systemd service
+  copy:
+    src: etcd.service
+    dest: /usr/lib/systemd/system/etcd.service
+    mode: 0644

@@ -1,0 +1,3 @@
+ETCD_DOWNLOAD_URL: https://storage.googleapis.com/etcd/v3.4.15/etcd-v3.4.15-linux-amd64.tar.gz
+ETCD_PACKAGE_NAME:  "{{ RESOURCES_PATH }}/etcd/etcd-v3.4.15-linux-amd64.tar.gz"
+ETCD_PKI_DIR: /etc/etcd/pki

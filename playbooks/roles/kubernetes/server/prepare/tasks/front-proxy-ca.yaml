@@ -12,7 +12,7 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/sys/mounts/pki_int_ipool_kubernetes_front_proxy"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/sys/mounts/pki_int_kubernetes_front_proxy"
     body_format: json
     status_code: 204
     body:
@@ -24,7 +24,7 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/sys/mounts/pki_int_ipool_kubernetes_front_proxy/tune"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/sys/mounts/pki_int_kubernetes_front_proxy/tune"
     body_format: json
     status_code: 204
     body:
@@ -37,7 +37,7 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int_ipool_kubernetes_front_proxy/intermediate/generate/exported"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int_kubernetes_front_proxy/intermediate/generate/exported"
     body_format: json
     body:
       common_name: front-proxy-ca
@@ -93,7 +93,7 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int_ipool_kubernetes_front_proxy/intermediate/set-signed"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int_kubernetes_front_proxy/intermediate/set-signed"
     body_format: json
     status_code: 204
     body:

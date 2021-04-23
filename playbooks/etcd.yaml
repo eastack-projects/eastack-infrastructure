@@ -1,18 +1,6 @@
-- name: Update DNS record
-  become: yes
-  hosts: bind
-  roles:
-    - bind/config
-
 - name: Initialize etcd cluster
   become: yes
   hosts: etcd
   roles:
-    - common/config/timezone
-    - common/config/update
-    - common/config/dns
-    - common/config/apt
-    - common/config/ca
-    - common/config/unseal
-    - etcd/prepare
-    - etcd/setup
+    - common
+    - etcd

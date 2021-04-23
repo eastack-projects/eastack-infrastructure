@@ -1,0 +1,7 @@
+# kubernetes server
+KUBERNETES_VERSION: v1.20.4
+KUBERNETES_SERVER_DOWNLOAD_URL: "https://dl.k8s.io/{{ KUBERNETES_VERSION }}/kubernetes-server-linux-amd64.tar.gz"
+KUBERNETES_SERVER_PACKAGE_NAME: "{{ RESOURCES_PATH }}/kubernetes/kubernetes-server-{{ KUBERNETES_VERSION }}-linux-amd64.tar.gz"
+# flannel manifests
+FLANNEL_MANIFESTS_DOWNLOAD_URL: https://ghproxy.com/https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+FLANNEL_MANIFESTS_FILE: "{{ RESOURCES_PATH }}/kubernetes/kube-flannel.yml"

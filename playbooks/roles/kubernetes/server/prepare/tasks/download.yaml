@@ -12,7 +12,7 @@
   local_action:
     module: get_url
     url: "{{ KUBERNETES_SERVER_DOWNLOAD_URL }}"
-    dest:  "{{ KUBERNETES_SERVER_PACKAGE }}"
+    dest:  "{{ KUBERNETES_SERVER_PACKAGE_NAME }}"
 
 - name: Download flannel manifests
   become: no

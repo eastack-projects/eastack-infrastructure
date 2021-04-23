@@ -1,11 +1,4 @@
 ---
-- name: Stat etcd package
-  become: no
-  local_action:
-    module: stat
-    path: "{{ VAULT_PACKAGE_NAME }}"
-  register: etcd_package
-
 - name: Create etcd packages directory
   become: no
   local_action:
@@ -19,5 +12,4 @@
   local_action:
     module: get_url
     url: "{{ ETCD_DOWNLOAD_URL }}"
-    dest:  "{{ ETCD_PACKAGE }}"
-  when: not etcd_package.stat.exists
+    dest:  "{{ ETCD_PACKAGE_NAME }}"

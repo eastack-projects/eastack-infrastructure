@@ -1,7 +1,4 @@
 ---
-- name: Common config
-  include_tasks: ../../../common/config.yaml
-
 - name: Config vault service
   template:
     src: "vault.hcl.j2"
@@ -27,10 +24,14 @@
   when: not vault_init.stat.exists
 
 - name: Unseal vault
-  include_tasks: ../../../common/unseal-vault.yaml
+  include_tasks: ../../../common/tasks/unseal-vault.yaml
 
-- name: Include root certificate
-  include_tasks: config-root-certificates.yaml
+- name: Try mount pki root cecret engine
+  include_tasks: mount-pki-root-secret-engine.yaml
+- name: Try generate root CA certificate
+  include_tasks: generate-root-ca.yaml
 
-- name: Include intermediate certificate
-  include_tasks: config-intermediate-certificates.yaml
+- name: Try mount pki intermediate cecret engine
+  include_tasks: mount-pki-int-secret-engine.yaml
+- name: Try generate intermediate CA certificate
+  include_tasks: generate-intermediate-ca.yaml

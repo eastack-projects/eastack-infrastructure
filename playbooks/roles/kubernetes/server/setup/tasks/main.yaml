@@ -1,6 +1,6 @@
 - name: Extract kubernetes package
   unarchive:
-    src: "{{ KUBERNETES_SERVER_PACKAGE }}"
+    src: "{{ KUBERNETES_SERVER_PACKAGE_NAME }}"
     dest: /tmp/kubernetes
     creates: /tmp/kubernetes/server
     extra_opts: [ "--strip-components=1" ]

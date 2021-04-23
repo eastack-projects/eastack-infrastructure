@@ -1,0 +1,3 @@
+vagrant snapshot restore etcd1 push_1619170007_1106
+vagrant snapshot restore etcd2 push_1619170009_9864
+vagrant snapshot restore etcd3 push_1619170012_7613

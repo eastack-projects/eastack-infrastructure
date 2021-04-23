@@ -1,0 +1,5 @@
+---
+# Timezone
+- name: Set Timezone
+  timezone:
+    name: Asia/Shanghai

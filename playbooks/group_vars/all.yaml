@@ -5,46 +5,26 @@ PKI_TTL: 8760h
 MAX_PKI_TTL: 17520h
 RESOURCES_PATH: ../resources
 
-# ETCD
-ETCD_DOWNLOAD_URL: https://storage.googleapis.com/etcd/v3.4.15/etcd-v3.4.15-linux-amd64.tar.gz
-ETCD_PACKAGE:  "{{ RESOURCES_PATH }}/etcd/etcd-v3.4.15-linux-amd64.tar.gz"
-
 # KUBERNETES
 KUBERNETES_CONFIG_DIRECTORY: /etc/kubernetes
-PAUSE_VERSION: 3.3
-INGRESS_VERSION: "v0.45.0"
-# kubernetes server
-KUBERNETES_SERVER_DOWNLOAD_URL: https://dl.k8s.io/v1.20.4/kubernetes-server-linux-amd64.tar.gz
-KUBERNETES_SERVER_PACKAGE: "{{ RESOURCES_PATH }}/kubernetes/kubernetes-server-linux-amd64.tar.gz"
-# kubernetes node
-KUBERNETES_NODE_DOWNLOAD_URL: https://dl.k8s.io/v1.20.4/kubernetes-node-linux-amd64.tar.gz
-KUBERNETES_NODE_PACKAGE: "{{ RESOURCES_PATH }}/kubernetes/kubernetes-node-linux-amd64.tar.gz"
-# cni plugins
-CNI_PLUGINS_DOWNLOAD_URL: https://ghproxy.com/https://github.com/containernetworking/plugins/releases/download/v0.9.1/cni-plugins-linux-amd64-v0.9.1.tgz
-CNI_PLUGINS_PACKAGE: "{{ RESOURCES_PATH }}/kubernetes/cni-plugins-linux-amd64.tar.gz"
-# flannel manifests
-FLANNEL_MANIFESTS_DOWNLOAD_URL: https://ghproxy.com/https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-FLANNEL_MANIFESTS_FILE: "{{ RESOURCES_PATH }}/kubernetes/kube-flannel.yml"
-# kubelet
-CLUSTER_DNS: 10.96.0.10
+KUBERNETES_VERSION: v1.20.4
 
 # HARBOR
-HARBOR_FQDN: harbor.ipool.me
-HARBOR_DOWNLOAD_URL: https://ghproxy.com/https://github.com/goharbor/harbor/releases/download/v2.2.0/harbor-offline-installer-v2.2.0.tgz
-HARBOR_PACKAGE:  "{{ RESOURCES_PATH }}/harbor/harbor-offline-installer.tgz"
+HARBOR_FQDN: harbor.lan
 
-# BIND
+# DNS
 FALLBACK_DNS: 114.114.114.114
 
 # VAULT
-VAULT_FQDN: vault
+VAULT_FQDN: vault.lan
 VAULT_PORT: 8200
-VAULT_CERT_DIR: /etc/vault/pki
-VAULT_CERT_NAME: ca.crt
-VAULT_CSR_NAME: ca.csr
-VAULT_KEY_NAME: ca.key
+VAULT_CERT_DIR: /opt/vault/tls
 VAULT_INITIALIZE_RESULT: initialize_result.json
+VAULT_CERT_NAME: tls.crt
+VAULT_KEY_NAME: tls.key
+ROOT_CERT_NAME: root-tls.crt
+VAULT_INT_CERT_NAME: int-ca.crt
 
 # GITLAB
-GITLAB_FQDN: gitlab.ipool.me
+GITLAB_FQDN: gitlab.lan
 EXTERNAL_URL: https://gitlab.ipool.me

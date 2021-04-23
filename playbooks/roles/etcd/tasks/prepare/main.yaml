@@ -1,0 +1,27 @@
+---
+# download etcd package
+- name: Stat etcd package
+  become: no
+  local_action:
+    module: stat
+    path: "{{ ETCD_PACKAGE_NAME }}"
+  register: etcd_package_stat
+
+- name: Try donwload etcd package
+  include_tasks: download-etcd.yaml
+  when: not etcd_package_stat.stat.exists
+
+# generate certificate
+- name: Waits vault service started
+  wait_for:
+    host: "{{ VAULT_FQDN }}"
+    port: "{{ VAULT_PORT }}"
+
+- name: Create etcd cert directory
+  file:
+    path: "{{ ETCD_PKI_DIR }}"
+    state: directory
+    mode: 0755
+
+- include_tasks: gen-peer-cert.yaml
+- include_tasks: gen-client-cert.yaml

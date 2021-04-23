@@ -7,19 +7,6 @@
     path: "{{ VAULT_PACKAGE_NAME }}"
   register: vault_package_stat
 
-- name: Download vault deb package
-  become: no
-  local_action:
-    module: get_url
-    url: "{{ VAULT_DOWNLOAD_URL }}"
-    dest:  "{{ VAULT_PACKAGE_NAME }}"
+- name: Try download vault package
+  include_tasks: download-vault.yaml
   when: not vault_package_stat.stat.exists
-
-# generate
-- name: Check vault CA certificate stat
-  stat:
-    path: "{{ VAULT_CERT_DIR }}/{{ VAULT_CSR_NAME }}"
-  register: vault_ca_key_stat
-
-- include_tasks: generate-certificate.yaml
-  when: not vault_ca_key_stat.stat.exists

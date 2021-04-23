@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
     bind.vm.box_check_update = false
     bind.vm.network "private_network", ip: host_ip
     bind.vm.hostname = "bind"
-    bind.vm.synced_folder "../../.vagrant/", "/var/cache/apt/", owner: "root", group: "root"
+    bind.vm.synced_folder ".apt/", "/var/cache/apt/", owner: "root", group: "root"
     bind.vm.provider "virtualbox" do |vb|
       vb.memory = "512"
     end

@@ -1,4 +1,16 @@
 ---
+# Setup vault certificate
+- name: Copy vault CA cert
+  copy:
+    remote_src: yes
+    src: "{{ VAULT_CERT_DIR }}/{{ VAULT_CERT_NAME }}"
+    dest: "/usr/local/share/ca-certificates/{{ VAULT_FQDN }}.crt"
+
+- name: Update CA certificate
+  shell:
+    cmd: update-ca-certificates
+
+# Initialize vault
 - name: Wait vault to be available
   wait_for:
     host: "{{ VAULT_FQDN }}"
@@ -18,3 +30,10 @@
   copy:
     content: "{{ initialize_result.json }}"
     dest: "{{ VAULT_CERT_DIR }}/{{ VAULT_INITIALIZE_RESULT }}"
+
+# Set VAULT_ADDR
+- name: Set VAULT_ADDR
+  lineinfile:
+    dest: /root/.bashrc
+    line: export VAULT_ADDR=https://vault:8200
+    state: present
