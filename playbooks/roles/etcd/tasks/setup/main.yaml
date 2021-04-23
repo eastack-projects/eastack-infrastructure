@@ -5,19 +5,19 @@
     state: directory
     mode: 0755
   with_items:
-    - /etc/etcd
-    - /var/lib/etcd
+    - "{{ ETCD_WORKING_DIR }}"
+    - "{{ ETCD_EXTRACT_DIR }}"
 
 - name: Extract etcd package
   unarchive:
     src: "{{ ETCD_PACKAGE_NAME }}"
-    dest: /opt/etcd
+    dest: "{{ ETCD_EXTRACT_DIR }}"
     extra_opts: [ '--strip-components=1' ]
-    creates: /opt/etcd/etcdctl
+    creates: "{{ ETCD_EXTRACT_DIR }}/etcdctl"
 
 - name: Copy etcdctl to /usr/bin
   copy:
-    src: "/opt/etcd/{{ item }}"
+    src: "{{ ETCD_EXTRACT_DIR }}/{{ item }}"
     dest: "/usr/bin/{{ item }}"
     remote_src: yes
     mode: 0755
@@ -27,7 +27,7 @@
   notify: Enable and restart etcd service
 
 - name: Add basic etcd systemd service
-  copy:
+  template:
     src: etcd.service
     dest: /usr/lib/systemd/system/etcd.service
     mode: 0644

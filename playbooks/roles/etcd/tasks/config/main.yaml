@@ -1,20 +1,26 @@
 ---
+- name: Create etcd config directory
+  file:
+    path: "{{ ETCD_CONFIG_DIR }}"
+    state: directory
+    mode: 0755
+
 - name: Generate etcd environment file
   template:
     src: etcd.j2
-    dest: /etc/etcd/etcd
+    dest: "{{ ETCD_CONFIG_DIR }}/etcd"
     mode: 0644
   notify: Enable and restart etcd service
 
-- name: Slurp vault int crt
+- name: Slurp etcd CA certificate
   slurp:
     src: "{{ VAULT_CERT_DIR }}/{{ INT_CERT_NAME }}"
   register: int_crt
   delegate_to: vault
 
-- name: Copy CA certificate
+- name: Persistent etcd CA certificate
   copy:
     content: "{{ int_crt['content'] | b64decode }}"
-    dest: "{{ ETCD_PKI_DIR }}/ca.crt"
+    dest: "{{ ETCD_PKI_DIR }}/{{ ETCD_CA_CERT_NAME }}"
     mode: 0644
   notify: Enable and restart etcd service

@@ -1,3 +1,11 @@
 ETCD_DOWNLOAD_URL: https://storage.googleapis.com/etcd/v3.4.15/etcd-v3.4.15-linux-amd64.tar.gz
 ETCD_PACKAGE_NAME:  "{{ RESOURCES_PATH }}/etcd/etcd-v3.4.15-linux-amd64.tar.gz"
 ETCD_PKI_DIR: /etc/etcd/pki
+ETCD_EXTRACT_DIR: /opt/etcd
+ETCD_CONFIG_DIR: /etc/etcd
+ETCD_WORKING_DIR: /var/lib/etcd
+ETCD_PEER_CERT_NAME: peer.crt
+ETCD_PEER_KEY_NAME: peer.key
+ETCD_CLIENT_CERT_NAME: client.crt
+ETCD_CLIENT_KEY_NAME: client.key
+ETCD_CA_CERT_NAME: int-ca.crt

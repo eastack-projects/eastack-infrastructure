@@ -27,11 +27,11 @@
 - name: Persistent etcd peer certificate
   copy:
     content: "{{ certificate.json.data.certificate }}"
-    dest: "{{ ETCD_PKI_DIR }}/peer.crt"
+    dest: "{{ ETCD_PKI_DIR }}/{{ ETCD_PEER_CERT_NAME }}"
     mode: 0644
 
 - name: Persistent etcd peer key
   copy:
     content: "{{ certificate.json.data.private_key }}"
-    dest: "{{ ETCD_PKI_DIR }}/peer.key"
+    dest: "{{ ETCD_PKI_DIR }}/{{ ETCD_PEER_KEY_NAME }}"
     mode: 0644

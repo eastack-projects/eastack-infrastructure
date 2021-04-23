@@ -4,8 +4,8 @@ After=network.target
 
 [Service]
 Type=simple
-WorkingDirectory=/var/lib/etcd/
-EnvironmentFile=/etc/etcd/etcd
+WorkingDirectory={{ ETCD_WORKING_DIR }}
+EnvironmentFile={{ ETCD_CONFIG_DIR }}/etcd
 ExecStart=/usr/bin/etcd $ETCD_ARGS
 
 [Install]
