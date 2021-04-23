@@ -59,6 +59,7 @@ kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
 * [ ] 创建目录的操作应该和变量声明一样，可能用到前才创建会好一些吧
 * [ ] 多个Node使用同一token，会有冲突
 * [ ] 一个ROLE只做一件事
+* [ ] 每个软件最好都有自己的用户组和用户
 
 准备文件
 

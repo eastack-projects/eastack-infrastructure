@@ -16,3 +16,12 @@
 
 - name: Generate certificate
   include_tasks: generate-certificate.yaml
+
+- name: Setup certificate
+  include_tasks: setup-certificate.yaml
+
+- name: Config hosts
+  lineinfile:
+    dest: /etc/hosts
+    line: "{{ ansible_host }} {{ VAULT_FQDN }} {{ VAULT_FQDN }}"
+    state: present
