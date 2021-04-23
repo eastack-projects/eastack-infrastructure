@@ -1,4 +1,12 @@
 ---
+- name: Create vault certificate directory
+  file:
+    path: "{{ VAULT_CERT_DIR }}"
+    state: directory
+    group: vault
+    owner: vault
+    mode: 0755
+
 - name: Generate an CA private
   openssl_privatekey:
     path: "{{ VAULT_CERT_DIR }}/{{ VAULT_KEY_NAME }}"

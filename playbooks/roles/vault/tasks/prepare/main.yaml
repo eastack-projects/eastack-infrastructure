@@ -11,8 +11,8 @@
   include_tasks: download-vault.yaml
   when: not vault_package_stat.stat.exists
 
-- name: Generate certificate
-  include_tasks: generate-certificate.yaml
-
 - name: Create group and user
   include_tasks: create-user.yaml
+
+- name: Generate certificate
+  include_tasks: generate-certificate.yaml
