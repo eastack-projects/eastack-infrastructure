@@ -39,7 +39,7 @@
 
 - name: Slurp intermediate certificate
   slurp:
-    src: "{{ VAULT_PKI_DIR }}/{{ VAULT_CERT_NAME }}"
+    src: "{{ K8S_NODE_PKI_DIR }}/{{ VAULT_CERT_NAME }}"
   register: int_cert
   delegate_to: vault
 

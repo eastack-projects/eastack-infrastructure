@@ -6,7 +6,7 @@ authentication:
     cacheTTL: 0s
     enabled: true
   x509:
-    clientCAFile: "{{ VAULT_PKI_DIR }}/{{ INT_CERT_NAME }}"
+    clientCAFile: "{{ K8S_NODE_PKI_DIR }}/{{ INT_CERT_NAME }}"
 authorization:
   mode: Webhook
   webhook:
