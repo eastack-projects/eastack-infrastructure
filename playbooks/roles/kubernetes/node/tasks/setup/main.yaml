@@ -52,7 +52,7 @@
 - name: Copy intermediate certificate
   copy:
     content: "{{ int_cert['content'] | b64decode }}"
-    dest: "{{ K8S_NODE_PKI_DIR }}/INT_CERT_NAME"
+    dest: "{{ K8S_NODE_PKI_DIR }}/{{ INT_CERT_NAME }}"
 
 - name: Slurp kube-proxy kube-apiserver client certificate
   slurp:

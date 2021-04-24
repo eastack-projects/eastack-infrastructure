@@ -12,22 +12,27 @@
     state: directory
     mode: 0644
 
-- name: Copy CA certificate
-  copy:
-    src: ./roles/vault/config/files/{{ INT_CERT_NAME }}
-    dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/ca.crt"
-    mode: 0644
-  notify: Restart docker service
+- name: Slurp intermediate certificate
+  slurp:
+    src: "{{ VAULT_PKI_DIR }}/{{ INT_CERT_NAME }}"
+  register: int_cert
+  delegate_to: vault
 
-- name: Copy certificate and private key
+- name: Copy intermediate certificate
   copy:
-    src: "./roles/harbor/prepare/files/{{ item.src }}"
-    dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/{{ item.dest }}"
-    mode: 0644
-  with_items:
-    - { src: "{{ HARBOR_FQDN }}.crt" , dest: "{{ HARBOR_FQDN }}.crt" }
-    - { src: "{{ HARBOR_FQDN }}.key" , dest: "{{ HARBOR_FQDN }}.key" }
-  notify: Restart docker service
+    content: "{{ int_cert['content'] | b64decode }}"
+    dest: "{{ K8S_NODE_PKI_DIR }}/{{ INT_CERT_NAME }}"
+
+# todo harbor certificate
+#- name: Copy certificate and private key
+#  copy:
+#    src: "./roles/harbor/prepare/files/{{ item.src }}"
+#    dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/{{ item.dest }}"
+#    mode: 0644
+#  with_items:
+#    - { src: "{{ HARBOR_FQDN }}.crt" , dest: "{{ HARBOR_FQDN }}.crt" }
+#    - { src: "{{ HARBOR_FQDN }}.key" , dest: "{{ HARBOR_FQDN }}.key" }
+#  notify: Restart docker service
 
 - name: Copy daemon.json
   copy:
