@@ -10,7 +10,7 @@
 
 - name: Add admin.conf
   template:
-    src: admin.conf.j2
+    src: setup/admin.conf.j2
     dest: /etc/kubernetes/admin.conf
     mode: 0644
   notify: Restart kubernetes server service

@@ -10,7 +10,7 @@
 
 - name: Add scheduler.conf
   template:
-    src: scheduler.conf.j2
+    src: setup/scheduler.conf.j2
     dest: /etc/kubernetes/scheduler.conf
     mode: 0644
   notify: Restart kubernetes server service
