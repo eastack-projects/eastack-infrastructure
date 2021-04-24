@@ -10,7 +10,7 @@
 
 - name: Add controller-manager.conf
   template:
-    src: controller-manager.conf.j2
+    src: setup/controller-manager.conf.j2
     dest: /etc/kubernetes/controller-manager.conf
     mode: 0644
   notify: Restart kubernetes server service
