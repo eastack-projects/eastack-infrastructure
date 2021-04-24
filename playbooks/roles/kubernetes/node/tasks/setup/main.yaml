@@ -23,7 +23,7 @@
     mode: 0644
   with_items:
     - { src: setup/kubelet.service, dest: kubelet.service }
-    - { src: setup/kube-proxy.service, dest: kubelet.service }
+    - { src: setup/kube-proxy.service, dest: kube-proxy.service }
 
 - name: Add kubernetes node custom service
   template:
