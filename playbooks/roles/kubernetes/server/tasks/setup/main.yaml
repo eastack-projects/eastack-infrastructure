@@ -29,9 +29,9 @@
     dest: "/lib/systemd/system/{{ item }}"
     mode: 0644
   with_items:
-    - kube-apiserver.service
-    - kube-controller-manager.service
-    - kube-scheduler.service
+    - setup/kube-apiserver.service
+    - setup/kube-controller-manager.service
+    - setup/kube-scheduler.service
   notify: Restart kubernetes server service
 
 - name: Add kubernetes custom server service
@@ -40,9 +40,9 @@
     dest: "/etc/systemd/system/kube-{{ item.dest }}.service.d/10-{{ item.dest }}.conf"
     mode: 0644
   with_items:
-    - { src: apiserver.service.j2, dest: apiserver }
-    - { src: controller-manager.service.j2, dest: controller-manager }
-    - { src: scheduler.service.j2, dest: scheduler }
+    - { src: setup/apiserver.service.j2, dest: apiserver }
+    - { src: setup/controller-manager.service.j2, dest: controller-manager }
+    - { src: setup/scheduler.service.j2, dest: scheduler }
   notify: Restart kubernetes server service
 
 - name: Slurp vault_int_ca.crt
