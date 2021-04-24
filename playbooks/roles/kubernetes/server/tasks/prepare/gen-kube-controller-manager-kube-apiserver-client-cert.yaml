@@ -1,0 +1,39 @@
+---
+- name: Add kube-controller-manager kube-apiserver client role
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int/roles/kube-controller-manager.client.kube-apiserver.lan"
+    body_format: json
+    status_code: 204
+    body:
+      key_usage: ["DigitalSignature", "KeyEncipherment"]
+      ext_key_usage: ["ClientAuth"]
+      enforce_hostnames: false
+      common_name: system:kube-controller-manager
+      allow_any_name: true
+
+- name: Generate kube-controller-manager kube-apiserver client certificate
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int/issue/kube-controller-manager.client.kube-apiserver.lan"
+    body_format: json
+    status_code: 200
+    body:
+      common_name: system:kube-controller-manager
+  register: certificate
+
+- name: Persistent kube-controller-manager kube-apiserver client certificate
+  copy:
+    content: "{{ certificate.json.data.certificate }}"
+    dest: "{{ K8S_SERVER_PKI_DIR }}/{{ KUBE_CONTROLLER_MANAGER_KUBE_APISERVER_CLIENT_CERT_NAME }}"
+    mode: 0644
+
+- name: Persistent kube-controller-manager kube-apiserver client key
+  copy:
+    content: "{{ certificate.json.data.private_key }}"
+    dest: "{{ K8S_SERVER_PKI_DIR }}/{{ KUBE_CONTROLLER_MANAGER_KUBE_APISERVER_CLIENT_KEY_NAME }}"
+    mode: 0644
