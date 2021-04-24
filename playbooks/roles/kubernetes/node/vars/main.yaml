@@ -4,7 +4,7 @@ KUBERNETES_NODE_PACKAGE_NAME: "{{ RESOURCES_PATH }}/kubernetes/kubernetes-node-{
 
 # cni plugins
 CNI_VERSION: v0.9.1
-CNI_PLUGINS_DOWNLOAD_URL: "https://ghproxy.com/https://github.com/containernetworking/plugins/releases/download/{{ CNI-VERSION }}/cni-plugins-linux-amd64-{{ CNI-VERSION }}.tgz"
+CNI_PLUGINS_DOWNLOAD_URL: "https://ghproxy.com/https://github.com/containernetworking/plugins/releases/download/{{ CNI_VERSION }}/cni-plugins-linux-amd64-{{ CNI_VERSION }}.tgz"
 CNI_PLUGINS_PACKAGE: "{{ RESOURCES_PATH }}/kubernetes/cni-plugins-{{ CNI_VERSION }}-linux-amd64.tar.gz"
 
 # components
