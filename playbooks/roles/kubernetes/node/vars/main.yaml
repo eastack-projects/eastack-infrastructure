@@ -1,11 +1,11 @@
 # kubernetes node
 KUBERNETES_NODE_DOWNLOAD_URL: "https://dl.k8s.io/{{ KUBERNETES_VERSION }}/kubernetes-node-linux-amd64.tar.gz"
-KUBERNETES_NODE_PACKAGE_NAME: "{{ RESOURCES-PATH }}/kubernetes/kubernetes-node-{{ KUBERNETES_VERSION }}-linux-amd64.tar.gz"
+KUBERNETES_NODE_PACKAGE_NAME: "{{ RESOURCES_PATH }}/kubernetes/kubernetes-node-{{ KUBERNETES_VERSION }}-linux-amd64.tar.gz"
 
 # cni plugins
 CNI_VERSION: v0.9.1
 CNI_PLUGINS_DOWNLOAD_URL: "https://ghproxy.com/https://github.com/containernetworking/plugins/releases/download/{{ CNI-VERSION }}/cni-plugins-linux-amd64-{{ CNI-VERSION }}.tgz"
-CNI_PLUGINS_PACKAGE: "{{ RESOURCES-PATH }}/kubernetes/cni-plugins-{{ CNI_VERSION }}-linux-amd64.tar.gz"
+CNI_PLUGINS_PACKAGE: "{{ RESOURCES_PATH }}/kubernetes/cni-plugins-{{ CNI_VERSION }}-linux-amd64.tar.gz"
 
 # components
 CLUSTER-DNS: 10.96.0.10
