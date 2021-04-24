@@ -28,11 +28,11 @@
 - name: Add kubernetes node custom service
   template:
     src: "{{ item.src }}"
-    dest: "/etc/systemd/system/{{ item.dest }}.service.d/10-{{ item.dest }}"
+    dest: "/etc/systemd/system/{{ item.dest }}.service.d/10-{{ item.dest }}.conf"
     mode: 0644
   with_items:
-    - { src: setup/kubelet.service.j2, dest: kubelet.conf }
-    - { src: setup/kube-proxy.service.j2, dest: kube-proxy.conf }
+    - { src: setup/kubelet.service.j2, dest: kubelet }
+    - { src: setup/kube-proxy.service.j2, dest: kube-proxy }
 
 - name: Copy kubelet config file
   template:
