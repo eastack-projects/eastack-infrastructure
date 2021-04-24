@@ -14,7 +14,7 @@
 - name: Apply token to kubernetes
   shell:
     cmd: kubectl apply -f /root/token.yaml
-  delegate_to: kubernetes-server
+  delegate_to: k8s-server
 
 - name: Generate bootstrap-kubelet.conf
   template:
