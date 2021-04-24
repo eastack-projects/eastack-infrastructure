@@ -24,6 +24,7 @@ VAULT_KEY_NAME: tls.key
 VAULT_CSR_NAME: tls.csr
 VAULT_INITIALIZE_RESULT: initialize_result.json
 INT_CERT_NAME: int-ca.crt
+INT_KEY_NAME: int-ca.key
 
 # GITLAB
 GITLAB_FQDN: gitlab.lan

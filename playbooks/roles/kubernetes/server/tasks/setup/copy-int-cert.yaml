@@ -1,5 +1,11 @@
-- name: Copy CA crt
+- name: Copy intermediate certificate
   copy:
     content: "{{ int_cert['content'] | b64decode }}"
     dest: "{{ K8S_SERVER_PKI_DIR }}/{{ INT_CERT_NAME }}"
+  notify: Restart kubernetes server service
+
+- name: Copy intermediate key
+  copy:
+    content: "{{ int_cert['content'] | b64decode }}"
+    dest: "{{ K8S_SERVER_PKI_DIR }}/{{ INT_KEY_NAME }}"
   notify: Restart kubernetes server service

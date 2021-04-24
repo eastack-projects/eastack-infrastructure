@@ -5,12 +5,12 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int/intermediate/generate/internal"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int/intermediate/generate/exported"
     body_format: json
     status_code: 200
     body:
       common_name: ipool.me
-  register: intermediate_ca_csr
+  register: int_ca_csr
 
 - name: Sign intermediate CA
   uri:
@@ -20,13 +20,18 @@
     url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/root/sign-intermediate"
     body_format: json
     body:
-      csr: "{{ intermediate_ca_csr.json.data.csr }}"
+      csr: "{{ int_ca_csr.json.data.csr }}"
   register: int_ca_crt
 
-- name: Persistent intermediate CA certificate result
+- name: Persistent intermediate CA certificate
   copy:
     content: "{{ int_ca_crt.json.data.certificate }}"
     dest: "{{ VAULT_PKI_DIR }}/{{ INT_CERT_NAME }}"
+
+- name: Persistent intermediate CA key
+  copy:
+    content: "{{ int_ca_csr.json.data.private_key }}"
+    dest: "{{ VAULT_PKI_DIR }}/{{ INT_KEY_NAME }}"
 
 - name: Set sign intermediate certificate
   uri:

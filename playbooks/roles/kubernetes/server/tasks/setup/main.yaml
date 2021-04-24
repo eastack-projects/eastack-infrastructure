@@ -45,16 +45,22 @@
     - { src: setup/scheduler.service.j2, dest: scheduler }
   notify: Restart kubernetes server service
 
-- name: Slurp vault_int_ca.crt
+- name: Slurp intermediate certificate
   slurp:
     src: "{{ VAULT_PKI_DIR }}/{{ INT_CERT_NAME }}"
   register: int_cert
   delegate_to: vault
 
+- name: Slurp intermediate key
+  slurp:
+    src: "{{ VAULT_PKI_DIR }}/{{ INT_KEY_NAME }}"
+  register: int_key
+  delegate_to: vault
+
+- include_tasks: copy-int-cert.yaml
 - include_tasks: template-controller-manager-conf.yaml
 - include_tasks: template-admain-conf.yaml
 - include_tasks: template-scheduler-conf.yaml
-- include_tasks: copy-int-cert.yaml
 
 - name: Copy kubectl config
   copy:
