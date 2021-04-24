@@ -9,7 +9,7 @@
     status_code: 204
     body:
       allow_any_name: true
-      allowed_domains: "client.{{ ETCD_DOMAIN }}"
+      allowed_domains: "client.{{ ETCD_DOMAIN }},localhost"
 
 - name: Generate etcd client certificate
   uri:

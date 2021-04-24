@@ -11,7 +11,7 @@
   include_tasks: download-k8s-server-package.yaml
   when: not kubernetes_server_package_stat.stat.exists
 
-# todo split
+# todo split it
 - include_tasks: create-directory.yaml
 
 # Generate certificate
@@ -36,15 +36,10 @@
     state: directory
     mode: 0644
 
-- include_tasks: generate-kube-apiserver-certificate.yaml
-- include_tasks: generate-kube-apiserver-etcd-client-certificate.yaml
-- include_tasks: generate-kube-apiserver-kubelet-client-certificate.yaml
-
-- include_tasks: generate-kube-controller-manager-kube-apiserver-client-certificate.yaml
-- include_tasks: generate-kube-scheduler-kube-apiserver-client-certificate.yaml
-
-- include_tasks: generate-admin-certificate.yaml
-
-#- include_tasks: front-proxy-ca.yaml
-#- include_tasks: front-proxy-client.yaml
-- include_tasks: generate-service-account-certificate.yaml
+- include_tasks: gen-kube-apiserver-cert.yaml
+- include_tasks: gen-kube-apiserver-etcd-client-cert.yaml
+- include_tasks: gen-kube-apiserver-kubelet-client-cert.yaml
+- include_tasks: gen-kube-controller-manager-kube-apiserver-client-cert.yaml
+- include_tasks: gen-kube-scheduler-kube-apiserver-client-cert.yaml
+- include_tasks: generate-service-account-cert.yaml
+- include_tasks: gen-admin-cert.yaml
