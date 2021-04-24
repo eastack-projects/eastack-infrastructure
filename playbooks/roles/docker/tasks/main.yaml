@@ -12,16 +12,16 @@
     state: directory
     mode: 0644
 
-- name: Slurp intermediate certificate
-  slurp:
-    src: "{{ VAULT_PKI_DIR }}/{{ INT_CERT_NAME }}"
-  register: int_cert
-  delegate_to: vault
-
-- name: Copy intermediate certificate
-  copy:
-    content: "{{ int_cert['content'] | b64decode }}"
-    dest: "{{ K8S_NODE_PKI_DIR }}/{{ INT_CERT_NAME }}"
+#- name: Slurp intermediate certificate
+#  slurp:
+#    src: "{{ VAULT_PKI_DIR }}/{{ INT_CERT_NAME }}"
+#  register: int_cert
+#  delegate_to: vault
+#
+#- name: Copy intermediate certificate
+#  copy:
+#    content: "{{ int_cert['content'] | b64decode }}"
+#    dest: "{{ K8S_NODE_PKI_DIR }}/{{ INT_CERT_NAME }}"
 
 # todo harbor certificate
 #- name: Copy certificate and private key
