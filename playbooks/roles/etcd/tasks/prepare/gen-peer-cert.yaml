@@ -9,7 +9,7 @@
     status_code: 204
     body:
       allow_any_name: true
-      allowed_domains: peer.etcd
+      allowed_domains: "peer.{{ ETCD_DOMAIN }}"
 
 - name: Generate etcd peer certificate
   uri:
@@ -20,8 +20,8 @@
     body_format: json
     status_code: 200
     body:
-      common_name: peer.etcd
-      ip_sans: "{{ ansible_host }},127.0.0.1"
+      common_name: "peer.{{ ETCD_DOMAIN }}"
+      ip_sans: "{{ ansible_host }}"
   register: certificate
 
 - name: Persistent etcd peer certificate

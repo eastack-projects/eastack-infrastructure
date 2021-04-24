@@ -9,7 +9,7 @@
     status_code: 204
     body:
       allow_any_name: true
-      allowed_domains: client.etcd
+      allowed_domains: "client.{{ ETCD_DOMAIN }}"
 
 - name: Generate etcd client certificate
   uri:
@@ -20,8 +20,8 @@
     body_format: json
     status_code: 200
     body:
-      common_name: "{{ ETCD_DOMAIN }}"
-      ip_sans: "{{ ansible_host }},127.0.0.1,localhost"
+      common_name: "client.{{ ETCD_DOMAIN }},localhost"
+      ip_sans: "{{ ansible_host }},127.0.0.1"
   register: certificate
 
 - name: Persistent etcd client certificate
