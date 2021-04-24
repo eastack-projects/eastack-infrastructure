@@ -1,5 +1,5 @@
 # kubernetes node
-KUBERNETES-NODE-DOWNLOAD-URL: "https://dl.k8s.io/{{ KUBERNETES-VERSION }}/kubernetes-node-linux-amd64.tar.gz"
+KUBERNETES_NODE_DOWNLOAD_URL: "https://dl.k8s.io/{{ KUBERNETES-VERSION }}/kubernetes-node-linux-amd64.tar.gz"
 KUBERNETES_NODE_PACKAGE_NAME: "{{ RESOURCES-PATH }}/kubernetes/kubernetes-node-{{ KUBERNETES-VERSION }}-linux-amd64.tar.gz"
 
 # cni plugins
