@@ -1,4 +1,16 @@
 ---
+# download
+- name: Stat kubernetes node package
+  become: no
+  local_action:
+    module: stat
+    path: "{{ KUBERNETES_NODE_PACKAGE_NAME }}"
+  register: kubernetes_node_package_stat
+
+- name: Try donwload kubernetes node package
+  include_tasks: download-k8s-node-package.yaml
+  when: not kubernetes_server_package_stat.stat.exists
+
 - name: Create directory
   file:
     path: "{{ item }}"
@@ -31,10 +43,6 @@
   register: int_cert
   delegate_to: vault
 
-- include_tasks:
-    file: download-node-package.yaml
-    apply:
-      become: no
 - include_tasks: config-kernel.yaml
 - include_tasks: gen-kube-proxy-cert.yaml
 - include_tasks: config-bootstrap-token.yaml
