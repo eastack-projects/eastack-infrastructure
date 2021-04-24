@@ -25,13 +25,13 @@
 
 - name: Add kubernetes basic systemd service
   copy:
-    src: "{{ item }}"
-    dest: "/lib/systemd/system/{{ item }}"
+    src: "{{ item.src }}"
+    dest: "/lib/systemd/system/{{ item.dest }}"
     mode: 0644
   with_items:
-    - setup/kube-apiserver.service
-    - setup/kube-controller-manager.service
-    - setup/kube-scheduler.service
+    - { src: setup/kube-apiserver.service, dest: kube-apiserver.service }
+    - { src: setup/kube-controller-manager.service, dest: kube-controller-manager }
+    - { src: setup/kube-scheduler.service, dest: kube-scheduler.service }
   notify: Restart kubernetes server service
 
 - name: Add kubernetes custom server service
