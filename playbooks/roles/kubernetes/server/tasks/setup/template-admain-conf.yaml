@@ -1,17 +1,11 @@
-- name: Slurp vault_int_ca.crt
-  slurp:
-    src: "{{ VAULT_PKI_DIR }}/{{ INT_CERT_NAME }}"
-  register: int_crt
-  delegate_to: vault
-
 - name: Slurp admin.crt
   slurp:
-    src: "/opt/kubernetes/tls/admin.crt"
+    src: "{{ K8S_SERVER_PKI_DIR }}/{{ K8S_ADMIN_CERT_NAME }}"
   register: admin_crt
 
 - name: Slurp admin.key
   slurp:
-    src: "/opt/kubernetes/tls/admin.key"
+    src: "{{ K8S_SERVER_PKI_DIR }}/{{ K8S_ADMIN_KEY_NAME }}"
   register: admin_key
 
 - name: Add admin.conf

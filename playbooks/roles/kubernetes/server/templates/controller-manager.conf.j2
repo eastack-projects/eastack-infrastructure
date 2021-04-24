@@ -1,7 +1,7 @@
 apiVersion: v1
 clusters:
 - cluster:
-    certificate-authority-data: {{ int_crt['content'] }}
+    certificate-authority-data: {{ int_cert['content'] }}
     server: https://{{ ansible_host }}:6443
   name: kubernetes
 contexts:
@@ -15,5 +15,5 @@ preferences: {}
 users:
 - name: system:kube-controller-manager
   user:
-    client-certificate-data: {{ controller_manager_apiserver_client_crt['content'] }}
-    client-key-data: {{ controller_manager_apiserver_client_key['content'] }}
+    client-certificate-data: {{ kube_controller_manager_kube_apiserver_client_key['content'] }}
+    client-key-data: {{ kube_controller_manager_kube_apiserver_client_key['content'] }}

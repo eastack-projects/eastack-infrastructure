@@ -19,7 +19,7 @@
 - name: Slurp vault_int_ca.crt
   slurp:
     src: "{{ VAULT_PKI_DIR }}/{{ INT_CERT_NAME }}"
-  register: int_crt
+  register: int_cert
   delegate_to: vault
 
 - name: Generate bootstrap-kubelet.conf

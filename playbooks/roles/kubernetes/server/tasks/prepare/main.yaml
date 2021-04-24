@@ -30,6 +30,12 @@
   set_fact:
     vault_initialize_result: "{{ vault_initialize_result['content'] | b64decode }}"
 
+- name: Create kubernetes PKI directory
+  file:
+    path: "{{ K8S_SERVER_PKI_DIR }}"
+    state: directory
+    mode: 0644
+
 - include_tasks: generate-kube-apiserver-certificate.yaml
 - include_tasks: generate-kube-apiserver-etcd-client-certificate.yaml
 - include_tasks: generate-kube-apiserver-kubelet-client-certificate.yaml

@@ -1,4 +1,5 @@
 # kubernetes server
+KUBERNETES_EXTRACT_DIR: /opt/kubernetes
 KUBERNETES_VERSION: v1.20.4
 KUBERNETES_SERVER_DOWNLOAD_URL: "https://dl.k8s.io/{{ KUBERNETES_VERSION }}/kubernetes-server-linux-amd64.tar.gz"
 KUBERNETES_SERVER_PACKAGE_NAME: "{{ RESOURCES_PATH }}/kubernetes/kubernetes-server-{{ KUBERNETES_VERSION }}-linux-amd64.tar.gz"

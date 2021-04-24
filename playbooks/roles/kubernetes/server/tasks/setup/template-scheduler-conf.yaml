@@ -1,0 +1,16 @@
+- name: Slurp scheduler-apiserver-client.crt
+  slurp:
+    src: "{{ K8S_SERVER_PKI_DIR }}/{{ KUBE_SCHEDULE_KUBE_APISERVER_CLIENT_CERT_NAME }}"
+  register: kube_schedule_kube_apiserver_client_cert
+
+- name: Slurp scheduler-apiserver-client.key
+  slurp:
+    src: "{{ K8S_SERVER_PKI_DIR }}/{{ KUBE_SCHEDULE_KUBE_APISERVER_CLIENT_KEY_NAME }}"
+  register: kube_schedule_kube_apiserver_client_key
+
+- name: Add scheduler.conf
+  template:
+    src: scheduler.conf.j2
+    dest: /etc/kubernetes/scheduler.conf
+    mode: 0644
+  notify: Restart kubernetes server service

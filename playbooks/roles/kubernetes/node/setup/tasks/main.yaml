@@ -46,7 +46,7 @@
 - name: Slurp vault_int_ca.crt
   slurp:
     src: "{{ VAULT_PKI_DIR }}/{{ INT_CERT_NAME }}"
-  register: int_crt
+  register: int_cert
   delegate_to: vault
 
 - name: Slurp kube-proxy-apiserver-client.crt
@@ -70,7 +70,7 @@
 
 - name: Copy CA certificate
   copy:
-    content: "{{ int_crt['content'] | b64decode }}"
+    content: "{{ int_cert['content'] | b64decode }}"
     dest: /opt/kubernetes/tls/ca.crt
 
 - name: Pull Pause docker image

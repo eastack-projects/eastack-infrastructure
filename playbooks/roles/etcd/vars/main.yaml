@@ -9,4 +9,3 @@ ETCD_PEER_CERT_NAME: peer.crt
 ETCD_PEER_KEY_NAME: peer.key
 ETCD_CLIENT_CERT_NAME: client.crt
 ETCD_CLIENT_KEY_NAME: client.key
-ETCD_CA_CERT_NAME: int-ca.crt

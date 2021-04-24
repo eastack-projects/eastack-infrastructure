@@ -1,14 +1,19 @@
+- name: Create kubernetes extract directory
+  file:
+    path: "{{ KUBERNETES_EXTRACT_DIR }}"
+    state: directory
+
 - name: Extract kubernetes package
   unarchive:
     src: "{{ KUBERNETES_SERVER_PACKAGE_NAME }}"
-    dest: /tmp/kubernetes
-    creates: /tmp/kubernetes/server
+    dest: "{{ KUBERNETES_EXTRACT_DIR }}"
+    creates: "{{ KUBERNETES_EXTRACT_DIR }}/server"
     extra_opts: [ "--strip-components=1" ]
 
 - name: Install kubernetes components
   copy:
     remote_src: yes
-    src: "/tmp/kubernetes/server/bin/{{ item }}"
+    src: "{{ KUBERNETES_EXTRACT_DIR }}/server/bin/{{ item }}"
     dest: "/usr/bin/{{ item }}"
     mode: 0755
   with_items:
@@ -40,11 +45,16 @@
     - { src: scheduler.service.j2, dest: scheduler }
   notify: Restart kubernetes server service
 
+- name: Slurp vault_int_ca.crt
+  slurp:
+    src: "{{ VAULT_PKI_DIR }}/{{ INT_CERT_NAME }}"
+  register: int_cert
+  delegate_to: vault
+
 - include_tasks: template-controller-manager-conf.yaml
 - include_tasks: template-admain-conf.yaml
 - include_tasks: template-scheduler-conf.yaml
-- include_tasks: copy-int-ca.yaml
-- include_tasks: copy-etcd-ca.yaml
+- include_tasks: copy-int-cert.yaml
 
 - name: Copy kubectl config
   copy:

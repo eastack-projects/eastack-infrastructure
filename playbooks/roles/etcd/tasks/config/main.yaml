@@ -15,12 +15,12 @@
 - name: Slurp etcd CA certificate
   slurp:
     src: "{{ VAULT_PKI_DIR }}/{{ INT_CERT_NAME }}"
-  register: int_crt
+  register: int_cert
   delegate_to: vault
 
 - name: Persistent etcd CA certificate
   copy:
-    content: "{{ int_crt['content'] | b64decode }}"
-    dest: "{{ ETCD_PKI_DIR }}/{{ ETCD_CA_CERT_NAME }}"
+    content: "{{ int_cert['content'] | b64decode }}"
+    dest: "{{ ETCD_PKI_DIR }}/{{ INT_CERT_NAME }}"
     mode: 0644
   notify: Enable and restart etcd service

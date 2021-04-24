@@ -8,7 +8,7 @@ contexts:
 current-context: kubernetes-admin@kubernetes
 clusters:
 - cluster:
-    certificate-authority-data: {{ int_crt['content'] }}
+    certificate-authority-data: {{ int_cert['content'] }}
     server: https://{{ ansible_host }}:6443
   name: kubernetes
 users:
