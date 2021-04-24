@@ -15,6 +15,12 @@
     - /etc/systemd/system/kubelet.service.d
     - /etc/systemd/system/kube-proxy.service.d
 
+- name: Slurp vault initialize result
+  slurp:
+    src: "{{ VAULT_PKI_DIR }}/{{ VAULT_INITIALIZE_RESULT }}"
+  register: vault_initialize_result
+  delegate_to: vault
+
 - name: Slurp intermediate certificate
   slurp:
     src: "{{ VAULT_PKI_DIR }}/{{ VAULT_CERT_NAME }}"
