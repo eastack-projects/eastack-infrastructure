@@ -9,7 +9,7 @@
 
 - name: Try donwload kubernetes node package
   include_tasks: download-k8s-node-package.yaml
-  when: not kubernetes_server_package_stat.stat.exists
+  when: not kubernetes_node_package_stat.stat.exists
 
 - name: Create directory
   file:
