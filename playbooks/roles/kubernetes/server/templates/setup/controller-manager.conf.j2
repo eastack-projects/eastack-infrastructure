@@ -15,5 +15,5 @@ preferences: {}
 users:
 - name: system:kube-controller-manager
   user:
-    client-certificate-data: {{ kube_controller_manager_kube_apiserver_client_key['content'] }}
+    client-certificate-data: {{ kube_controller_manager_kube_apiserver_client_cert['content'] }}
     client-key-data: {{ kube_controller_manager_kube_apiserver_client_key['content'] }}
