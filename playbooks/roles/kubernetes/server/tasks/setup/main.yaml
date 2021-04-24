@@ -30,7 +30,7 @@
     mode: 0644
   with_items:
     - { src: setup/kube-apiserver.service, dest: kube-apiserver.service }
-    - { src: setup/kube-controller-manager.service, dest: kube-controller-manager }
+    - { src: setup/kube-controller-manager.service, dest: kube-controller-manager.service }
     - { src: setup/kube-scheduler.service, dest: kube-scheduler.service }
   notify: Restart kubernetes server service
 
