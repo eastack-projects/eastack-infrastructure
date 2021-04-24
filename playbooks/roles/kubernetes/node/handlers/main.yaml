@@ -1,10 +1,9 @@
 ---
-- name: Restart kubernetes node service
+- name: Enable and restart kubelet and kube-proxy service
   systemd:
     name: "{{ item }}"
     state: restarted
     enabled: yes
-    daemon_reload: yes
   with_items:
-    - kubelet
     - kube-proxy
+    - kubelet

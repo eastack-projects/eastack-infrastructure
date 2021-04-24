@@ -1,0 +1,89 @@
+---
+- name: Extract kubernetes package
+  unarchive:
+    src: "{{ KUBERNETES_NODE_PACKAGE_NAME }}"
+    dest: "{{ KUBERNETES_EXTRACT_DIR }}"
+    creates: "{{ KUBERNETES_EXTRACT_DIR }}/node"
+    extra_opts: [ "--strip-components=1" ]
+
+- name: Install kubelet and kube-proxy
+  copy:
+    src: "{{ KUBERNETES_EXTRACT_DIR }}/node/bin/{{ item }}"
+    dest: "/usr/bin/{{ item }}"
+    remote_src: yes
+    mode: 0755
+  with_items:
+    - kubelet
+    - kube-proxy
+
+- name: Add kubernetes node basic service
+  copy:
+    src: "{{ item.src }}"
+    dest: "/lib/systemd/system/{{ item.dest }}"
+    mode: 0644
+  with_items:
+    - { src: setup/kubelet.service, dest: kubelet.service }
+    - { src: setup/kube-proxy.service, dest: kubelet.service }
+
+- name: Add kubernetes node custom service
+  template:
+    src: "{{ item.src }}"
+    dest: "/etc/systemd/system/{{ item.dest }}.service.d/10-{{ item.dest }}"
+    mode: 0644
+  with_items:
+    - { src: setup/kubelet.service.j2, dest: kubelet.conf }
+    - { src: setup/kube-proxy.service.j2, dest: kube-proxy.conf }
+
+- name: Copy kubelet config file
+  template:
+    src: "{{ item.src }}"
+    dest: "/var/lib/kubelet/{{ item.dest }}"
+    mode: 0644
+  with_items:
+    - { src: setup/kubelet-config.yaml.j2, dest: config.yaml }
+    - { src: setup/kubelet-flags.env.j2, dest: kubelet-flags.env }
+
+- name: Slurp intermediate certificate
+  slurp:
+    src: "{{ VAULT_PKI_DIR }}/{{ INT_CERT_NAME }}"
+  register: int_cert
+  delegate_to: vault
+
+- name: Copy intermediate certificate
+  copy:
+    content: "{{ int_cert['content'] | b64decode }}"
+    dest: "{{ K8S_NODE_PKI_DIR }}/INT_CERT_NAME"
+
+- name: Slurp kube-proxy kube-apiserver client certificate
+  slurp:
+    src: "{{ K8S_NODE_PKI_DIR }}/{{ KUBE_PROXY_KUBE_APISERVER_CLIENT_CERT_NAME }}"
+  register: kube_proxy_kube_apiserver_client_cert
+
+- name: Slurp kube-proxy kube-apiserver client key
+  slurp:
+    src: "{{ K8S_NODE_PKI_DIR }}/{{ KUBE_PROXY_KUBE_APISERVER_CLIENT_KEY_NAME }}"
+  register: kube_proxy_kube_apiserver_client_key
+
+- name: Copy kube-proxy config file
+  template:
+    src: "{{ item.src }}"
+    dest: "/var/lib/kube-proxy/{{ item.dest }}"
+    mode: 0644
+  with_items:
+    - { src: setup/kube-proxy-config.yaml.j2, dest: config.yaml }
+    - { src: setup/kubeconfig.conf.j2, dest: kubeconfig.conf }
+  notify: Enable and restart kubelet and kube-proxy service
+
+- name: Pull Pause docker image
+  docker_image:
+    name: "registry.aliyuncs.com/google_containers/pause:{{ PAUSE_VERSION }}"
+    repository: "k8s.gcr.io/pause:{{ PAUSE_VERSION }}"
+    source: pull
+
+- name: Pull nginx ingress docker image
+  docker_image:
+    name: "registry.cn-hangzhou.aliyuncs.com/google_containers/nginx-ingress-controller:{{ INGRESS_VERSION }}"
+    repository: "k8s.gcr.io/ingress-nginx/controller:{{ INGRESS_VERSION }}"
+    source: pull
+
+- include_tasks: cni.yaml

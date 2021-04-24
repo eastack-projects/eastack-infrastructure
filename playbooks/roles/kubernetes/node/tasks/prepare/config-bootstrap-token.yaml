@@ -6,24 +6,24 @@
 
 - name: Copy token.yaml
   template:
-    src: token.yaml.j2
+    src: prepare/token.yaml.j2
     dest: /root/token.yaml
     mode: 0644
-  delegate_to: kubernetes-server
+  delegate_to: k8s-server
 
 - name: Apply token to kubernetes
   shell:
     cmd: kubectl apply -f /root/token.yaml
   delegate_to: kubernetes-server
 
-- name: Slurp vault_int_ca.crt
+- name: Slurp intermediate certificate
   slurp:
-    src: "{{ VAULT_PKI_DIR }}/{{ INT_CERT_NAME }}"
+    src: "{{ VAULT_PKI_DIR }}/{{ VAULT_CERT_NAME }}"
   register: int_cert
   delegate_to: vault
 
 - name: Generate bootstrap-kubelet.conf
   template:
-    src: bootstrap-kubelet.conf.j2
+    src: prepare/bootstrap-kubelet.conf.j2
     dest: /etc/kubernetes/bootstrap-kubelet.conf
     mode: 0644

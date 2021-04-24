@@ -6,7 +6,7 @@ authentication:
     cacheTTL: 0s
     enabled: true
   x509:
-    clientCAFile: /opt/kubernetes/tls/ca.crt
+    clientCAFile: "{{ VAULT_PKI_DIR }}/{{ INT_CERT_NAME }}"
 authorization:
   mode: Webhook
   webhook:

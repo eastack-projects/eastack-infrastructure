@@ -1,11 +1,16 @@
 # kubernetes node
-KUBERNETES_NODE_DOWNLOAD_URL: "https://dl.k8s.io/{{ KUBERNETES_VERSION }}/kubernetes-node-linux-amd64.tar.gz"
-KUBERNETES_NODE_PACKAGE: "{{ RESOURCES_PATH }}/kubernetes/kubernetes-node-{{ KUBERNETES_VERSION }}-linux-amd64.tar.gz"
+KUBERNETES-NODE-DOWNLOAD-URL: "https://dl.k8s.io/{{ KUBERNETES-VERSION }}/kubernetes-node-linux-amd64.tar.gz"
+KUBERNETES_NODE_PACKAGE_NAME: "{{ RESOURCES-PATH }}/kubernetes/kubernetes-node-{{ KUBERNETES-VERSION }}-linux-amd64.tar.gz"
+
 # cni plugins
-CNI_VERSION: v0.9.1
-CNI_PLUGINS_DOWNLOAD_URL: "https://ghproxy.com/https://github.com/containernetworking/plugins/releases/download/{{ CNI_VERSION }}/cni-plugins-linux-amd64-{{ CNI_VERSION }}.tgz"
-CNI_PLUGINS_PACKAGE: "{{ RESOURCES_PATH }}/kubernetes/cni-plugins-{{ CNI_VERSION }}-linux-amd64.tar.gz"
+CNI-VERSION: v0.9.1
+CNI-PLUGINS-DOWNLOAD-URL: "https://ghproxy.com/https://github.com/containernetworking/plugins/releases/download/{{ CNI-VERSION }}/cni-plugins-linux-amd64-{{ CNI-VERSION }}.tgz"
+CNI-PLUGINS-PACKAGE: "{{ RESOURCES-PATH }}/kubernetes/cni-plugins-{{ CNI-VERSION }}-linux-amd64.tar.gz"
 # components
-CLUSTER_DNS: 10.96.0.10
-INGRESS_VERSION: v0.45.0
-PAUSE_VERSION: 3.3
+CLUSTER-DNS: 10.96.0.10
+INGRESS-VERSION: v0.45.0
+PAUSE-VERSION: 3.3
+
+K8S_NODE_PKI_DIR: /etc/kubernetes/pki
+KUBE_PROXY_KUBE_APISERVER_CLIENT_CERT_NAME: kube-proxy-kube-apiserver-client.crt
+KUBE_PROXY_KUBE_APISERVER_CLIENT_KEY_NAME: kube-proxy-kube-apiserver-client.key

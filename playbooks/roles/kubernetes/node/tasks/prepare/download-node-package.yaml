@@ -10,7 +10,7 @@
   local_action:
     module: get_url
     url: "{{ KUBERNETES_NODE_DOWNLOAD_URL }}"
-    dest:  "{{ KUBERNETES_NODE_PACKAGE }}"
+    dest:  "{{ KUBERNETES_NODE_PACKAGE_NAME }}"
 
 - name: Download CNI plugins binary package
   local_action:

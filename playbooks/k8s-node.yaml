@@ -1,25 +1,7 @@
-- name: Update DNS record
-  become: yes
-  hosts: bind
-  roles:
-    - bind/config
-
-- name: Config kubernetes server
-  become: yes
-  hosts: kubernetes-server
-  roles:
-    - kubernetes/server/config
-
 - name: Initialize kubernetes node
   become: yes
-  hosts: kubernetes-node
+  hosts: k8s-node
   roles:
-    - common/config/timezone
-    - common/config/update
-    - common/config/dns
-    - common/config/apt
-    - common/config/ca
-    - common/config/unseal
-    - docker/setup
-    - kubernetes/node/prepare
-    - kubernetes/node/setup
+    - common
+    - docker
+    - kubernetes/node
