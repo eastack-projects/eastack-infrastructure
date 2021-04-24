@@ -62,6 +62,7 @@ kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
 * [ ] 每个软件最好都有自己的用户组和用户
 * [ ] defaults vs vars
 * [ ] allow_any_name
+* [ ] 主动注册的形式更加灵活
 
 
 准备文件

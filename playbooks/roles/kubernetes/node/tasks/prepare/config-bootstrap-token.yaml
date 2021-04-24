@@ -16,12 +16,6 @@
     cmd: kubectl apply -f /root/token.yaml
   delegate_to: kubernetes-server
 
-- name: Slurp intermediate certificate
-  slurp:
-    src: "{{ VAULT_PKI_DIR }}/{{ VAULT_CERT_NAME }}"
-  register: int_cert
-  delegate_to: vault
-
 - name: Generate bootstrap-kubelet.conf
   template:
     src: prepare/bootstrap-kubelet.conf.j2

@@ -11,8 +11,15 @@
     - /var/lib/kubelet
     - /var/lib/kube-proxy
     - /etc/kubernetes/manifests
+    - /etc/kubernetes/pki
     - /etc/systemd/system/kubelet.service.d
     - /etc/systemd/system/kube-proxy.service.d
+
+- name: Slurp intermediate certificate
+  slurp:
+    src: "{{ VAULT_PKI_DIR }}/{{ VAULT_CERT_NAME }}"
+  register: int_cert
+  delegate_to: vault
 
 - include_tasks:
     file: download-node-package.yaml
