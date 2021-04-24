@@ -21,6 +21,10 @@
   register: vault_initialize_result
   delegate_to: vault
 
+- name: Base64 decode vault initialize result
+  set_fact:
+    vault_initialize_result: "{{ vault_initialize_result['content'] | b64decode }}"
+
 - name: Slurp intermediate certificate
   slurp:
     src: "{{ VAULT_PKI_DIR }}/{{ VAULT_CERT_NAME }}"
