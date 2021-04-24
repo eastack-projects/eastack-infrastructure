@@ -41,5 +41,5 @@
 - include_tasks: gen-kube-apiserver-kubelet-client-cert.yaml
 - include_tasks: gen-kube-controller-manager-kube-apiserver-client-cert.yaml
 - include_tasks: gen-kube-scheduler-kube-apiserver-client-cert.yaml
-- include_tasks: generate-service-account-cert.yaml
+- include_tasks: gen-service-account-cert.yaml
 - include_tasks: gen-admin-cert.yaml
