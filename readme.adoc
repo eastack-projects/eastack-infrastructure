@@ -60,6 +60,9 @@ kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
 * [ ] 多个Node使用同一token，会有冲突
 * [ ] 一个ROLE只做一件事
 * [ ] 每个软件最好都有自己的用户组和用户
+* [ ] defaults vs vars
+* [ ] allow_any_name
+
 
 准备文件
 

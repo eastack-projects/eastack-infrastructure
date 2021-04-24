@@ -1,7 +1,7 @@
 ---
 - name: Create vault certificate directory
   file:
-    path: "{{ VAULT_CERT_DIR }}"
+    path: "{{ VAULT_PKI_DIR }}"
     state: directory
     group: vault
     owner: vault
@@ -9,15 +9,15 @@
 
 - name: Generate an CA private
   openssl_privatekey:
-    path: "{{ VAULT_CERT_DIR }}/{{ VAULT_KEY_NAME }}"
+    path: "{{ VAULT_PKI_DIR }}/{{ VAULT_KEY_NAME }}"
     group: vault
     owner: vault
     mode: 0600
 
 - name: Generate an CA certificate signing request
   openssl_csr:
-    path: "{{ VAULT_CERT_DIR }}/{{ VAULT_CSR_NAME }}"
-    privatekey_path: "{{ VAULT_CERT_DIR }}/{{ VAULT_KEY_NAME }}"
+    path: "{{ VAULT_PKI_DIR }}/{{ VAULT_CSR_NAME }}"
+    privatekey_path: "{{ VAULT_PKI_DIR }}/{{ VAULT_KEY_NAME }}"
     common_name: "{{ VAULT_FQDN }}"
     basic_constraints: 'CA:TRUE'
     email_address: "admin@eastack.me"
@@ -30,9 +30,9 @@
 
 - name: Generate a self signed CA certificate
   openssl_certificate:
-    privatekey_path: "{{ VAULT_CERT_DIR }}/{{ VAULT_KEY_NAME }}"
-    csr_path: "{{ VAULT_CERT_DIR }}/{{ VAULT_CSR_NAME }}"
-    path: "{{ VAULT_CERT_DIR }}/{{ VAULT_CERT_NAME }}"
+    privatekey_path: "{{ VAULT_PKI_DIR }}/{{ VAULT_KEY_NAME }}"
+    csr_path: "{{ VAULT_PKI_DIR }}/{{ VAULT_CSR_NAME }}"
+    path: "{{ VAULT_PKI_DIR }}/{{ VAULT_CERT_NAME }}"
     provider: selfsigned
     group: vault
     owner: vault

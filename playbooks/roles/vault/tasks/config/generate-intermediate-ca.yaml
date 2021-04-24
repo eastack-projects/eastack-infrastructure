@@ -26,7 +26,7 @@
 - name: Persistent intermediate CA certificate result
   copy:
     content: "{{ int_ca_crt.json.data.certificate }}"
-    dest: "{{ VAULT_CERT_DIR }}/{{ INT_CERT_NAME }}"
+    dest: "{{ VAULT_PKI_DIR }}/{{ INT_CERT_NAME }}"
 
 - name: Set sign intermediate certificate
   uri:

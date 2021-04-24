@@ -1,10 +1,10 @@
 ---
-- name: Add controller-manager apiserver client role
+- name: Add kube-controller-manager kube-apiserver client role
   uri:
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int/roles/client.apiserver.controller-manager.kubernetes.ipool.me"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int/roles/kube-controller-manager.client.kube-apiserver.lan"
     body_format: json
     status_code: 204
     body:
@@ -14,26 +14,26 @@
       common_name: system:kube-controller-manager
       allow_any_name: true
 
-- name: Generate controller-manager apiserver client certificate
+- name: Generate kube-controller-manager kube-apiserver client certificate
   uri:
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int/issue/client.apiserver.controller-manager.kubernetes.ipool.me"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int/issue/kube-controller-manager.client.kube-apiserver.lan"
     body_format: json
     status_code: 200
     body:
       common_name: system:kube-controller-manager
   register: certificate
 
-- name: Persistent controller-manager apiserver client certificate
+- name: Persistent kube-controller-manager kube-apiserver client certificate
   copy:
     content: "{{ certificate.json.data.certificate }}"
-    dest: /opt/kubernetes/tls/controller-manager-apiserver-client.crt
+    dest: "{{ K8S_SERVER_PKI_DIR }}/{{ KUBE_CONTROLLER_MANAGER_KUBE_APISERVER_CLIENT_CERT_NAME }}"
     mode: 0644
 
-- name: Persistent controller-manager apiserver client key
+- name: Persistent kube-controller-manager kube-apiserver client key
   copy:
     content: "{{ certificate.json.data.private_key }}"
-    dest: /opt/kubernetes/tls/controller-manager-apiserver-client.key
+    dest: "{{ K8S_SERVER_PKI_DIR }}/{{ KUBE_CONTROLLER_MANAGER_KUBE_APISERVER_CLIENT_KEY_NAME }}"
     mode: 0644

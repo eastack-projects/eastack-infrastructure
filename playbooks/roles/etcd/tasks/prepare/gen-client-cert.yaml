@@ -20,8 +20,8 @@
     body_format: json
     status_code: 200
     body:
-      common_name: client.etcd
-      ip_sans: "{{ ansible_host }},127.0.0.1"
+      common_name: "{{ ETCD_DOMAIN }}"
+      ip_sans: "{{ ansible_host }},127.0.0.1,localhost"
   register: certificate
 
 - name: Persistent etcd client certificate

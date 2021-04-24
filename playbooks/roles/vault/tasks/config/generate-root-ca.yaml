@@ -15,7 +15,7 @@
 - name: Persistent the root CA certificate
   copy:
     content: "{{ root_certificate.json.data.certificate }}"
-    dest: "{{ VAULT_CERT_DIR }}/{{ ROOT_CERT_NAME }}"
+    dest: "{{ VAULT_PKI_DIR }}/{{ ROOT_CERT_NAME }}"
 
 - name: Config the CA and CRL URLs
   uri:

@@ -16,7 +16,7 @@
 # Initialize vault
 - name: Check vault initialize stat
   stat:
-    path: "{{ VAULT_CERT_DIR }}/{{ VAULT_INITIALIZE_RESULT }}"
+    path: "{{ VAULT_PKI_DIR }}/{{ VAULT_INITIALIZE_RESULT }}"
   register: vault_init
 
 - name: Try initialize vault

@@ -6,17 +6,39 @@
     module: stat
     path: "{{ KUBERNETES_SERVER_PACKAGE_NAME }}"
   register: kubernetes_server_package_stat
+
 - name: Try donwload kubernetes serverr package
-  include_tasks: download.yaml
+  include_tasks: download-k8s-server-package.yaml
   when: not kubernetes_server_package_stat.stat.exists
 
+# todo split
 - include_tasks: create-directory.yaml
-- include_tasks: apiserver.yaml
-- include_tasks: apiserver-etcd-client.yaml
-- include_tasks: apiserver-kubelet-client.yaml
-- include_tasks: controller-manager-apiserver-client.yaml
-- include_tasks: scheduler-apiserver-client.yaml
-- include_tasks: front-proxy-ca.yaml
-- include_tasks: front-proxy-client.yaml
-- include_tasks: sa.yaml
-- include_tasks: admin.yaml
+
+# Generate certificate
+- name: Waits vault service started
+  wait_for:
+    host: "{{ VAULT_FQDN }}"
+    port: "{{ VAULT_PORT }}"
+
+- name: Slurp vault initialize result
+  slurp:
+    src: "{{ VAULT_PKI_DIR }}/{{ VAULT_INITIALIZE_RESULT }}"
+  register: vault_initialize_result
+  delegate_to: vault
+
+- name: Base64 decode vault initialize result
+  set_fact:
+    vault_initialize_result: "{{ vault_initialize_result['content'] | b64decode }}"
+
+- include_tasks: generate-kube-apiserver-certificate.yaml
+- include_tasks: generate-kube-apiserver-etcd-client-certificate.yaml
+- include_tasks: generate-kube-apiserver-kubelet-client-certificate.yaml
+
+- include_tasks: generate-kube-controller-manager-kube-apiserver-client-certificate.yaml
+- include_tasks: generate-kube-scheduler-kube-apiserver-client-certificate.yaml
+
+- include_tasks: generate-admin-certificate.yaml
+
+#- include_tasks: front-proxy-ca.yaml
+#- include_tasks: front-proxy-client.yaml
+- include_tasks: generate-service-account-certificate.yaml

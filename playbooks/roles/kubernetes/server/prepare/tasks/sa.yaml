@@ -1,8 +1,0 @@
----
-- name: Generate sa RSA private key
-  shell:
-    cmd: openssl genrsa -out /opt/kubernetes/tls/sa.key 2048
-
-- name: Generate sa RSA public key
-  shell:
-    cmd: openssl rsa -in /opt/kubernetes/tls/sa.key -pubout -out /opt/kubernetes/tls/sa.pub

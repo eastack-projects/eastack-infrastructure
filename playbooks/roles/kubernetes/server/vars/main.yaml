@@ -5,3 +5,22 @@ KUBERNETES_SERVER_PACKAGE_NAME: "{{ RESOURCES_PATH }}/kubernetes/kubernetes-serv
 # flannel manifests
 FLANNEL_MANIFESTS_DOWNLOAD_URL: https://ghproxy.com/https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 FLANNEL_MANIFESTS_FILE: "{{ RESOURCES_PATH }}/kubernetes/kube-flannel.yml"
+# Certificate
+#K8S_SERVER_DOMAIN: "{% for host in groups['kubernetes-server'] %}{{ host }}.lan. {{ \",\" if not loop.last else \"\" }}{% endfor %}"
+K8S_SERVER_DOMAIN: "{{ ansible_hostname }}.lan"
+K8S_SERVER_PKI_DIR: /etc/kubernetes/pki
+K8S_ADMIN_CERT_NAME: admin.crt
+K8S_ADMIN_KEY_NAME: admin.key
+K8S_SERVICE_ACCOUNT_CERT_NAME: service-account.crt
+K8S_SERVICE_ACCOUNT_KEY_NAME: service-account.key
+KUBE_APISERVER_CERT_NAME: apiserver.crt
+KUBE_APISERVER_KEY_NAME: apiserver.key
+KUBE_APISERVER_ETCD_CLIENT_CERT_NAME: kube-apiserver-etcd-client.crt
+KUBE_APISERVER_ETCD_CLIENT_KEY_NAME: kube-apiserver-etcd-client.key
+KUBE_APISERVER_KUBELET_CLIENT_CERT_NAME: kube-apiserver-kubelet-client.crt
+KUBE_APISERVER_KUBELET_CLIENT_KEY_NAME: kube-apiserver-kubelet-client.key
+KUBE_CONTROLLER_MANAGER_KUBE_APISERVER_CLIENT_CERT_NAME: kube-controller-manager-kube-apiserver-client.crt
+KUBE_CONTROLLER_MANAGER_KUBE_APISERVER_CLIENT_KEY_NAME: kube-controller-manager-kube-apiserver-client.key
+KUBE_SCHEDULE_KUBE_APISERVER_CLIENT_CERT_NAME: kube-schedule-kube-apiserver-client.cert
+KUBE_SCHEDULE_KUBE_APISERVER_CLIENT_KEY_NAME: kube-schedule-kube-apiserver-client.key
+

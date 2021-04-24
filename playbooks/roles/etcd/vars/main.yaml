@@ -1,5 +1,6 @@
 ETCD_DOWNLOAD_URL: https://storage.googleapis.com/etcd/v3.4.15/etcd-v3.4.15-linux-amd64.tar.gz
 ETCD_PACKAGE_NAME:  "{{ RESOURCES_PATH }}/etcd/etcd-v3.4.15-linux-amd64.tar.gz"
+ETCD_DOMAIN: "{{ ansible_hostname }}.lan"
 ETCD_PKI_DIR: /etc/etcd/pki
 ETCD_EXTRACT_DIR: /opt/etcd
 ETCD_CONFIG_DIR: /etc/etcd

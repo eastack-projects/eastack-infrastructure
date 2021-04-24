@@ -18,7 +18,7 @@ FALLBACK_DNS: 114.114.114.114
 # VAULT
 VAULT_FQDN: vault.lan
 VAULT_PORT: 8200
-VAULT_CERT_DIR: /etc/vault/pki
+VAULT_PKI_DIR: /etc/vault/pki
 VAULT_CERT_NAME: tls.crt
 VAULT_KEY_NAME: tls.key
 VAULT_CSR_NAME: tls.csr

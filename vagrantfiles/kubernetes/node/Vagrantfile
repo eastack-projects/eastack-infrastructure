@@ -5,14 +5,14 @@ Vagrant.configure("2") do |config|
   host_vars = {}
 
   (1..2).each do |i|
-    config.vm.define "kubernetes-node#{i}" do |kubernetes|
+    config.vm.define "k8s-node#{i}" do |kubernetes|
       host_ip = "192.168.33.7#{i}"
-      host_vars.store("kubernetes-node#{i}", {"ansible_host" => host_ip, "ansible_port" => 22})
+      host_vars.store("k8s-node#{i}", {"ansible_host" => host_ip, "ansible_port" => 22})
 
       kubernetes.vm.box = "ubuntu/focal64"
       kubernetes.vm.box_check_update = false
       kubernetes.vm.network "private_network", ip: host_ip
-      kubernetes.vm.hostname = "kubernetes-node#{i}"
+      kubernetes.vm.hostname = "k8s-node#{i}"
       kubernetes.vm.synced_folder "../../.vagrant/", "/var/cache/apt/", owner: "root", group: "root"
       kubernetes.vm.provider "virtualbox" do |vb|
         vb.memory = "2048"
@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
 
       kubernetes.vm.provision :ansible do |ansible|
         ansible.playbook = "playbook.yaml"
-        ansible.groups = { "kubernetes-node" => host_vars.keys }
+        ansible.groups = { "k8s-node" => host_vars.keys }
         ansible.host_vars = host_vars
       end
     end

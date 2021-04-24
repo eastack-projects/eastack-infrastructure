@@ -18,7 +18,7 @@
 - name: Persistent initialize result
   copy:
     content: "{{ initialize_result.json }}"
-    dest: "{{ VAULT_CERT_DIR }}/{{ VAULT_INITIALIZE_RESULT }}"
+    dest: "{{ VAULT_PKI_DIR }}/{{ VAULT_INITIALIZE_RESULT }}"
 
 # Set VAULT_ADDR
 - name: Set VAULT_ADDR

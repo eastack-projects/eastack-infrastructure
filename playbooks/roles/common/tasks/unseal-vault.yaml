@@ -6,7 +6,7 @@
 
 - name: Include vault keys
   slurp:
-    src: "{{ VAULT_CERT_DIR }}/{{ VAULT_INITIALIZE_RESULT }}"
+    src: "{{ VAULT_PKI_DIR }}/{{ VAULT_INITIALIZE_RESULT }}"
   register: vault_initialize_result
   delegate_to: vault
 
