@@ -5,6 +5,7 @@
     name:
       - docker-compose
       - socat
+      - conntrack
 
 - name: Create docker cert directory
   file:
