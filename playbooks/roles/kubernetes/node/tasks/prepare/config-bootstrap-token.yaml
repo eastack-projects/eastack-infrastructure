@@ -7,13 +7,13 @@
 - name: Copy token.yaml
   template:
     src: prepare/token.yaml.j2
-    dest: /root/token.yaml
+    dest: "/root/{{ ansible_hostname }}-token.yaml"
     mode: 0644
   delegate_to: k8s-server
 
 - name: Apply token to kubernetes
   shell:
-    cmd: kubectl apply -f /root/token.yaml
+    cmd: "kubectl apply -f /root/{{ ansible_hostname }}-token.yaml"
   delegate_to: k8s-server
 
 - name: Generate bootstrap-kubelet.conf

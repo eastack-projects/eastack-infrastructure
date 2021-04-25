@@ -1,0 +1,12 @@
+---
+- name: Pull Pause docker image
+  docker_image:
+    name: "registry.aliyuncs.com/google_containers/pause:{{ PAUSE_VERSION }}"
+    repository: "k8s.gcr.io/pause:{{ PAUSE_VERSION }}"
+    source: pull
+
+- name: Pull nginx ingress docker image
+  docker_image:
+    name: "registry.cn-hangzhou.aliyuncs.com/google_containers/nginx-ingress-controller:{{ INGRESS_VERSION }}"
+    repository: "k8s.gcr.io/ingress-nginx/controller:{{ INGRESS_VERSION }}"
+    source: pull

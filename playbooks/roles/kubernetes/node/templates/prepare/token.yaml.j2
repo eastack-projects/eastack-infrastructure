@@ -1,15 +1,15 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: bootstrap-token-{{ token_id }}
+  name: bootstrap-token-{{ hostvars[ansible_hostname].token_id }}
   namespace: kube-system
 
 type: bootstrap.kubernetes.io/token
 stringData:
   description: "The default bootstrap token."
 
-  token-id: {{ token_id }}
-  token-secret: {{ token_secret }}
+  token-id: {{ hostvars[ansible_hostname].token_id }}
+  token-secret: {{ hostvars[ansible_hostname].token_secret }}
 
   expiration: 2027-03-10T03:22:11Z
 

@@ -1,12 +1,5 @@
 .vagrant
 .idea
 
-vagrantfiles/.cache/**
-!vagrantfiles/.cache/.gitkeep
-
-vault-init-result.json
-bootstrap-kubelet.yaml
-
 resources/*
 !resources/.gitkeep
-vagrantfiles/bind/.apt/

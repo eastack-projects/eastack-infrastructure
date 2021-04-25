@@ -9,3 +9,13 @@
     - kube-controller-manager
     - kube-scheduler
     - kube-apiserver
+
+- name: Initializing cluster role binding
+  shell:
+    cmd: "kubectl apply -f {{ item }}"
+    chdir: "/root/"
+  with_items:
+    - config/auto-approve-csrs-for-group.yaml
+    - config/auto-approve-renewals-for-nodes.yaml
+    - config/create-csrs-for-bootstrapping.yaml
+    - config/kube-flannel.yaml

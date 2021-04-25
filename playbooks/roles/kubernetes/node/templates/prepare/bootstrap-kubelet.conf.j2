@@ -15,4 +15,4 @@ preferences: {}
 users:
 - name: kubelet-bootstrap
   user:
-    token: {{ token_id }}.{{ token_secret }}
+    token: {{ hostvars[ansible_hostname].token_id }}.{{ hostvars[ansible_hostname].token_secret }}

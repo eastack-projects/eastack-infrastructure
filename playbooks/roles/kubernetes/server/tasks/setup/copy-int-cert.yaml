@@ -6,6 +6,6 @@
 
 - name: Copy intermediate key
   copy:
-    content: "{{ int_cert['content'] | b64decode }}"
+    content: "{{ int_key['content'] | b64decode }}"
     dest: "{{ K8S_SERVER_PKI_DIR }}/{{ INT_KEY_NAME }}"
   notify: Restart kubernetes server service
