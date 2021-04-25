@@ -29,4 +29,4 @@ INT_KEY_NAME: int-ca.key
 
 # GITLAB
 GITLAB_FQDN: gitlab.lan
-EXTERNAL_URL: https://gitlab.ipool.me
+EXTERNAL_URL: https://gitlab.lan

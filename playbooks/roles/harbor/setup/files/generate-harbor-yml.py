@@ -3,7 +3,7 @@
 from yaml import load, dump
 from yaml import CLoader as Loader, CDumper as Dumper
 
-FQDN = 'harbor.ipool.me'
+FQDN = 'harbor.lan'
 
 with open('harbor.yaml.tmpl', 'r') as file:
     content = load(file, Loader=Loader)

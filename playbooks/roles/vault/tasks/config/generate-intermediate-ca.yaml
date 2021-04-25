@@ -9,7 +9,7 @@
     body_format: json
     status_code: 200
     body:
-      common_name: int.vault.lan
+      common_name: "int.{{ VAULT_FQDN }}"
   register: int_ca_csr
 
 - name: Sign intermediate CA

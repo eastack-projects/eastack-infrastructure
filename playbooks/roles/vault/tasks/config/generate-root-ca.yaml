@@ -9,7 +9,7 @@
     body_format: json
     status_code: 200
     body:
-      common_name: ipool.me
+      common_name: "root.{{ VAULT_FQDN }}"
   register: root_certificate
 
 - name: Persistent the root CA certificate
