@@ -39,9 +39,15 @@
     src: daemon.json
     dest: /etc/docker/daemon.json
     mode: 0644
-  notify: Restart docker service
 
 - name: Add vagrant user to docker group
   user:
     name: vagrant
     group: docker
+
+- name: Restart docker service
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+    daemon_reload: true

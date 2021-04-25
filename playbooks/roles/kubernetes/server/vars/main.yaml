@@ -20,6 +20,6 @@ KUBE_APISERVER_KUBELET_CLIENT_CERT_NAME: kube-apiserver-kubelet-client.crt
 KUBE_APISERVER_KUBELET_CLIENT_KEY_NAME: kube-apiserver-kubelet-client.key
 KUBE_CONTROLLER_MANAGER_KUBE_APISERVER_CLIENT_CERT_NAME: kube-controller-manager-kube-apiserver-client.crt
 KUBE_CONTROLLER_MANAGER_KUBE_APISERVER_CLIENT_KEY_NAME: kube-controller-manager-kube-apiserver-client.key
-KUBE_SCHEDULE_KUBE_APISERVER_CLIENT_CERT_NAME: kube-schedule-kube-apiserver-client.cert
+KUBE_SCHEDULE_KUBE_APISERVER_CLIENT_CERT_NAME: kube-schedule-kube-apiserver-client.crt
 KUBE_SCHEDULE_KUBE_APISERVER_CLIENT_KEY_NAME: kube-schedule-kube-apiserver-client.key
 
