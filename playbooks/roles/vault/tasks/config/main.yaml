@@ -27,11 +27,6 @@
   include_tasks: ../../../common/tasks/unseal-vault.yaml
 
 - name: Try mount pki root cecret engine
-  include_tasks: mount-pki-root-secret-engine.yaml
+  include_tasks: mount-root-pki-secret-engine.yaml
 - name: Try generate root CA certificate
   include_tasks: generate-root-ca.yaml
-
-- name: Try mount pki intermediate cecret engine
-  include_tasks: mount-pki-int-secret-engine.yaml
-- name: Try generate intermediate CA certificate
-  include_tasks: generate-intermediate-ca.yaml

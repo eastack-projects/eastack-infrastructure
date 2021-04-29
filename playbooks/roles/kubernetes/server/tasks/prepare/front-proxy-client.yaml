@@ -1,0 +1,38 @@
+---
+- name: Add kubernetes front proxy client role
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int_ipool_kubernetes_front_proxy/roles/client.front.proxy.kubernetes.ipool.me"
+    body_format: json
+    status_code: 204
+    body:
+      key_usage: ["DigitalSignature", "KeyEncipherment"]
+      ext_key_usage: ["ClientAuth"]
+      allowed_domains: front-proxy-client
+      allow_any_name: true
+
+- name: Generate kubernetes front proxy client certificate
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int_ipool_kubernetes_front_proxy/issue/client.front.proxy.kubernetes.ipool.me"
+    body_format: json
+    status_code: 200
+    body:
+      common_name: front-proxy-client
+  register: certificate
+
+- name: Persistent front proxy client certificate
+  copy:
+    content: "{{ certificate.json.data.certificate }}"
+    dest: /opt/kubernetes/tls/front-proxy-client.crt
+    mode: 0644
+
+- name: Persistent front proxy client key
+  copy:
+    content: "{{ certificate.json.data.private_key }}"
+    dest: /opt/kubernetes/tls/front-proxy-client.key
+    mode: 0644

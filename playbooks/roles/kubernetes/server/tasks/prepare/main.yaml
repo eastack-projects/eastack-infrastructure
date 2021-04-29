@@ -20,15 +20,8 @@
     host: "{{ VAULT_FQDN }}"
     port: "{{ VAULT_PORT }}"
 
-- name: Slurp vault initialize result
-  slurp:
-    src: "{{ VAULT_PKI_DIR }}/{{ VAULT_INITIALIZE_RESULT }}"
-  register: vault_initialize_result
-  delegate_to: vault
-
-- name: Base64 decode vault initialize result
-  set_fact:
-    vault_initialize_result: "{{ vault_initialize_result['content'] | b64decode }}"
+- name: Slurp vault token
+  include_tasks: ../../../common/tasks/slurp-vault-token.yaml
 
 - name: Create kubernetes PKI directory
   file:
@@ -36,6 +29,8 @@
     state: directory
     mode: 0644
 
+- include_tasks: mount-kubernetes-pki-secret-engine.yaml
+- include_tasks: generate-kubernetes-ca.yaml
 - include_tasks: gen-kube-apiserver-cert.yaml
 - include_tasks: gen-kube-apiserver-etcd-client-cert.yaml
 - include_tasks: gen-kube-apiserver-kubelet-client-cert.yaml

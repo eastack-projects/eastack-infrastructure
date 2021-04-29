@@ -4,7 +4,7 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int/roles/kube-controller-manager.client.kube-apiserver.lan"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/kubernetes/roles/kube-controller-manager.client.kube-apiserver.lan"
     body_format: json
     status_code: 204
     body:
@@ -19,7 +19,7 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int/issue/kube-controller-manager.client.kube-apiserver.lan"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/kubernetes/issue/kube-controller-manager.client.kube-apiserver.lan"
     body_format: json
     status_code: 200
     body:

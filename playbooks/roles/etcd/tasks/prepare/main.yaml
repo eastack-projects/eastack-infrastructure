@@ -17,15 +17,8 @@
     host: "{{ VAULT_FQDN }}"
     port: "{{ VAULT_PORT }}"
 
-- name: Slurp vault initialize result
-  slurp:
-    src: "{{ VAULT_PKI_DIR }}/{{ VAULT_INITIALIZE_RESULT }}"
-  register: vault_initialize_result
-  delegate_to: vault
-
-- name: Base64 decode vault initialize result
-  set_fact:
-    vault_initialize_result: "{{ vault_initialize_result['content'] | b64decode }}"
+- name: Slurp vault token
+  include_tasks: ../../../common/tasks/slurp-vault-token.yaml
 
 - name: Create etcd cert directory
   file:
