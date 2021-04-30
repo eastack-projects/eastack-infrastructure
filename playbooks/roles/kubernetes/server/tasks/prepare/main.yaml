@@ -16,7 +16,7 @@
 
 - name: Create kubernetes PKI directory
   file:
-    path: "{{ SERVER_PKI_DIR }}"
+    path: "{{ KUBERNETES_PKI_DIR }}"
     state: directory
     mode: 0644
 

@@ -1,6 +1,5 @@
 ---
 # common land
-NAME: radix10
 PKI_TTL: 8760h
 MAX_PKI_TTL: 17520h
 RESOURCES_PATH: ../resources
@@ -9,9 +8,10 @@ RESOURCES_PATH: ../resources
 KUBERNETES_VERSION: v1.20.4
 KUBERNETES_EXTRACT_DIR: /opt/kubernetes
 SERVER_PORT: 8443
-SERVER_CONFIG_DIR: /etc/kubernetes
-SERVER_PKI_DIR: "{{ SERVER_CONFIG_DIR }}/pki"
-SERVER_CA_CERT_NAME: ca.crt
+KUBERNETES_CONFIG_DIR: /etc/kubernetes
+KUBERNETES_PKI_DIR: "{{ KUBERNETES_CONFIG_DIR }}/pki"
+KUBERNETES_CA_CERT_NAME: ca.crt
+KUBERNETES_CA_KEY_NAME: ca.key
 
 # ETCD
 ETCD_CONFIG_DIR: /etc/etcd
@@ -33,8 +33,6 @@ VAULT_CERT_NAME: tls.crt
 VAULT_KEY_NAME: tls.key
 VAULT_CSR_NAME: tls.csr
 VAULT_INITIALIZE_RESULT: initialize_result.json
-INT_CERT_NAME: int-ca.crt
-INT_KEY_NAME: int-ca.key
 
 # GITLAB
 GITLAB_FQDN: gitlab.lan

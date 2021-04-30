@@ -37,7 +37,7 @@
 - name: Add kubernetes service config
   template:
     src: "{{ item.src }}"
-    dest: "{{ SERVER_CONFIG_DIR }}/{{ item.dest }}"
+    dest: "{{ KUBERNETES_CONFIG_DIR }}/{{ item.dest }}"
     mode: 0644
   with_items:
     - { src: setup/apiserver.env.j2, dest: apiserver.env }
@@ -48,7 +48,7 @@
 - name: Add kubeconf config file
   template:
     src: "{{ item.src }}"
-    dest: "{{ SERVER_CONFIG_DIR }}/{{ item.dest }}"
+    dest: "{{ KUBERNETES_CONFIG_DIR }}/{{ item.dest }}"
     mode: 0644
   notify: Restart kubernetes server service
   with_items:

@@ -8,11 +8,11 @@ contexts:
 current-context: kubernetes-admin@kubernetes
 clusters:
 - cluster:
-    certificate-authority: {{ SERVER_PKI_DIR }}/{{ SERVER_CA_CERT_NAME }}
+    certificate-authority: {{ KUBERNETES_PKI_DIR }}/{{ KUBERNETES_CA_CERT_NAME }}
     server: https://{{ ansible_host }}:{{ SERVER_PORT }}
   name: kubernetes
 users:
 - name: kubernetes-admin
   user:
-    client-certificate: {{ SERVER_PKI_DIR }}/{{ ADMIN_CERT_NAME }}
-    client-key: {{ SERVER_PKI_DIR }}/{{ ADMIN_KEY_NAME }}
+    client-certificate: {{ KUBERNETES_PKI_DIR }}/{{ ADMIN_CERT_NAME }}
+    client-key: {{ KUBERNETES_PKI_DIR }}/{{ ADMIN_KEY_NAME }}

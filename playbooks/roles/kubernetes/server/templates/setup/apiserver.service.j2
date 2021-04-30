@@ -5,7 +5,7 @@ Wants=network-online.target
 After=network-online.target
 
 [Service]
-EnvironmentFile={{ SERVER_CONFIG_DIR }}/apiserver.env
+EnvironmentFile={{ KUBERNETES_CONFIG_DIR }}/apiserver.env
 ExecStart=/usr/bin/kube-apiserver $KUBE_API_ARGS
 Restart=on-failure
 LimitNOFILE=65536

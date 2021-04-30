@@ -9,9 +9,9 @@ FLANNEL_MANIFESTS_FILE: "{{ RESOURCES_PATH }}/kubernetes/kube-flannel.yml"
 
 # Certificate
 # certificate directory
-SERVER_ETCD_PKI_DIR: "{{ SERVER_PKI_DIR }}/etcd"
+SERVER_ETCD_PKI_DIR: "{{ KUBERNETES_PKI_DIR }}/etcd"
 # certificate authority
-SERVER_CA_KEY_NAME: ca.key
+
 SERVER_ETCD_CA_CERT_NAME: etcd-ca.crt
 SERVER_ETCD_CA_KEY_NAME: etcd-ca.key
 FRONT_PROXY_CA_CERT_NAME: front-proxy-ca.crt

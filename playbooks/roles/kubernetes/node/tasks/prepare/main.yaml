@@ -4,12 +4,12 @@
   become: no
   local_action:
     module: stat
-    path: "{{ KUBERNETES_NODE_PACKAGE_NAME }}"
-  register: kubernetes_node_package_stat
+    path: "{{ NODE_PACKAGE_NAME }}"
+  register: node_package_stat
 
 - name: Try donwload kubernetes node package
-  include_tasks: download-k8s-node-package.yaml
-  when: not kubernetes_node_package_stat.stat.exists
+  include_tasks: download-node-package.yaml
+  when: not node_package_stat.stat.exists
 
 - name: Create directory
   file:
@@ -26,12 +26,6 @@
     - /etc/kubernetes/pki
     - /etc/systemd/system/kubelet.service.d
     - /etc/systemd/system/kube-proxy.service.d
-
-- name: Slurp intermediate certificate
-  slurp:
-    src: "{{ SERVER_PKI_DIR }}/{{ SERVER_CA_CERT_NAME }}"
-  register: int_cert
-  delegate_to: k8s-server
 
 - include_tasks: config-kernel.yaml
 - include_tasks: gen-kube-proxy-cert.yaml

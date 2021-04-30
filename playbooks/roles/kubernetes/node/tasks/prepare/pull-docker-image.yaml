@@ -1,5 +1,5 @@
 ---
-- name: Pull Pause docker image
+- name: Pull pause docker image
   docker_image:
     name: "registry.aliyuncs.com/google_containers/pause:{{ PAUSE_VERSION }}"
     repository: "k8s.gcr.io/pause:{{ PAUSE_VERSION }}"

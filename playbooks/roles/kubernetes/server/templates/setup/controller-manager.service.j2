@@ -5,7 +5,7 @@ After=kube-apiserver.service
 Requires=kube-apiserver.service
 
 [Service]
-EnvironmentFile={{ SERVER_CONFIG_DIR }}/controller-manager.env
+EnvironmentFile={{ KUBERNETES_CONFIG_DIR }}/controller-manager.env
 ExecStart=/usr/bin/kube-controller-manager $KUBE_CONTROLLER_MANAGER_ARGS
 Restart=on-failure
 LimitNOFILE=65535

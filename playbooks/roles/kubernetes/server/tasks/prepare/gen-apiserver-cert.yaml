@@ -30,11 +30,11 @@
 - name: Persistent kube-apiserver certificate
   copy:
     content: "{{ certificate.json.data.certificate }}"
-    dest: "{{ SERVER_PKI_DIR }}/{{ APISERVER_CERT_NAME }}"
+    dest: "{{ KUBERNETES_PKI_DIR }}/{{ APISERVER_CERT_NAME }}"
     mode: 0644
 
 - name: Persistent kube-apiserver key
   copy:
     content: "{{ certificate.json.data.private_key }}"
-    dest: "{{ SERVER_PKI_DIR }}/{{ APISERVER_KEY_NAME }}"
+    dest: "{{ KUBERNETES_PKI_DIR }}/{{ APISERVER_KEY_NAME }}"
     mode: 0644

@@ -5,7 +5,7 @@ After=kube-apiserver.service
 Requires=kube-apiserver.service
 
 [Service]
-EnvironmentFile={{ SERVER_CONFIG_DIR }}/scheduler.env
+EnvironmentFile={{ KUBERNETES_CONFIG_DIR }}/scheduler.env
 ExecStart=/usr/bin/kube-scheduler $KUBE_SCHEDULER_ARGS
 Restart=on-failure
 LimitNOFILE=65535

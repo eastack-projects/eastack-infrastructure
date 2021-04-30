@@ -37,9 +37,9 @@
 - name: Persistent front proxy CA certificate
   copy:
     content: "{{ front_proxy_ca_crt.json.data.certificate }}"
-    dest: "{{ SERVER_PKI_DIR }}/{{ FRONT_PROXY_CA_CERT_NAME }}"
+    dest: "{{ KUBERNETES_PKI_DIR }}/{{ FRONT_PROXY_CA_CERT_NAME }}"
 
 - name: Persistent front proxy CA key
   copy:
     content: "{{ front_proxy_ca_csr.json.data.private_key }}"
-    dest: "{{ SERVER_PKI_DIR }}/{{ FRONT_PROXY_CA_KEY_NAME }}"
+    dest: "{{ KUBERNETES_PKI_DIR }}/{{ FRONT_PROXY_CA_KEY_NAME }}"

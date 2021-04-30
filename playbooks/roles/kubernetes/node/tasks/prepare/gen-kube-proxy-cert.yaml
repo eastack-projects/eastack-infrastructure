@@ -1,10 +1,10 @@
 ---
-- name: Add kube-proxy kube-apiserver client role
+- name: Add proxy apiserver client role
   uri:
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/kubernetes/roles/system-kube-proxy"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/kubernetes/roles/system-kube-proxy"
     body_format: json
     status_code: 204
     body:
@@ -13,28 +13,30 @@
       enforce_hostnames: false
       common_name: system:kube-proxy
       allow_any_name: true
+    run_once: yes
 
-- name: Generate kube-proxy kube-apiserver client certificate
+- name: Generate proxy apiserver client certificate
   uri:
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/kubernetes/issue/system-kube-proxy"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/kubernetes/issue/system-kube-proxy"
     body_format: json
     status_code: 200
     body:
       common_name: system:kube-proxy
   register: certificate
+  run_once: yes
 
-- name: Persistent kube-proxy kube-apiserver client certificate
+- name: Persistent proxy apiserver client certificate
   copy:
     content: "{{ certificate.json.data.certificate }}"
-    dest: "{{ K8S_NODE_PKI_DIR }}/{{ KUBE_PROXY_KUBE_APISERVER_CLIENT_CERT_NAME }}"
+    dest: "{{ KUBERNETES_PKI_DIR }}/{{ PROXY_APISERVER_CLIENT_CERT_NAME }}"
     mode: 0644
 
-- name: Persistent kube-proxy kube-apiserver client key
+- name: Persistent proxy apiserver client key
   copy:
     content: "{{ certificate.json.data.private_key }}"
-    dest: "{{ K8S_NODE_PKI_DIR }}/{{ KUBE_PROXY_KUBE_APISERVER_CLIENT_KEY_NAME }}"
+    dest: "{{ KUBERNETES_PKI_DIR }}/{{ PROXY_APISERVER_CLIENT_KEY_NAME }}"
     mode: 0644
 

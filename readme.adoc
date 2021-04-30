@@ -64,3 +64,4 @@ kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
 * [ ] defaults vs vars
 * [ ] allow_any_name
 * [ ] 主动注册的形式更加灵活
+* [ ] 本机咱就别slurp了好不。嗯，好。
