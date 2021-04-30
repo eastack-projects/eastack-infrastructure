@@ -13,6 +13,12 @@
     enabled: yes
     state: started
 
+- name: Config hosts
+  lineinfile:
+    dest: /etc/hosts
+    line: "{{ ansible_host }} {{ VAULT_FQDN }} {{ VAULT_FQDN }}"
+    state: present
+
 # Initialize vault
 - name: Check vault initialize stat
   stat:
@@ -28,5 +34,6 @@
 
 - name: Try mount pki root cecret engine
   include_tasks: mount-root-pki-secret-engine.yaml
+
 - name: Try generate root CA certificate
   include_tasks: generate-root-ca.yaml

@@ -25,6 +25,7 @@ kubernetes-node:: 192.168.33.7[0-9]
 .test etcd cluster
 [source, bash]
 ----
+cd /etc/etcd/pki/
 etcdctl --cacert=ca.crt --cert=client.crt --key=client.key put hello world
 ----
 
@@ -63,12 +64,3 @@ kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
 * [ ] defaults vs vars
 * [ ] allow_any_name
 * [ ] 主动注册的形式更加灵活
-
-
-准备文件
-
-二进制安装
-
-生成证书
-
-修改配置

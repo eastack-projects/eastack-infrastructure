@@ -1,4 +1,9 @@
 ---
+- name: Waits vault service started
+  wait_for:
+    host: "{{ VAULT_FQDN }}"
+    port: "{{ VAULT_PORT }}"
+
 - name: Slurp vault initialize result
   slurp:
     src: "{{ VAULT_PKI_DIR }}/{{ VAULT_INITIALIZE_RESULT }}"

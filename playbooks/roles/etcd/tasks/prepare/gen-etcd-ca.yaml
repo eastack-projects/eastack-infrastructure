@@ -1,0 +1,48 @@
+---
+# Generate etcd CA
+- name: Generate etcd CA csr
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/etcd/intermediate/generate/exported"
+    body_format: json
+    status_code: 200
+    body:
+      common_name: "etcd-ca"
+  register: etcd_ca_csr
+  run_once: yes
+
+- name: Sign etcd CA
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/root/root/sign-intermediate"
+    body_format: json
+    body:
+      csr: "{{ etcd_ca_csr.json.data.csr }}"
+  register: etcd_ca_crt
+  run_once: yes
+
+- name: Set sign etcd certificate
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/etcd/intermediate/set-signed"
+    body_format: json
+    status_code: 204
+    body:
+      certificate: "{{ etcd_ca_crt.json.data.certificate }}"
+  run_once: yes
+
+- name: Persistent etcd CA certificate
+  copy:
+    content: "{{ etcd_ca_crt.json.data.certificate }}"
+    dest: "{{ ETCD_PKI_DIR }}/{{ ETCD_CA_CERT_NAME }}"
+
+- name: Persistent etcd CA key
+  copy:
+    content: "{{ etcd_ca_csr.json.data.private_key }}"
+    dest: "{{ ETCD_PKI_DIR }}/{{ ETCD_CA_KEY_NAME }}"

@@ -3,3 +3,4 @@
 - include_tasks: config-certificate.yaml
 - include_tasks: config-dns.yaml
 - include_tasks: config-timezone.yaml
+- include_tasks: unseal-vault.yaml

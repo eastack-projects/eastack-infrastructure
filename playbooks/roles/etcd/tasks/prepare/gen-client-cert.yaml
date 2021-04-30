@@ -4,7 +4,7 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/kubernetes/roles/client.etcd"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/etcd/roles/client.etcd"
     body_format: json
     status_code: 204
     body:
@@ -17,7 +17,7 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/kubernetes/issue/client.etcd"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/etcd/issue/client.etcd"
     body_format: json
     status_code: 200
     body:

@@ -7,6 +7,3 @@
     - /opt/kubernetes/tls
     - /opt/etcd/tls
     - /etc/kubernetes
-    - /etc/systemd/system/kube-apiserver.service.d
-    - /etc/systemd/system/kube-controller-manager.service.d
-    - /etc/systemd/system/kube-scheduler.service.d

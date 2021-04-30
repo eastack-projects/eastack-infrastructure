@@ -1,4 +1,14 @@
+[Unit]
+Description=Kubernetes Scheduler
+Documentation=https://github.com/GoogleCloudPlatfor/kubernetes
+After=kube-apiserver.service
+Requires=kube-apiserver.service
+
 [Service]
-Environment="KUBE_SCHEDULER_ARGS=--authentication-kubeconfig=/etc/kubernetes/scheduler.conf --authorization-kubeconfig=/etc/kubernetes/scheduler.conf --bind-address={{ ansible_host }} --kubeconfig=/etc/kubernetes/scheduler.conf --leader-elect=true --port=0"
-ExecStart=
+EnvironmentFile={{ SERVER_CONFIG_DIR }}/scheduler.env
 ExecStart=/usr/bin/kube-scheduler $KUBE_SCHEDULER_ARGS
+Restart=on-failure
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target

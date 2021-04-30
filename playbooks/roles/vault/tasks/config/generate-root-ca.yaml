@@ -5,7 +5,7 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/root/generate/internal"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/root/root/generate/internal"
     body_format: json
     status_code: 200
     body:
@@ -22,7 +22,7 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/config/urls"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/root/config/urls"
     body_format: json
     status_code: 204
     body:

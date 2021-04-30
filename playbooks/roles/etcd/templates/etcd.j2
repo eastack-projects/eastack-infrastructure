@@ -7,7 +7,7 @@ ETCD_ARGS="--name {{ ansible_hostname }} \
   --initial-cluster {% for host in groups['etcd'] %}{{ host }}=https://{{ hostvars[host].ansible_host }}:2380{{ "," if not loop.last else "" }}{% endfor %} \
   --initial-cluster-state new \
   --client-cert-auth \
-  --trusted-ca-file={{ ETCD_PKI_DIR }}/{{ INT_CERT_NAME }} \
+  --trusted-ca-file={{ ETCD_PKI_DIR }}/{{ ETCD_CA_CERT_NAME }} \
   --cert-file={{ ETCD_PKI_DIR }}/{{ ETCD_CLIENT_CERT_NAME }} --key-file={{ ETCD_PKI_DIR }}/{{ ETCD_CLIENT_KEY_NAME }} \
-  --peer-client-cert-auth --peer-trusted-ca-file={{ ETCD_PKI_DIR }}/{{ INT_CERT_NAME }} \
+  --peer-client-cert-auth --peer-trusted-ca-file={{ ETCD_PKI_DIR }}/{{ ETCD_CA_CERT_NAME }} \
   --peer-cert-file={{ ETCD_PKI_DIR }}/{{ ETCD_PEER_CERT_NAME }} --peer-key-file={{ ETCD_PKI_DIR }}/{{ ETCD_PEER_KEY_NAME }}"

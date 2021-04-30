@@ -8,19 +8,6 @@
 - name: Generate etcd environment file
   template:
     src: etcd.j2
-    dest: "{{ ETCD_CONFIG_DIR }}/etcd"
-    mode: 0644
-  notify: Enable and restart etcd service
-
-- name: Slurp etcd CA certificate
-  slurp:
-    src: "{{ VAULT_PKI_DIR }}/{{ INT_CERT_NAME }}"
-  register: int_cert
-  delegate_to: vault
-
-- name: Persistent etcd CA certificate
-  copy:
-    content: "{{ int_cert['content'] | b64decode }}"
-    dest: "{{ ETCD_PKI_DIR }}/{{ INT_CERT_NAME }}"
+    dest: "{{ ETCD_CONFIG_DIR }}/etcd.env"
     mode: 0644
   notify: Enable and restart etcd service

@@ -4,7 +4,7 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/kubernetes/roles/admin.client.kube-apiserver.lan"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/kubernetes/roles/kubernetes-admin"
     body_format: json
     status_code: 204
     body:
@@ -19,7 +19,7 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/kubernetes/issue/admin.client.kube-apiserver.lan"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/kubernetes/issue/kubernetes-admin"
     body_format: json
     status_code: 200
     body:
@@ -29,11 +29,11 @@
 - name: Persistent admin certificate
   copy:
     content: "{{ certificate.json.data.certificate }}"
-    dest: "{{ K8S_SERVER_PKI_DIR }}/{{ K8S_ADMIN_CERT_NAME }}"
+    dest: "{{ SERVER_PKI_DIR }}/{{ ADMIN_CERT_NAME }}"
     mode: 0644
 
 - name: Persistent admin key
   copy:
     content: "{{ certificate.json.data.private_key }}"
-    dest: "{{ K8S_SERVER_PKI_DIR }}/{{ K8S_ADMIN_KEY_NAME }}"
+    dest: "{{ SERVER_PKI_DIR }}/{{ ADMIN_KEY_NAME }}"
     mode: 0644

@@ -1,0 +1,45 @@
+---
+# Generate kubernetes CA
+- name: Generate kubernetes CA csr
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/kubernetes/intermediate/generate/exported"
+    body_format: json
+    status_code: 200
+    body:
+      common_name: kubernetes-ca
+  register: kubernetes_ca_csr
+
+- name: Sign kubernetes CA
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/root/root/sign-intermediate"
+    body_format: json
+    body:
+      csr: "{{ kubernetes_ca_csr.json.data.csr }}"
+  register: kubernetes_ca_crt
+
+- name: Set sign kubernetes certificate
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/kubernetes/intermediate/set-signed"
+    body_format: json
+    status_code: 204
+    body:
+      certificate: "{{ kubernetes_ca_crt.json.data.certificate }}"
+
+- name: Persistent kubernetes CA certificate
+  copy:
+    content: "{{ kubernetes_ca_crt.json.data.certificate }}"
+    dest: "{{ SERVER_PKI_DIR }}/{{ SERVER_CA_CERT_NAME }}"
+
+- name: Persistent kubernetes CA key
+  copy:
+    content: "{{ kubernetes_ca_csr.json.data.private_key }}"
+    dest: "{{ SERVER_PKI_DIR }}/{{ SERVER_CA_KEY_NAME }}"

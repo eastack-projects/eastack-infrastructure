@@ -27,14 +27,11 @@
     - /etc/systemd/system/kubelet.service.d
     - /etc/systemd/system/kube-proxy.service.d
 
-- name: Slurp vault token
-  include_tasks: ../../../common/tasks/slurp-vault-token.yaml
-
 - name: Slurp intermediate certificate
   slurp:
-    src: "{{ VAULT_PKI_DIR }}/{{ INT_CERT_NAME }}"
+    src: "{{ SERVER_PKI_DIR }}/{{ SERVER_CA_CERT_NAME }}"
   register: int_cert
-  delegate_to: vault
+  delegate_to: k8s-server
 
 - include_tasks: config-kernel.yaml
 - include_tasks: gen-kube-proxy-cert.yaml

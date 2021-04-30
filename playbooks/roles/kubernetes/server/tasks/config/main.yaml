@@ -1,4 +1,15 @@
 ---
+- name: Create kubernetes config directory
+  file:
+    path: /root/.kube
+    state: directory
+
+- name: Copy kubectl config
+  copy:
+    remote_src: true
+    src: /etc/kubernetes/admin.conf
+    dest: /root/.kube/config
+
 - name: Create kubernetes config yaml directory
   file:
     path: "/root/config"

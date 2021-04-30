@@ -14,27 +14,37 @@
 # todo split it
 - include_tasks: create-directory.yaml
 
-# Generate certificate
-- name: Waits vault service started
-  wait_for:
-    host: "{{ VAULT_FQDN }}"
-    port: "{{ VAULT_PORT }}"
-
-- name: Slurp vault token
-  include_tasks: ../../../common/tasks/slurp-vault-token.yaml
-
 - name: Create kubernetes PKI directory
   file:
-    path: "{{ K8S_SERVER_PKI_DIR }}"
+    path: "{{ SERVER_PKI_DIR }}"
     state: directory
     mode: 0644
 
-- include_tasks: mount-kubernetes-pki-secret-engine.yaml
-- include_tasks: generate-kubernetes-ca.yaml
-- include_tasks: gen-kube-apiserver-cert.yaml
-- include_tasks: gen-kube-apiserver-etcd-client-cert.yaml
-- include_tasks: gen-kube-apiserver-kubelet-client-cert.yaml
-- include_tasks: gen-kube-controller-manager-kube-apiserver-client-cert.yaml
-- include_tasks: gen-kube-scheduler-kube-apiserver-client-cert.yaml
+- name: Get vault mounts info
+  uri:
+    method: GET
+    headers:
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/sys/mounts"
+    status_code: 200
+  register: mounts_result
+
+- name: Try mount kubernetes pki secret engine
+  include_tasks: mount-kubernetes-pki-secret-engine.yaml
+  when: mounts_result.json.data['pki/kubernetes/'] is undefined
+
+- name: Try mount front proxy pki secret engine
+  include_tasks: mount-front-proxy-pki-secret-engine.yaml
+  when: mounts_result.json.data['pki/front-proxy/'] is undefined
+
+- include_tasks: gen-kubernetes-ca.yaml
+- include_tasks: gen-front-proxy-ca.yaml
+- include_tasks: copy-etcd-ca-cert.yaml
+- include_tasks: gen-apiserver-cert.yaml
+- include_tasks: gen-front-proxy-client-cert.yaml
+- include_tasks: gen-apiserver-etcd-client-cert.yaml
+- include_tasks: gen-apiserver-kubelet-client-cert.yaml
+- include_tasks: gen-controller-manager-apiserver-client-cert.yaml
+- include_tasks: gen-scheduler-apiserver-client-cert.yaml
 - include_tasks: gen-service-account-cert.yaml
 - include_tasks: gen-admin-cert.yaml

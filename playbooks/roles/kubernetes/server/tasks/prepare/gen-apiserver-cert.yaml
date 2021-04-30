@@ -4,13 +4,13 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/kubernetes/roles/kube-apiserver.lan"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/kubernetes/roles/kube-apiserver"
     body_format: json
     status_code: 204
     body:
       key_usage: ["DigitalSignature", "KeyEncipherment"]
       ext_key_usage: ["ServerAuth"]
-      allowed_domains: "{{ VAULT_PKI_DIR }}"
+      allowed_domains: kube-apiserver
       allow_any_name: true
 
 - name: Generate kube-apiserver certificate
@@ -18,11 +18,11 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/kubernetes/issue/kube-apiserver.lan"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/kubernetes/issue/kube-apiserver"
     body_format: json
     status_code: 200
     body:
-      common_name: "{{ K8S_SERVER_DOMAIN }}"
+      common_name: kube-apiserver
       alt_names: "kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster.local"
       ip_sans: "10.96.0.1,{{ ansible_host }}"
   register: certificate
@@ -30,11 +30,11 @@
 - name: Persistent kube-apiserver certificate
   copy:
     content: "{{ certificate.json.data.certificate }}"
-    dest: "{{ K8S_SERVER_PKI_DIR }}/{{ KUBE_APISERVER_CERT_NAME }}"
+    dest: "{{ SERVER_PKI_DIR }}/{{ APISERVER_CERT_NAME }}"
     mode: 0644
 
 - name: Persistent kube-apiserver key
   copy:
     content: "{{ certificate.json.data.private_key }}"
-    dest: "{{ K8S_SERVER_PKI_DIR }}/{{ KUBE_APISERVER_KEY_NAME }}"
+    dest: "{{ SERVER_PKI_DIR }}/{{ APISERVER_KEY_NAME }}"
     mode: 0644

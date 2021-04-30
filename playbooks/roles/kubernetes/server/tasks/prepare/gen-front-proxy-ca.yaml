@@ -1,100 +1,45 @@
 ---
-- name: List vault mounts
-  uri:
-    method: GET
-    headers:
-      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/sys/mounts"
-  register: mounts
-
-- name: Mount kubernetes front proxy intermediate PKI secret engine
+# Generate front proxy CA
+- name: Generate front proxy CA csr
   uri:
     method: POST
     headers:
-      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/sys/mounts/pki_int_ipool_kubernetes_front_proxy"
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/front-proxy/intermediate/generate/exported"
     body_format: json
-    status_code: 204
-    body:
-      type: pki
-  when: not mounts.json.data is search("pki_int_ipool_kubernetes_front_proxy")
-
-- name: Tune kubernetes front proxy PKI intermediate secret engine
-  uri:
-    method: POST
-    headers:
-      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/sys/mounts/pki_int_ipool_kubernetes_front_proxy/tune"
-    body_format: json
-    status_code: 204
-    body:
-      description: Kubernetes front proxy certificate
-      max_lease_ttl: "{{ MAX_PKI_TTL }}"
-      default_lease_ttl: "{{ PKI_TTL }}"
-
-- name: Generate kubernetes front proxy intermediate ca csr
-  uri:
-    method: POST
-    headers:
-      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int_ipool_kubernetes_front_proxy/intermediate/generate/exported"
-    body_format: json
+    status_code: 200
     body:
       common_name: front-proxy-ca
-  register: certificate_csr
-
-- name: Persistent kubernetes front proxy intermediate ca CSR result
-  copy:
-    content: "{{ certificate_csr.json.data.csr }}"
-    dest: /opt/kubernetes/tls/front-proxy-ca.csr
-
-- name: Persistent kubernetes front proxy intermediate ca private key result
-  copy:
-    content: "{{ certificate_csr.json.data.private_key }}"
-    dest: /opt/kubernetes/tls/front-proxy-ca.key
-
-- name: Include front-proxy-ca.csr
-  slurp:
-    src: "/opt/kubernetes/tls/front-proxy-ca.csr"
   register: front_proxy_ca_csr
 
-- name: Base64 decode front_proxy_ca_csr
-  set_fact:
-    front_proxy_ca_csr: "{{ front_proxy_ca_csr['content'] | b64decode}}"
-
-- name: Sign kubernetes front proxy intermediate ca
+- name: Sign front proxy CA
   uri:
     method: POST
     headers:
-      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/root/sign-intermediate"
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/root/root/sign-intermediate"
     body_format: json
     body:
-      csr: "{{ front_proxy_ca_csr }}"
-      common_name: front-proxy-ca
-  register: certificate_crt
-
-- name: Persistent kubernetes front proxy intermediate ca certificate result
-  copy:
-    content: "{{ certificate_crt.json.data.certificate }}"
-    dest: /opt/kubernetes/tls/front-proxy-ca.crt
-
-- name: Include front-proxy-ca.crt
-  slurp:
-    src: "/opt/kubernetes/tls/front-proxy-ca.crt"
+      csr: "{{ front_proxy_ca_csr.json.data.csr }}"
   register: front_proxy_ca_crt
 
-- name: Base64 decode front_proxy_ca_crt
-  set_fact:
-    front_proxy_ca_crt: "{{ front_proxy_ca_crt['content'] | b64decode}}"
-
-- name: Set signed kubernetes front proxy intermediate ca
+- name: Set sign front proxy certificate
   uri:
     method: POST
     headers:
-      X-Vault-Token: "{{ vault_init_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki_int_ipool_kubernetes_front_proxy/intermediate/set-signed"
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/front-proxy/intermediate/set-signed"
     body_format: json
     status_code: 204
     body:
-      certificate: "{{ front_proxy_ca_crt }}"
+      certificate: "{{ front_proxy_ca_crt.json.data.certificate }}"
+
+- name: Persistent front proxy CA certificate
+  copy:
+    content: "{{ front_proxy_ca_crt.json.data.certificate }}"
+    dest: "{{ SERVER_PKI_DIR }}/{{ FRONT_PROXY_CA_CERT_NAME }}"
+
+- name: Persistent front proxy CA key
+  copy:
+    content: "{{ front_proxy_ca_csr.json.data.private_key }}"
+    dest: "{{ SERVER_PKI_DIR }}/{{ FRONT_PROXY_CA_KEY_NAME }}"

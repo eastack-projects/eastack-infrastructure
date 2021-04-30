@@ -12,19 +12,28 @@
   when: not etcd_package_stat.stat.exists
 
 # generate certificate
-- name: Waits vault service started
-  wait_for:
-    host: "{{ VAULT_FQDN }}"
-    port: "{{ VAULT_PORT }}"
-
-- name: Slurp vault token
-  include_tasks: ../../../common/tasks/slurp-vault-token.yaml
-
-- name: Create etcd cert directory
+- name: Create etcd certificate directory
   file:
     path: "{{ ETCD_PKI_DIR }}"
     state: directory
     mode: 0755
+
+- name: Get vault mounts info
+  uri:
+    method: GET
+    headers:
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/sys/mounts"
+    status_code: 200
+  register: mounts_result
+
+- name: Try mount etcd pki secret engine
+  include_tasks: mount-etcd-pki-secret-engine.yaml
+  when: mounts_result.json.data['pki/etcd/'] is undefined
+  run_once: yes
+
+- name: Try generate etcd ca
+  include_tasks: gen-etcd-ca.yaml
 
 - include_tasks: gen-peer-cert.yaml
 - include_tasks: gen-client-cert.yaml

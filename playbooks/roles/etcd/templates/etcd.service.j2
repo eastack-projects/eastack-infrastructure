@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory={{ ETCD_WORKING_DIR }}
-EnvironmentFile={{ ETCD_CONFIG_DIR }}/etcd
+EnvironmentFile={{ ETCD_CONFIG_DIR }}/etcd.env
 ExecStart=/usr/bin/etcd $ETCD_ARGS
 
 [Install]
