@@ -13,7 +13,7 @@
       enforce_hostnames: false
       common_name: system:kube-proxy
       allow_any_name: true
-    run_once: yes
+  run_once: yes
 
 - name: Generate proxy apiserver client certificate
   uri:

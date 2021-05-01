@@ -16,7 +16,7 @@
     cmd: "kubectl apply -f /root/{{ ansible_hostname }}-token.yaml"
   delegate_to: k8s-server
 
-- name: Generate bootstrap-kubelet.conf
+- name: Generate bootstrap config
   template:
     src: prepare/bootstrap-kubelet.conf.j2
     dest: /etc/kubernetes/bootstrap-kubelet.conf

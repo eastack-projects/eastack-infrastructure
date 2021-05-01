@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Config
 clusters:
 - cluster:
-    certificate-authority-data: {{ ca_cert['content'] }}
+    certificate-authority: {{ KUBERNETES_PKI_DIR }}/{{ KUBERNETES_CA_CERT_NAME }}
     server: https://{{ hostvars['k8s-server'].ansible_host }}:{{ SERVER_PORT }}
   name: bootstrap
 contexts:
