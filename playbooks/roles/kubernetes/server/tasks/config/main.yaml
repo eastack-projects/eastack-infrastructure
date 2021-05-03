@@ -10,6 +10,12 @@
     src: /etc/kubernetes/admin.conf
     dest: /root/.kube/config
 
+- name: Add kubectl complete for bash
+  lineinfile:
+    dest: /root/.bashrc
+    line: source /usr/share/bash-completion/bash_completion && source <(kubectl completion bash)
+    state: present
+
 - name: Create kubernetes config yaml directory
   file:
     path: "/root/config"

@@ -23,8 +23,8 @@
     status_code: 200
     body:
       common_name: kube-apiserver
-      alt_names: "kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster.local"
-      ip_sans: "10.96.0.1,{{ ansible_host }}"
+      alt_names: "localhost,kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster.local"
+      ip_sans: "127.0.0.1,10.0.0.1,10.96.0.1,{{ ansible_host }}"
   register: certificate
 
 - name: Persistent kube-apiserver certificate
