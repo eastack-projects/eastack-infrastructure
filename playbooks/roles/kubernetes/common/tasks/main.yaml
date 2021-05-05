@@ -5,6 +5,12 @@
     dest: /etc/docker/daemon.json
     mode: 0644
 
+- name: Restart docker service
+  systemd:
+    name: docker
+    state: restarted
+    daemon_reload: true
+
 - name: Add kubernetes mirror key
   apt_key:
     url: https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg.asc
@@ -25,11 +31,9 @@
       - conntrack
 
 - name: Config autocomplete
-  blockinfile:
+  lineinfile:
     path: /root/.bashrc
-    line: |
-      source <(kubectl completion bash)
-      source <(kubeadm completion bash)
+    line: source <(kubectl completion bash)
     state: present
 
 - name: Load kernel module br_netfilter

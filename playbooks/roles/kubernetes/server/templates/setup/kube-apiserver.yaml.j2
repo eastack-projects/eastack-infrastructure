@@ -18,10 +18,10 @@ spec:
         - --client-ca-file={{ kubernetes_pki_directory }}/{{ kubernetes_ca_certificate }}
         - --enable-admission-plugins=NodeRestriction
         - --enable-bootstrap-token-auth=true
-        - --etcd-cafile={{ kubernetes_etcd_pki_directory }}/{{ etcd_ca_certificate }
+        - --etcd-cafile={{ kubernetes_etcd_pki_directory }}/{{ etcd_ca_certificate }}
         - --etcd-certfile={{ kubernetes_pki_directory }}/{{ apiserver_etcd_client_certificate }}
         - --etcd-keyfile={{ kubernetes_pki_directory }}/{{ apiserver_etcd_client_key }}
-        - --etcd-servers={% for host in groups['etcd'] %}https://{{ hostvars[host].ansible_host }}:2379{{ "," if not loop.last else "" }}{% endfor %}
+        - --etcd-servers={% for host in groups['etcd'] %}https://{{ hostvars[host].ansible_host }}:2379{{ "," if not loop.last else "\r\n" }}{% endfor %}
         - --insecure-port=0
         - --kubelet-client-certificate={{ kubernetes_pki_directory }}/{{ apiserver_kubelet_client_certificate }}
         - --kubelet-client-key={{ kubernetes_pki_directory }}/{{ apiserver_kubelet_client_key }}

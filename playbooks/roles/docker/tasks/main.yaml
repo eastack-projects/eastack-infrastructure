@@ -41,9 +41,8 @@
     name: vagrant
     group: docker
 
-- name: Restart docker service
+- name: Enable docker service
   systemd:
     name: docker
     enabled: yes
-    state: restarted
-    daemon_reload: true
+    state: started

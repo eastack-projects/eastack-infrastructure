@@ -9,7 +9,7 @@ kubernetes_version: v1.21.0
 server_port: 6443
 KUBERNETES_EXTRACT_DIR: /opt/kubernetes
 kubernetes_config_directory: /etc/kubernetes
-kubernetes_manifests_directory: {{ kubernetes_config_directory }}/manifests
+kubernetes_manifests_directory: "{{ kubernetes_config_directory }}/manifests"
 kubernetes_pki_directory: "{{ kubernetes_config_directory }}/pki"
 kubernetes_ca_certificate: ca.crt
 kubernetes_ca_key: ca.key

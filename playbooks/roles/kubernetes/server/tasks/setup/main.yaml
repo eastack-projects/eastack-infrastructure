@@ -1,9 +1,8 @@
-- name: Install kubectl and kubelet
+- name: Install kubectl
   apt:
     update_cache: yes
     name:
       - kubectl
-      - kubelet
 
 - name: Copy manifests file
   template:
@@ -20,8 +19,17 @@
     src: "{{ item.src }}"
     dest: "{{ kubernetes_config_directory }}/{{ item.dest }}"
     mode: 0644
-  notify: Restart kubernetes server service
   with_items:
     - { src: setup/controller-manager.conf.j2, dest: controller-manager.conf }
     - { src: setup/scheduler.conf.j2, dest: scheduler.conf }
     - { src: setup/admin.conf.j2, dest: admin.conf }
+
+- name: Copy conofig kubelet service
+  copy:
+    content: "{{ root_certificate.json.data.certificate }}"
+    dest: "{{ VAULT_PKI_DIR }}/{{ ROOT_CERT_NAME }}"
+
+- name: Copy kubelet conofig file
+  template:
+    src: setup/kubelet.conf.j2
+    dest: /var/lib/kubelet/config.yaml
