@@ -3,15 +3,14 @@
   apt:
     update_cache: yes
     name:
-      - docker-compose
-      - socat
+      - docker.io
       - conntrack
 
-- name: Create docker cert directory
-  file:
-    path: "/etc/docker/certs.d/{{ HARBOR_FQDN }}"
-    state: directory
-    mode: 0644
+#- name: Create docker cert directory
+#  file:
+#    path: "/etc/docker/certs.d/{{ HARBOR_FQDN }}"
+#    state: directory
+#    mode: 0644
 
 #- name: Slurp intermediate certificate
 #  slurp:
@@ -35,11 +34,7 @@
 #    - { src: "{{ HARBOR_FQDN }}.key" , dest: "{{ HARBOR_FQDN }}.key" }
 #  notify: Restart docker service
 
-- name: Copy daemon.json
-  copy:
-    src: daemon.json
-    dest: /etc/docker/daemon.json
-    mode: 0644
+
 
 - name: Add vagrant user to docker group
   user:

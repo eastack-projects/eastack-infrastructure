@@ -1,19 +1,18 @@
 apiVersion: v1
-clusters:
-- cluster:
-    certificate-authority: {{ KUBERNETES_PKI_DIR }}/{{ KUBERNETES_CA_CERT_NAME }}
-    server: https://{{ ansible_host }}:{{ SERVER_PORT }}
-  name: kubernetes
+kind: Config
+current-context: system:kube-controller-manager@kubernetes
 contexts:
 - context:
     cluster: kubernetes
     user: system:kube-controller-manager
   name: system:kube-controller-manager@kubernetes
-current-context: system:kube-controller-manager@kubernetes
-kind: Config
-preferences: {}
+clusters:
+- cluster:
+    certificate-authority: {{ kubernetes_pki_directory }}/{{ kubernetes_ca_certificate }}
+    server: https://{{ ansible_host }}:{{ server_port }}
+  name: kubernetes
 users:
 - name: system:kube-controller-manager
   user:
-    client-certificate: {{ KUBERNETES_PKI_DIR }}/{{ CONTROLLER_MANAGER_APISERVER_CLIENT_CERT_NAME }}
-    client-key: {{ KUBERNETES_PKI_DIR }}/{{ CONTROLLER_MANAGER_APISERVER_CLIENT_KEY_NAME }}
+    client-certificate: {{ kubernetes_pki_directory }}/{{ controller_manager_apiserver_client_certificate }}
+    client-key: {{ kubernetes_pki_directory }}/{{ controller_manager_apiserver_client_key }}

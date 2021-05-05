@@ -1,7 +1,7 @@
 # Download
 # kubernetes server
-KUBERNETES_SERVER_DOWNLOAD_URL: "https://dl.k8s.io/{{ KUBERNETES_VERSION }}/kubernetes-server-linux-amd64.tar.gz"
-KUBERNETES_SERVER_PACKAGE_NAME: "{{ RESOURCES_PATH }}/kubernetes/kubernetes-server-{{ KUBERNETES_VERSION }}-linux-amd64.tar.gz"
+KUBERNETES_SERVER_DOWNLOAD_URL: "https://dl.k8s.io/{{ kubernetes_version }}/kubernetes-server-linux-amd64.tar.gz"
+KUBERNETES_SERVER_PACKAGE_NAME: "{{ RESOURCES_PATH }}/kubernetes/kubernetes-server-{{ kubernetes_version }}-linux-amd64.tar.gz"
 # flannel manifests
 FLANNEL_MANIFESTS_DOWNLOAD_URL: https://ghproxy.com/https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 FLANNEL_MANIFESTS_FILE: "{{ RESOURCES_PATH }}/kubernetes/kube-flannel.yml"
@@ -9,27 +9,27 @@ FLANNEL_MANIFESTS_FILE: "{{ RESOURCES_PATH }}/kubernetes/kube-flannel.yml"
 
 # Certificate
 # certificate directory
-SERVER_ETCD_PKI_DIR: "{{ KUBERNETES_PKI_DIR }}/etcd"
+kubernetes_etcd_pki_directory: "{{ kubernetes_pki_directory }}/etcd"
 # certificate authority
 
-SERVER_ETCD_CA_CERT_NAME: etcd-ca.crt
+etcd_ca_certificate: etcd-ca.crt
 SERVER_ETCD_CA_KEY_NAME: etcd-ca.key
-FRONT_PROXY_CA_CERT_NAME: front-proxy-ca.crt
-FRONT_PROXY_CA_KEY_NAME: front-proxy-ca.key
+front_proxy_ca_certificate: front-proxy-ca.crt
+front_proxy_ca_key: front-proxy-ca.key
 # certificate
 ADMIN_CERT_NAME: admin.crt
 ADMIN_KEY_NAME: admin.key
-APISERVER_ETCD_CLIENT_CERT_NAME: apiserver-etcd-client.crt
-APISERVER_ETCD_CLIENT_KEY_NAME: apiserver-etcd-client.key
-APISERVER_CERT_NAME: apiserver.crt
-APISERVER_KEY_NAME: apiserver.key
-APISERVER_KUBELET_CLIENT_CERT_NAME: apiserver-kubelet-client.crt
-APISERVER_KUBELET_CLIENT_KEY_NAME: apiserver-kubelet-client.key
-CONTROLLER_MANAGER_APISERVER_CLIENT_CERT_NAME: controller-manager-apiserver-client.crt
-CONTROLLER_MANAGER_APISERVER_CLIENT_KEY_NAME: controller-manager-apiserver-client.key
+apiserver_etcd_client_certificate: apiserver-etcd-client.crt
+apiserver_etcd_client_key: apiserver-etcd-client.key
+apiserver_certificate: apiserver.crt
+apiserver_key: apiserver.key
+apiserver_kubelet_client_certificate: apiserver-kubelet-client.crt
+apiserver_kubelet_client_key: apiserver-kubelet-client.key
+controller_manager_apiserver_client_certificate: controller-manager-apiserver-client.crt
+controller_manager_apiserver_client_key: controller-manager-apiserver-client.key
 FRONT_PROXY_CLIENT_CERT_NAME: front-proxy-client.crt
 FRONT_PROXY_CLIENT_KEY_NAME: front-proxy-client.key
-SCHEDULE_APISERVER_CLIENT_CERT_NAME: schedule-apiserver-client.crt
-SCHEDULE_APISERVER_CLIENT_KEY_NAME: schedule-apiserver-client.key
-SERVICE_ACCOUNT_CERT_NAME: service-account.crt
-SERVICE_ACCOUNT_KEY_NAME: service-account.key
+schedule_apiserver_client_certificate: schedule-apiserver-client.crt
+schedule_apiserver_client_key: schedule-apiserver-client.key
+service_account_certificate: service-account.crt
+service_account_key: service-account.key

@@ -3,4 +3,6 @@
   hosts: k8s-server
   roles:
     - common
+    - docker
+    - kubernetes/common
     - kubernetes/server

@@ -30,11 +30,11 @@
 - name: Persistent front proxy client certificate
   copy:
     content: "{{ certificate.json.data.certificate }}"
-    dest: "{{ KUBERNETES_PKI_DIR }}/{{ FRONT_PROXY_CLIENT_CERT_NAME }}"
+    dest: "{{ kubernetes_pki_directory }}/{{ FRONT_PROXY_CLIENT_CERT_NAME }}"
     mode: 0644
 
 - name: Persistent kube-apiserver key
   copy:
     content: "{{ certificate.json.data.private_key }}"
-    dest: "{{ KUBERNETES_PKI_DIR }}/{{ FRONT_PROXY_CLIENT_KEY_NAME }}"
+    dest: "{{ kubernetes_pki_directory }}/{{ FRONT_PROXY_CLIENT_KEY_NAME }}"
     mode: 0644

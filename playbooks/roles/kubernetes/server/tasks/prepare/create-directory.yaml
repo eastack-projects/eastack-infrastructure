@@ -1,9 +1,0 @@
-- name: Create kubernetes directory
-  file:
-    path: "{{ item }}"
-    state: directory
-  with_items:
-    - /root/.kube
-    - /opt/kubernetes/tls
-    - /opt/etcd/tls
-    - /etc/kubernetes

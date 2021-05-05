@@ -30,11 +30,11 @@
 - name: Persistent kube-apiserver etcd client certificate
   copy:
     content: "{{ certificate.json.data.certificate }}"
-    dest: "{{ KUBERNETES_PKI_DIR }}/{{ APISERVER_ETCD_CLIENT_CERT_NAME }}"
+    dest: "{{ kubernetes_pki_directory }}/{{ apiserver_etcd_client_certificate }}"
     mode: 0644
 
 - name: Persistent kube-apiserver etcd client key
   copy:
     content: "{{ certificate.json.data.private_key }}"
-    dest: "{{ KUBERNETES_PKI_DIR }}/{{ APISERVER_ETCD_CLIENT_KEY_NAME}}"
+    dest: "{{ kubernetes_pki_directory }}/{{ apiserver_etcd_client_key}}"
     mode: 0644

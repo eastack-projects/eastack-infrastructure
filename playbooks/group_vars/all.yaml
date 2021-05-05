@@ -5,13 +5,14 @@ MAX_PKI_TTL: 17520h
 RESOURCES_PATH: ../resources
 
 # KUBERNETES
-KUBERNETES_VERSION: v1.20.4
+kubernetes_version: v1.21.0
+server_port: 6443
 KUBERNETES_EXTRACT_DIR: /opt/kubernetes
-SERVER_PORT: 8443
-KUBERNETES_CONFIG_DIR: /etc/kubernetes
-KUBERNETES_PKI_DIR: "{{ KUBERNETES_CONFIG_DIR }}/pki"
-KUBERNETES_CA_CERT_NAME: ca.crt
-KUBERNETES_CA_KEY_NAME: ca.key
+kubernetes_config_directory: /etc/kubernetes
+kubernetes_manifests_directory: {{ kubernetes_config_directory }}/manifests
+kubernetes_pki_directory: "{{ kubernetes_config_directory }}/pki"
+kubernetes_ca_certificate: ca.crt
+kubernetes_ca_key: ca.key
 
 # ETCD
 ETCD_CONFIG_DIR: /etc/etcd

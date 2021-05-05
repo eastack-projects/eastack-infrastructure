@@ -1,18 +1,18 @@
 apiVersion: v1
 kind: Config
+clusters:
+- cluster:
+    certificate-authority: {{ kubernetes_pki_directory }}/{{ kubernetes_ca_certificate }}
+    server: https://{{ ansible_host }}:{{ server_port }}
+  name: kubernetes
 contexts:
 - context:
     cluster: kubernetes
     user: kubernetes-admin
   name: kubernetes-admin@kubernetes
 current-context: kubernetes-admin@kubernetes
-clusters:
-- cluster:
-    certificate-authority: {{ KUBERNETES_PKI_DIR }}/{{ KUBERNETES_CA_CERT_NAME }}
-    server: https://{{ ansible_host }}:{{ SERVER_PORT }}
-  name: kubernetes
 users:
 - name: kubernetes-admin
   user:
-    client-certificate: {{ KUBERNETES_PKI_DIR }}/{{ ADMIN_CERT_NAME }}
-    client-key: {{ KUBERNETES_PKI_DIR }}/{{ ADMIN_KEY_NAME }}
+    client-certificate: {{ kubernetes_pki_directory }}/{{ ADMIN_CERT_NAME }}
+    client-key: {{ kubernetes_pki_directory }}/{{ ADMIN_KEY_NAME }}

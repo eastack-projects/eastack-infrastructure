@@ -1,6 +1,6 @@
 # kubernetes node
-KUBERNETES_NODE_DOWNLOAD_URL: "https://dl.k8s.io/{{ KUBERNETES_VERSION }}/kubernetes-node-linux-amd64.tar.gz"
-NODE_PACKAGE_NAME: "{{ RESOURCES_PATH }}/kubernetes/kubernetes-node-{{ KUBERNETES_VERSION }}-linux-amd64.tar.gz"
+KUBERNETES_NODE_DOWNLOAD_URL: "https://dl.k8s.io/{{ kubernetes_version }}/kubernetes-node-linux-amd64.tar.gz"
+NODE_PACKAGE_NAME: "{{ RESOURCES_PATH }}/kubernetes/kubernetes-node-{{ kubernetes_version }}-linux-amd64.tar.gz"
 
 # cni plugins
 CNI_VERSION: v0.9.1

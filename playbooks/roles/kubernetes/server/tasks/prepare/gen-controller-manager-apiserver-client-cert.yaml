@@ -29,11 +29,11 @@
 - name: Persistent controller-manager apiserver client certificate
   copy:
     content: "{{ certificate.json.data.certificate }}"
-    dest: "{{ KUBERNETES_PKI_DIR }}/{{ CONTROLLER_MANAGER_APISERVER_CLIENT_CERT_NAME }}"
+    dest: "{{ kubernetes_pki_directory }}/{{ controller_manager_apiserver_client_certificate }}"
     mode: 0644
 
 - name: Persistent controller-manager apiserver client key
   copy:
     content: "{{ certificate.json.data.private_key }}"
-    dest: "{{ KUBERNETES_PKI_DIR }}/{{ CONTROLLER_MANAGER_APISERVER_CLIENT_KEY_NAME }}"
+    dest: "{{ kubernetes_pki_directory }}/{{ controller_manager_apiserver_client_key }}"
     mode: 0644

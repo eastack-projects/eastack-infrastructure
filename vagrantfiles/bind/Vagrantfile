@@ -5,7 +5,7 @@ Vagrant.configure("2") do |config|
   host_ip = "192.168.33.10"
 
   config.vm.define "bind" do |bind|
-    bind.vm.box = "ubuntu/focal64"
+    bind.vm.box = "ubuntu/xenial64"
     bind.vm.box_check_update = false
     bind.vm.network "private_network", ip: host_ip
     bind.vm.hostname = "bind"

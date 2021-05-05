@@ -1,0 +1,48 @@
+---
+- name: Config docker daemon
+  copy:
+    src: daemon.json
+    dest: /etc/docker/daemon.json
+    mode: 0644
+
+- name: Add kubernetes mirror key
+  apt_key:
+    url: https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg.asc
+    state: present
+
+- name: Add kubernetes mirror
+  apt_repository:
+    repo: deb http://mirrors.ustc.edu.cn/kubernetes/apt kubernetes-xenial main
+    state: present
+    filename: kubernetes
+
+- name: Install kubelet
+  apt:
+    update_cache: yes
+    name:
+      - kubelet
+      - socat
+      - conntrack
+
+- name: Config autocomplete
+  blockinfile:
+    path: /root/.bashrc
+    line: |
+      source <(kubectl completion bash)
+      source <(kubeadm completion bash)
+    state: present
+
+- name: Load kernel module br_netfilter
+  modprobe:
+    name: br_netfilter
+    state: present
+
+- name: Config kernel parameter
+  sysctl:
+    name: "{{ item }}"
+    value: '1'
+    state: present
+    reload: yes
+  with_items:
+    - net.bridge.bridge-nf-call-iptables
+    - net.bridge.bridge-nf-call-ip6tables

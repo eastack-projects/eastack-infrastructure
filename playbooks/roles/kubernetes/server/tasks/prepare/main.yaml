@@ -1,24 +1,12 @@
 ---
-# download
-- name: Stat kubernetes server package
-  become: no
-  local_action:
-    module: stat
-    path: "{{ KUBERNETES_SERVER_PACKAGE_NAME }}"
-  register: kubernetes_server_package_stat
-
-- name: Try donwload kubernetes serverr package
-  include_tasks: download-k8s-server-package.yaml
-  when: not kubernetes_server_package_stat.stat.exists
-
-# todo split it
-- include_tasks: create-directory.yaml
-
 - name: Create kubernetes PKI directory
   file:
-    path: "{{ KUBERNETES_PKI_DIR }}"
+    path: "{{ item }}"
     state: directory
     mode: 0644
+  with_items:
+    - "{{ kubernetes_pki_directory }}"
+    - "{{ kubernetes_etcd_pki_directory }}"
 
 - name: Get vault mounts info
   uri:
@@ -37,9 +25,9 @@
   include_tasks: mount-front-proxy-pki-secret-engine.yaml
   when: mounts_result.json.data['pki/front-proxy/'] is undefined
 
+- include_tasks: copy-etcd-ca-cert.yaml
 - include_tasks: gen-kubernetes-ca.yaml
 - include_tasks: gen-front-proxy-ca.yaml
-- include_tasks: copy-etcd-ca-cert.yaml
 - include_tasks: gen-apiserver-cert.yaml
 - include_tasks: gen-front-proxy-client-cert.yaml
 - include_tasks: gen-apiserver-etcd-client-cert.yaml
