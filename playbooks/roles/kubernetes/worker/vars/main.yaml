@@ -8,8 +8,7 @@ CNI_PLUGINS_DOWNLOAD_URL: "https://ghproxy.com/https://github.com/containernetwo
 CNI_PLUGINS_PACKAGE: "{{ RESOURCES_PATH }}/kubernetes/cni-plugins-{{ CNI_VERSION }}-linux-amd64.tar.gz"
 
 # components
+
 CLUSTER_DNS: 10.96.0.10
-INGRESS_VERSION: v0.45.0
-PAUSE_VERSION: 3.3
 PROXY_APISERVER_CLIENT_CERT_NAME: kube-proxy-kube-apiserver-client.crt
 PROXY_APISERVER_CLIENT_KEY_NAME: kube-proxy-kube-apiserver-client.key

@@ -1,0 +1,7 @@
+- name: Initialize kubernetes control plane
+  become: yes
+  hosts: kubernetes_control_plane
+  roles:
+    - docker
+    - kubernetes/common
+    #- kubernetes/server

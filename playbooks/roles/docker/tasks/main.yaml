@@ -1,10 +1,11 @@
 ---
-- name: Install docker-ce and docker-compose
+- name: Install docker
   apt:
     update_cache: yes
     name:
       - docker.io
       - conntrack
+      - python3-docker
 
 #- name: Create docker cert directory
 #  file:
@@ -33,8 +34,6 @@
 #    - { src: "{{ HARBOR_FQDN }}.crt" , dest: "{{ HARBOR_FQDN }}.crt" }
 #    - { src: "{{ HARBOR_FQDN }}.key" , dest: "{{ HARBOR_FQDN }}.key" }
 #  notify: Restart docker service
-
-
 
 - name: Add vagrant user to docker group
   user:

@@ -1,0 +1,12 @@
+---
+- name: Pull coredns docker image
+  docker_image:
+    name: "coredns/coredns:{{ coredns_version }}"
+    repository: "{{ image-repository }}/coredns/coredns:v{{ coredns_version }}"
+    source: pull
+
+- name: Pull nginx ingress docker image
+  docker_image:
+    name: "{{ image-repository }}/nginx-ingress-controller:v{{ ingress_version }}"
+    repository: "k8s.gcr.io/ingress-nginx/controller:v{{ ingress_version }}"
+    source: pull

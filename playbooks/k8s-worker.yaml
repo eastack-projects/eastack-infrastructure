@@ -1,0 +1,7 @@
+- name: Initialize kubernetes worker
+  become: yes
+  hosts: kubernetes_worker
+  roles:
+    - docker
+    - kubernetes/common
+      #    - kubernetes/node

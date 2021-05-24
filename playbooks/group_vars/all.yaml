@@ -5,6 +5,9 @@ MAX_PKI_TTL: 17520h
 RESOURCES_PATH: ../resources
 
 # KUBERNETES
+image_repository: registry.aliyuncs.com/google_containers
+coredns_version: 1.8.0
+ingress_version: 0.46.0
 kubernetes_version: v1.21.0
 server_port: 6443
 KUBERNETES_EXTRACT_DIR: /opt/kubernetes

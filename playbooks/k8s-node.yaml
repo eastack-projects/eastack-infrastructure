@@ -1,8 +1,0 @@
-- name: Initialize kubernetes node
-  become: yes
-  hosts: k8s-node
-  roles:
-    - common
-    - docker
-    - kubernetes/common
-    - kubernetes/node

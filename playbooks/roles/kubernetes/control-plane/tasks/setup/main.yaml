@@ -1,8 +1,13 @@
 - name: Install kubectl
   apt:
     update_cache: yes
-    name:
-      - kubectl
+    name: kubectl
+
+- name: Config autocomplete
+  lineinfile:
+    path: /root/.bashrc
+    line: source <(kubectl completion bash)
+    state: present
 
 - name: Copy manifests file
   template:

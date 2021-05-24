@@ -22,19 +22,30 @@
     state: present
     filename: kubernetes
 
-- name: Install kubelet
+- name: Install kubelet and kubeadm
   apt:
     update_cache: yes
     name:
       - kubelet
+      - kubeadm
       - socat
       - conntrack
+      - apt-transport-https
+      - gnupg-agent
+      - software-properties-common
 
-- name: Config autocomplete
-  lineinfile:
-    path: /root/.bashrc
-    line: source <(kubectl completion bash)
-    state: present
+- name: Remove swapfile from /etc/fstab
+  mount:
+    name: "{{ item }}"
+    fstype: swap
+    state: absent
+  with_items:
+    - swap
+    - none
+
+- name: Disable swap
+  command: swapoff -a
+  when: ansible_swaptotal_mb > 0
 
 - name: Load kernel module br_netfilter
   modprobe:
@@ -50,3 +61,21 @@
   with_items:
     - net.bridge.bridge-nf-call-iptables
     - net.bridge.bridge-nf-call-ip6tables
+
+- name: Configure node ip
+  lineinfile:
+    path: /etc/default/kubelet
+    line: "KUBELET_EXTRA_ARGS=--node-ip={{ ansible_enp0s8.ipv4.address }}"
+    create: yes
+
+- name: Enable kubelet
+  service:
+    name: kubelet
+    daemon_reload: yes
+    enabled: yes
+
+- name: Pull coredns docker image
+  docker_image:
+    name: "coredns/coredns:{{ coredns_version }}"
+    repository: "{{ image_repository }}/coredns/coredns:v{{ coredns_version }}"
+    source: pull
