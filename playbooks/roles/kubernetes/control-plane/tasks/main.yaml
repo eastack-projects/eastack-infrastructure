@@ -1,10 +1,4 @@
 ---
-- name: Pull nginx ingress docker image
-  docker_image:
-    name: "{{ image_repository }}/nginx-ingress-controller:v{{ ingress_version }}"
-    repository: "k8s.gcr.io/ingress-nginx/controller:v{{ ingress_version }}"
-    source: pull
-
 - name: Initialize the Kubernetes cluster using kubeadm
   command: "kubeadm init --apiserver-advertise-address {{ ansible_enp0s8.ipv4.address }} --image-repository {{ image_repository }} --pod-network-cidr=192.168.0.0/16"
 
@@ -18,3 +12,14 @@
 - name: Install calico pod network
   become: no
   command: kubectl create -f https://docs.projectcalico.org/manifests/calico.yaml
+
+- name: Download nginx ingress yaml
+  get_url:
+    url: "{{ nginx_ingress_url }}"
+    dest: /tmp/nginx-ingress.yaml
+
+- name: Replace nginx ingress yaml
+  replace:
+    path: /tmp/nginx-ingress.yaml
+    regexp: '^(.*)k8s.gcr.io/ingress-nginx/controller:v(0.46.0).*'
+    replace: "\\1{{ image_repository }}/nginx-ingress-controller:v\\2"

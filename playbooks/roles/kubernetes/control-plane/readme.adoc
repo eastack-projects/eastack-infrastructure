@@ -1,3 +1,0 @@
-= Kubernetes Server
-
-证书相关部分遵循官方 https://kubernetes.io/docs/setup/best-practices/certificates/[PKI best practices]

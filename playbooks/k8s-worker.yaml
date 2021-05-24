@@ -4,4 +4,4 @@
   roles:
     - docker
     - kubernetes/common
-      #    - kubernetes/node
+    - kubernetes/worker
