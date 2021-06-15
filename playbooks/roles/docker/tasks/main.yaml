@@ -9,7 +9,7 @@
 
 #- name: Create docker cert directory
 #  file:
-#    path: "/etc/docker/certs.d/{{ HARBOR_FQDN }}"
+#    path: "/etc/docker/certs.d/{{ harbor_fqdn }}"
 #    state: directory
 #    mode: 0644
 
@@ -28,11 +28,11 @@
 #- name: Copy certificate and private key
 #  copy:
 #    src: "./roles/harbor/prepare/files/{{ item.src }}"
-#    dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/{{ item.dest }}"
+#    dest: "/etc/docker/certs.d/{{ harbor_fqdn }}/{{ item.dest }}"
 #    mode: 0644
 #  with_items:
-#    - { src: "{{ HARBOR_FQDN }}.crt" , dest: "{{ HARBOR_FQDN }}.crt" }
-#    - { src: "{{ HARBOR_FQDN }}.key" , dest: "{{ HARBOR_FQDN }}.key" }
+#    - { src: "{{ harbor_fqdn }}.crt" , dest: "{{ harbor_fqdn }}.crt" }
+#    - { src: "{{ harbor_fqdn }}.key" , dest: "{{ harbor_fqdn }}.key" }
 #  notify: Restart docker service
 
 - name: Add vagrant user to docker group

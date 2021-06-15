@@ -2,5 +2,5 @@
   become: yes
   hosts: bind
   roles:
-    - common
     - bind
+    - common

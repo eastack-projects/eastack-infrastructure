@@ -1,5 +1,4 @@
 ---
-# APT
 - name: Config apt source mirror
   copy:
     src: sources.list

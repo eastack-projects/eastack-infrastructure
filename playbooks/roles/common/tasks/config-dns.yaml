@@ -1,17 +1,16 @@
 ---
-# DNS
 - name: Configure DNS
   replace:
     path: /etc/systemd/resolved.conf
     regexp: '#DNS='
-    replace: "DNS={{ hostvars.bind.ansible_host }}"
+    replace: "DNS={{ hostvars.bind['ansible_' ~ public_interface].ipv4.address }}"
     backup: yes
 
 - name: Configure fallback DNS
   replace:
     path: /etc/systemd/resolved.conf
     regexp: '#FallbackDNS='
-    replace: "FallbackDNS={{ FALLBACK_DNS }}"
+    replace: "FallbackDNS={{ fallback_dns }}"
     backup: yes
 
 - name: Restart systemd-resolved service

@@ -10,16 +10,6 @@ etcd
 kubernetes-server
 kubernetes-node
 
-== IP allocation
-
-bind:: 192.168.33.10
-vault:: 192.168.33.20
-etcd:: 192.168.33.3[0-9]
-harbor:: 192.168.33.40
-gitlab:: 192.168.33.50
-kubernetes-server:: 192.168.33.60
-kubernetes-node:: 192.168.33.7[0-9]
-
 == notes
 
 .test etcd cluster

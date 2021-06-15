@@ -1,7 +1,7 @@
 ---
 - name: Check harbor certificate stat
   stat:
-    path: "./roles/harbor/prepare/files/{{ HARBOR_FQDN }}.crt"
+    path: "./roles/harbor/prepare/files/{{ harbor_fqdn }}.crt"
   register: harbor_cert_stat
 
 - name: Add harbor role
@@ -9,11 +9,11 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/kubernetes/roles/{{ HARBOR_FQDN }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/kubernetes/roles/{{ harbor_fqdn }}"
     body_format: json
     status_code: 204
     body:
-      allowed_domains: "{{ HARBOR_FQDN }}"
+      allowed_domains: "{{ harbor_fqdn }}"
       allow_any_name: true
       allow_subdomains: yes
   when: not harbor_cert_stat.stat.exists
@@ -23,11 +23,11 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/kubernetes/issue/{{ HARBOR_FQDN }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/kubernetes/issue/{{ harbor_fqdn }}"
     body_format: json
     status_code: 200
     body:
-      common_name: "{{ HARBOR_FQDN }}"
+      common_name: "{{ harbor_fqdn }}"
       ip_sans: "{{ ansible_host }}"
   register: certificate
   when: not harbor_cert_stat.stat.exists
@@ -37,7 +37,7 @@
   local_action:
     module: copy
     content: "{{ certificate.json.data.certificate }}"
-    dest: "./roles/harbor/prepare/files/{{ HARBOR_FQDN }}.crt"
+    dest: "./roles/harbor/prepare/files/{{ harbor_fqdn }}.crt"
   when: not harbor_cert_stat.stat.exists
 
 - name: Persistent harbor private key
@@ -45,6 +45,6 @@
   local_action:
     module: copy
     content: "{{ certificate.json.data.private_key }}"
-    dest: "./roles/harbor/prepare/files/{{ HARBOR_FQDN }}.key"
+    dest: "./roles/harbor/prepare/files/{{ harbor_fqdn }}.key"
   when: not harbor_cert_stat.stat.exists
 

@@ -5,7 +5,7 @@
   become: no
   local_action:
     module: stat
-    path: "./roles/harbor/prepare/files/{{ HARBOR_FQDN }}.key"
+    path: "./roles/harbor/prepare/files/{{ harbor_fqdn }}.key"
   register: certificate_file
 
 - include_tasks: gen-harbor-cert.yaml

@@ -1,5 +1,18 @@
-- name: Include setup bind
-  include_tasks: setup.yaml
+- name: Setup bind
+  apt:
+    update_cache: yes
+    name: bind9
 
-- name: Include config bind
-  include_tasks: config.yaml
+- name: debug
+  debug:
+    msg: "{{ hostvars }}"
+
+- name: Update bind configuration
+  template:
+    src: "{{ item.src }}"
+    dest: "/etc/bind/{{ item.dest }}"
+    mode: 0644
+  with_items:
+    - { src: db.lan.j2 , dest: db.lan }
+    - { src: named.conf.local.j2 , dest: named.conf.local }
+  notify: Restart bind service

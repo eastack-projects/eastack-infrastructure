@@ -1,5 +1,0 @@
----
-- name: Setup bind
-  apt:
-    update_cache: yes
-    name: bind9
