@@ -1,9 +1,3 @@
-- name: Update DNS record
-  become: yes
-  hosts: bind
-  roles:
-    - bind/config
-
 - name: Initialize gitlab ce
   become: yes
   hosts: gitlab

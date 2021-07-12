@@ -1,0 +1,38 @@
+---
+# Certificate
+- name: Slurp vault cert
+  slurp:
+    src: "{{ VAULT_PKI_DIR }}/{{ VAULT_CERT_NAME }}"
+  register: vault_cert
+  delegate_to: vault
+
+- name: Copy CA cert
+  copy:
+    content: "{{ vault_cert['content'] | b64decode }}"
+    dest: "/usr/local/share/ca-certificates/vault-cert.crt"
+
+- name: Slurp root certificate
+  slurp:
+    src: "{{ VAULT_PKI_DIR }}/{{ ROOT_CERT_NAME }}"
+  register: root_cert
+  delegate_to: vault
+
+- name: Copy root certificate
+  copy:
+    content: "{{ root_cert['content'] | b64decode }}"
+    dest: "/usr/local/share/ca-certificates/root-cert.crt"
+
+- name: Slurp int certificate
+  slurp:
+    src: "{{ VAULT_PKI_DIR }}/{{ ROOT_CERT_NAME }}"
+  register: int_cert
+  delegate_to: vault
+
+- name: Copy int certificate
+  copy:
+    content: "{{ int_cert['content'] | b64decode }}"
+    dest: "/usr/local/share/ca-certificates/int-cert.crt"
+
+- name: Update CA certificate
+  shell:
+    cmd: update-ca-certificates

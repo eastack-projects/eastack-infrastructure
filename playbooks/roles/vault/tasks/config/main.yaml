@@ -37,3 +37,9 @@
 
 - name: Try generate root CA certificate
   include_tasks: generate-root-ca.yaml
+
+- name: Try mount pki int cecret engine
+  include_tasks: mount-int-pki-secret-engine.yaml
+
+- name: Try generate int CA certificate
+  include_tasks: generate-int-ca.yaml

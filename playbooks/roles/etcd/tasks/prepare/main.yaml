@@ -1,5 +1,5 @@
 ---
-# download etcd package
+# Download etcd package
 - name: Stat etcd package
   become: no
   local_action:
@@ -11,29 +11,15 @@
   include_tasks: download-etcd.yaml
   when: not etcd_package_stat.stat.exists
 
-# generate certificate
+# Generate certificate
+- name: Unseal vault
+  include_tasks: ../../../common/tasks/unseal-vault.yaml
+
 - name: Create etcd certificate directory
   file:
     path: "{{ ETCD_PKI_DIR }}"
     state: directory
     mode: 0755
-
-- name: Get vault mounts info
-  uri:
-    method: GET
-    headers:
-      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/sys/mounts"
-    status_code: 200
-  register: mounts_result
-
-- name: Try mount etcd pki secret engine
-  include_tasks: mount-etcd-pki-secret-engine.yaml
-  when: mounts_result.json.data['pki/etcd/'] is undefined
-  run_once: yes
-
-- name: Try generate etcd ca
-  include_tasks: gen-etcd-ca.yaml
 
 - include_tasks: gen-peer-cert.yaml
 - include_tasks: gen-client-cert.yaml

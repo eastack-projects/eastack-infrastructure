@@ -1,10 +1,10 @@
 ---
 # Setup vault certificate
-- name: Copy vault CA cert
+- name: Copy vault cert
   copy:
     remote_src: yes
     src: "{{ VAULT_PKI_DIR }}/{{ VAULT_CERT_NAME }}"
-    dest: "/usr/local/share/ca-certificates/{{ VAULT_FQDN }}.crt"
+    dest: "/usr/local/share/ca-certificates/vault_cert.crt"
 
 - name: Update CA certificate
   shell:

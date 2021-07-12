@@ -1,0 +1,3 @@
+---
+- include_tasks: prepare/main.yaml
+- include_tasks: setup/main.yaml

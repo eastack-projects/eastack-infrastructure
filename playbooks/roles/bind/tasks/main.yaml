@@ -3,10 +3,6 @@
     update_cache: yes
     name: bind9
 
-- name: debug
-  debug:
-    msg: "{{ hostvars }}"
-
 - name: Update bind configuration
   template:
     src: "{{ item.src }}"

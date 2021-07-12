@@ -4,7 +4,6 @@ PKI_TTL: 8760h
 MAX_PKI_TTL: 17520h
 RESOURCES_PATH: ../resources
 public_ip_address: "{{ ansible_enp0s8.ipv4.address }}"
-public_interface: "enp0s8"
 
 # KUBERNETES
 image_repository: registry.aliyuncs.com/google_containers
@@ -20,6 +19,8 @@ fallback_dns: 114.114.114.114
 VAULT_FQDN: vault.lan
 VAULT_PORT: 8200
 VAULT_PKI_DIR: /etc/vault/pki
+ROOT_CERT_NAME: root-ca.crt
+INT_CERT_NAME: int-ca.crt
 VAULT_CERT_NAME: tls.crt
 VAULT_KEY_NAME: tls.key
 VAULT_CSR_NAME: tls.csr
