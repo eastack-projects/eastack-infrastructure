@@ -30,7 +30,7 @@
   when: not vault_init.stat.exists
 
 - name: Unseal vault
-  include_tasks: ../../../common/tasks/unseal-vault.yaml
+  include_tasks: ../../../common/prepare/tasks/unseal-vault.yaml
 
 - name: Try mount pki root cecret engine
   include_tasks: mount-root-pki-secret-engine.yaml
