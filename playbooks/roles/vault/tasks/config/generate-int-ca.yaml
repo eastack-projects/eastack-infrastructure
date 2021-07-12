@@ -1,0 +1,40 @@
+---
+# Generate Intermediate CA
+- name: Generate Intermediate CA csr
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/int/intermediate/generate/internal"
+    body_format: json
+    status_code: 200
+    body:
+      common_name: "eastack.lan"
+  register: int_ca_csr
+
+- name: Sign Intermediate CA
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/root/root/sign-intermediate"
+    body_format: json
+    body:
+      csr: "{{ int_ca_csr.json.data.csr }}"
+  register: int_ca_crt
+
+- name: Set sign Intermediate Certificate
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/int/intermediate/set-signed"
+    body_format: json
+    status_code: 204
+    body:
+      certificate: "{{ int_ca_crt.json.data.certificate }}"
+
+- name: Persistent Intermediate CA Certificate
+  copy:
+    content: "{{ int_ca_crt.json.data.certificate }}"
+    dest: "{{ VAULT_PKI_DIR }}/{{ INT_CERT_NAME }}"

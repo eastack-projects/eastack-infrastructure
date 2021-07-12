@@ -1,0 +1,8 @@
+---
+- name: Generate join command
+  command: "kubeadm token create --print-join-command"
+  delegate_to: kubernetes_control_plane
+  register: join_command
+
+- name: Join cluster
+  command: "{{ join_command }}"

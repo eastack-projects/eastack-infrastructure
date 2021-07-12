@@ -16,7 +16,7 @@
 - name: Config hosts
   lineinfile:
     dest: /etc/hosts
-    line: "{{ ansible_host }} {{ VAULT_FQDN }} {{ VAULT_FQDN }}"
+    line: "{{ public_ip_address }} {{ VAULT_FQDN }} {{ VAULT_FQDN }}"
     state: present
 
 # Initialize vault
@@ -37,3 +37,9 @@
 
 - name: Try generate root CA certificate
   include_tasks: generate-root-ca.yaml
+
+- name: Try mount pki int cecret engine
+  include_tasks: mount-int-pki-secret-engine.yaml
+
+- name: Try generate int CA certificate
+  include_tasks: generate-int-ca.yaml

@@ -1,0 +1,31 @@
+---
+- name: Register DNS record
+  lineinfile:
+    dest: /etc/bind/db.lan
+    line: "{{ inventory_hostname }}.lan. IN A {{ public_ip_address }}"
+    state: present
+  delegate_to: bind
+
+- name: Get bind public ip address
+  shell: "ip addr show enp0s8 | grep -Po 'inet \K[\d.]+'"
+  register: bind_public_ip
+  delegate_to: bind
+
+- name: Configure DNS
+  replace:
+    path: /etc/systemd/resolved.conf
+    regexp: '#DNS='
+    replace: "DNS={{ bind_public_ip }}"
+    backup: yes
+
+- name: Configure fallback DNS
+  replace:
+    path: /etc/systemd/resolved.conf
+    regexp: '#FallbackDNS='
+    replace: "FallbackDNS={{ fallback_dns }}"
+    backup: yes
+
+- name: Restart systemd-resolved service
+  systemd:
+    name: systemd-resolved
+    state: restarted

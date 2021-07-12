@@ -1,17 +1,17 @@
 ---
-- name: Install docker-ce and docker-compose
+- name: Install docker
   apt:
     update_cache: yes
     name:
-      - docker-compose
-      - socat
+      - docker.io
       - conntrack
+      - python3-docker
 
-- name: Create docker cert directory
-  file:
-    path: "/etc/docker/certs.d/{{ HARBOR_FQDN }}"
-    state: directory
-    mode: 0644
+#- name: Create docker cert directory
+#  file:
+#    path: "/etc/docker/certs.d/{{ harbor_fqdn }}"
+#    state: directory
+#    mode: 0644
 
 #- name: Slurp intermediate certificate
 #  slurp:
@@ -28,27 +28,20 @@
 #- name: Copy certificate and private key
 #  copy:
 #    src: "./roles/harbor/prepare/files/{{ item.src }}"
-#    dest: "/etc/docker/certs.d/{{ HARBOR_FQDN }}/{{ item.dest }}"
+#    dest: "/etc/docker/certs.d/{{ harbor_fqdn }}/{{ item.dest }}"
 #    mode: 0644
 #  with_items:
-#    - { src: "{{ HARBOR_FQDN }}.crt" , dest: "{{ HARBOR_FQDN }}.crt" }
-#    - { src: "{{ HARBOR_FQDN }}.key" , dest: "{{ HARBOR_FQDN }}.key" }
+#    - { src: "{{ harbor_fqdn }}.crt" , dest: "{{ harbor_fqdn }}.crt" }
+#    - { src: "{{ harbor_fqdn }}.key" , dest: "{{ harbor_fqdn }}.key" }
 #  notify: Restart docker service
-
-- name: Copy daemon.json
-  copy:
-    src: daemon.json
-    dest: /etc/docker/daemon.json
-    mode: 0644
 
 - name: Add vagrant user to docker group
   user:
     name: vagrant
     group: docker
 
-- name: Restart docker service
+- name: Enable docker service
   systemd:
     name: docker
     enabled: yes
-    state: restarted
-    daemon_reload: true
+    state: started

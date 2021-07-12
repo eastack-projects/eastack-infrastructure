@@ -2,5 +2,5 @@
   become: yes
   hosts: vault
   roles:
-    - vault
     - common
+    - vault

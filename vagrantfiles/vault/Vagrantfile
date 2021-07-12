@@ -2,23 +2,27 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  host_ip = "192.168.33.20"
-
   config.vm.define "vault" do |vault|
-    vault.vm.box = "ubuntu/focal64"
     vault.vm.box_check_update = false
-    vault.vm.network "private_network", ip: host_ip
+    vault.vm.box = "ubuntu/focal64"
+    vault.vm.network "public_network"
     vault.vm.hostname = "vault"
     vault.vm.provider "virtualbox" do |vb|
-      vb.gui = false
       vb.memory = "1024"
     end
 
     vault.vm.provision :ansible do |ansible|
+      ansible.compatibility_mode = "2.0"
       ansible.playbook = "playbook.yaml"
-      ansible.host_vars = {
-        vault.vm.hostname => {"ansible_host" => host_ip, "ansible_port" => 22}
-      }
+    end
+
+    $script = <<-'SCRIPT'
+    public_ip=$(ip -o -4 addr list enp0s8 | awk '{print $4}' | cut -d/ -f1)
+    sed -i "s/127.0.0.1/$public_ip/" /vagrant/.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory
+    SCRIPT
+
+    config.trigger.after :up do |trigger|
+      trigger.run_remote = {inline: $script}
     end
   end
 end

@@ -22,14 +22,14 @@ set -euxo pipefail
 #
 #cd ../
 #
-#cd vagrantfiles/kubernetes/server
-#vagrant destroy -f && vagrant up
-#cd ../../../playbooks
-#ansible-playbook k8s-server.yaml
-#
-#cd ../
-
-cd vagrantfiles/kubernetes/node
+cd vagrantfiles/kubernetes/server
 #vagrant destroy -f && vagrant up
 cd ../../../playbooks
-ansible-playbook k8s-node.yaml
+ansible-playbook k8s-server.yaml
+
+cd ../
+
+#cd vagrantfiles/kubernetes/node
+#vagrant destroy -f && vagrant up
+#cd ../../../playbooks
+#ansible-playbook k8s-node.yaml

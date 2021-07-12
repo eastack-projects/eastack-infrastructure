@@ -4,21 +4,11 @@ Based Ansible and Vagrant.
 
 == Boot Order
 
-vault
 bind
+vault
 etcd
 kubernetes-server
 kubernetes-node
-
-== IP allocation
-
-bind:: 192.168.33.10
-vault:: 192.168.33.20
-etcd:: 192.168.33.3[0-9]
-harbor:: 192.168.33.40
-gitlab:: 192.168.33.50
-kubernetes-server:: 192.168.33.60
-kubernetes-node:: 192.168.33.7[0-9]
 
 == notes
 
@@ -65,3 +55,6 @@ kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
 * [ ] allow_any_name
 * [ ] 主动注册的形式更加灵活
 * [ ] 本机咱就别slurp了好不。嗯，好。
+* [ ] 关闭swap
+* [*] Kubeadm 它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!
+* [*] DNS那货怎么搞奥

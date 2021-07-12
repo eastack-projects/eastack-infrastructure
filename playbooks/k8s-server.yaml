@@ -1,6 +1,0 @@
-- name: Initialize kubernetes server
-  become: yes
-  hosts: k8s-server
-  roles:
-    - common
-    - kubernetes/server
