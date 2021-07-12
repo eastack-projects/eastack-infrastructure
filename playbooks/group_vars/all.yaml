@@ -3,7 +3,6 @@
 PKI_TTL: 8760h
 MAX_PKI_TTL: 17520h
 RESOURCES_PATH: ../resources
-public_ip_address: "{{ ansible_enp0s8.ipv4.address }}"
 
 # KUBERNETES
 image_repository: registry.aliyuncs.com/google_containers

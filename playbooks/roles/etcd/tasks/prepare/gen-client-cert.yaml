@@ -1,5 +1,5 @@
 ---
-- name: Add etcd client role
+- name: Add Etcd client role
   uri:
     method: POST
     headers:

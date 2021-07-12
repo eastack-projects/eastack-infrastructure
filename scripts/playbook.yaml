@@ -4,7 +4,7 @@
   hosts: all
 
   tasks:
-  - name: Patch inventory
+  - name: Patch vagrant ansible inventory
     replace:
       path: "/vagrant/.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory"
       regexp: "127.0.0.1"

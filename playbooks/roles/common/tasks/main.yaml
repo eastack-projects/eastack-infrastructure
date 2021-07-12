@@ -1,3 +1,37 @@
 ---
-- include_tasks: basic.yaml
-- include_tasks: register-dns.yaml
+- name: Config apt source mirror
+  copy:
+    src: sources.list
+    dest: /etc/apt/sources.list
+    mode: 0644
+
+- name: Disable Auto Update
+  replace:
+    path: /etc/apt/apt.conf.d/20auto-upgrades
+    regexp: '1'
+    replace: '0'
+    backup: yes
+
+- name: Set Timezone
+  timezone:
+    name: Asia/Shanghai
+
+# Config DNS
+- name: Configure DNS
+  replace:
+    path: /etc/systemd/resolved.conf
+    regexp: '#DNS='
+    replace: "DNS={{ hostvars.bind.ansible_host }}"
+    backup: yes
+
+- name: Configure fallback DNS
+  replace:
+    path: /etc/systemd/resolved.conf
+    regexp: '#FallbackDNS='
+    replace: "FallbackDNS={{ fallback_dns }}"
+    backup: yes
+
+- name: Restart systemd-resolved service
+  systemd:
+    name: systemd-resolved
+    state: restarted

@@ -14,3 +14,4 @@ $TTL    7d
                    MX      10      mail
 ns1                IN      A       127.0.0.1
 ns2                IN      A       127.0.0.2
+{% for host in groups['all'] %}{{ host }}.lan. IN A {{ hostvars[host].ansible_host }}{{ "\n" if not loop.last else "" }}{% endfor %}

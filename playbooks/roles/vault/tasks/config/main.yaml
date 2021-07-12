@@ -16,7 +16,7 @@
 - name: Config hosts
   lineinfile:
     dest: /etc/hosts
-    line: "{{ public_ip_address }} {{ VAULT_FQDN }} {{ VAULT_FQDN }}"
+    line: "{{ ansible_host }} {{ VAULT_FQDN }} {{ VAULT_FQDN }}"
     state: present
 
 # Initialize vault

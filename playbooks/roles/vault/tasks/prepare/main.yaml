@@ -1,5 +1,5 @@
 ---
-# download
+# Download vault package
 - name: Stat vault package
   become: no
   local_action:

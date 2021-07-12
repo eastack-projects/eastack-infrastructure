@@ -1,5 +1,5 @@
 ---
-- name: Add etcd peer role
+- name: Add Etcd peer role
   uri:
     method: POST
     headers:
@@ -11,7 +11,7 @@
       allow_any_name: true
       allowed_domains: "peer.{{ ETCD_DOMAIN }}"
 
-- name: Generate etcd peer certificate
+- name: Generate Etcd peer certificate
   uri:
     method: POST
     headers:

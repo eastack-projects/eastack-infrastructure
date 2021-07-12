@@ -54,6 +54,7 @@ kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
 * [ ] defaults vs vars
 * [ ] allow_any_name
 * [ ] 主动注册的形式更加灵活
+* [ ] 注册的形式确实灵活，但权限逻辑上不太通
 * [ ] 本机咱就别slurp了好不。嗯，好。
 * [ ] 关闭swap
 * [*] Kubeadm 它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!
