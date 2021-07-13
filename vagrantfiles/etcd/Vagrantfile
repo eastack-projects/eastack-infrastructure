@@ -7,7 +7,7 @@ Vagrant.configure("2") do |config|
   (1..3).each do |i|
     config.vm.define "etcd#{i}" do |etcd|
       etcd.vm.box = "ubuntu/focal64"
-      etcd.vm.network "private_network", type: "dhcp"
+      etcd.vm.network "public_network"
       etcd.vm.hostname = "etcd#{i}"
       etcd.vm.provider "virtualbox" do |vb|
         vb.memory = "1024"

@@ -4,8 +4,14 @@
   hosts: all
 
   tasks:
-  - name: Patch vagrant ansible inventory
+  - name: Patch inventory ansible_host
     replace:
       path: "/vagrant/.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory"
       regexp: "127.0.0.1"
       replace: "{{ ansible_enp0s8.ipv4.address }}"
+
+  - name: Patch inventory ansible_port
+    replace:
+      path: "/vagrant/.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory"
+      regexp: 'ansible_port=(\d+)'
+      replace: "ansible_port=22"

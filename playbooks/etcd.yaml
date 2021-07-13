@@ -2,5 +2,6 @@
   become: yes
   hosts: etcd
   roles:
-    - common
+    - common/prepare
+    - common/config
     - etcd
