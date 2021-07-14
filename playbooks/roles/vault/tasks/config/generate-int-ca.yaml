@@ -5,11 +5,11 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/int/intermediate/generate/internal"
+    url: "https://{{ VAULT_DOMAIN }}:{{ VAULT_PORT }}/v1/pki_int/intermediate/generate/internal"
     body_format: json
     status_code: 200
     body:
-      common_name: "eastack.lan"
+      common_name: "int.{{ VAULT_DOMAIN }}"
   register: int_ca_csr
 
 - name: Sign Intermediate CA
@@ -17,7 +17,7 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/root/root/sign-intermediate"
+    url: "https://{{ VAULT_DOMAIN }}:{{ VAULT_PORT }}/v1/pki/root/sign-intermediate"
     body_format: json
     body:
       csr: "{{ int_ca_csr.json.data.csr }}"
@@ -28,7 +28,7 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/int/intermediate/set-signed"
+    url: "https://{{ VAULT_DOMAIN }}:{{ VAULT_PORT }}/v1/pki_int/intermediate/set-signed"
     body_format: json
     status_code: 204
     body:
@@ -38,3 +38,15 @@
   copy:
     content: "{{ int_ca_crt.json.data.certificate }}"
     dest: "{{ VAULT_PKI_DIR }}/{{ INT_CERT_NAME }}"
+
+- name: Config the CA and CRL URLs
+  uri:
+    method: POST
+    headers:
+      X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
+    url: "https://{{ VAULT_DOMAIN }}:{{ VAULT_PORT }}/v1/pki_int/config/urls"
+    body_format: json
+    status_code: 204
+    body:
+      issuing_certificates: "https://{{ VAULT_DOMAIN }}:{{ VAULT_PORT }}/v1/pki_int/ca"
+      crl_distribution_points: "https://{{ VAULT_DOMAIN }}:{{ VAULT_PORT }}/v1/pki_int/crl"

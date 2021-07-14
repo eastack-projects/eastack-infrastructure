@@ -4,7 +4,9 @@ ETCD_DOMAIN: "{{ ansible_hostname }}.lan"
 ETCD_EXTRACT_DIR: /opt/etcd
 ETCD_WORKING_DIR: /var/lib/etcd
 ETCD_PKI_DIR: /etc/etcd/pki
+ETCD_CONFIG_DIR: /etc/etcd
 ETCD_PEER_CERT_NAME: peer.crt
 ETCD_PEER_KEY_NAME: peer.key
 ETCD_CLIENT_CERT_NAME: client.crt
 ETCD_CLIENT_KEY_NAME: client.key
+ETCD_CA_CERT: /usr/local/share/ca-certificates/root-cert.crt

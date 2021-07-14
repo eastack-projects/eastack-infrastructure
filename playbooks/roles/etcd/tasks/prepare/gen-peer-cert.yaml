@@ -4,24 +4,24 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/int/roles/peer.etcd"
+    url: "https://{{ VAULT_DOMAIN }}:{{ VAULT_PORT }}/v1/pki_int/roles/peer.{{ ETCD_DOMAIN }}"
     body_format: json
     status_code: 204
     body:
       allow_any_name: true
-      allowed_domains: "peer.{{ ETCD_DOMAIN }}"
+      allowed_domains: "{{ ETCD_DOMAIN }}"
 
 - name: Generate Etcd peer certificate
   uri:
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/int/issue/peer.etcd"
+    url: "https://{{ VAULT_DOMAIN }}:{{ VAULT_PORT }}/v1/pki_int/issue/peer.{{ ETCD_DOMAIN }}"
     body_format: json
     status_code: 200
     body:
-      common_name: "peer.{{ ETCD_DOMAIN }}"
-      ip_sans: "{{ ansible_host }}"
+      common_name: "{{ ETCD_DOMAIN }}"
+      ip_sans: "{{ PUBLIC_IP_ADDRESS }}"
   register: certificate
 
 - name: Persistent etcd peer certificate

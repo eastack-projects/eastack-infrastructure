@@ -1,13 +1,5 @@
-- name: Test ansible
+- name: Setup vault
   become: yes
-  hosts: bind
-  vars:
-    public_ip_address: "{{ ansible_enp0s8.ipv4.address }}"
-  tasks:
-    - name: Get hostname
-      debug:
-        msg: "{{ inventory_hostname }}"
-
-    - name: Get IP address
-      debug:
-        msg: "{{hostvars['bind'].ansible_enp0s8.ipv4.address}}"
+  hosts: localhost
+  roles:
+    - common

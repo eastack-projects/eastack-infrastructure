@@ -1,21 +1,4 @@
 ---
-- name: Config apt source mirror
-  copy:
-    src: sources.list
-    dest: /etc/apt/sources.list
-    mode: 0644
-
-- name: Disable Auto Update
-  replace:
-    path: /etc/apt/apt.conf.d/20auto-upgrades
-    regexp: '1'
-    replace: '0'
-    backup: yes
-
-- name: Set Timezone
-  timezone:
-    name: Asia/Shanghai
-
 # Config DNS
 - name: Configure DNS
   replace:
@@ -28,7 +11,7 @@
   replace:
     path: /etc/systemd/resolved.conf
     regexp: '#FallbackDNS='
-    replace: "FallbackDNS={{ fallback_dns }}"
+    replace: "FallbackDNS={{ FALLBACK_DNS }}"
     backup: yes
 
 - name: Restart systemd-resolved service

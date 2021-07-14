@@ -22,10 +22,12 @@
     state: present
     filename: kubernetes
 
-- name: Install kubelet and kubeadm
+- name: Install Docker Kubelet and Kubeadm
   apt:
-    update_cache: yes
     name:
+      - docker.io
+      - conntrack
+      - python3-docker
       - kubelet
       - kubeadm
       - socat
@@ -33,6 +35,12 @@
       - apt-transport-https
       - gnupg-agent
       - software-properties-common
+
+- name: Enable docker service
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
 
 - name: Remove swapfile from /etc/fstab
   mount:
@@ -65,7 +73,7 @@
 - name: Configure node ip
   lineinfile:
     path: /etc/default/kubelet
-    line: "KUBELET_EXTRA_ARGS=--node-ip={{ ansible_enp0s8.ipv4.address }}"
+    line: "KUBELET_EXTRA_ARGS=--node-ip={{ PUBLIC_IP_ADDRESS }}"
     create: yes
 
 - name: Enable kubelet
@@ -76,6 +84,6 @@
 
 - name: Pull coredns docker image
   docker_image:
-    name: "coredns/coredns:{{ coredns_version }}"
-    repository: "{{ image_repository }}/coredns/coredns:v{{ coredns_version }}"
+    name: "coredns/coredns:{{ COREDNS_VERSION }}"
+    repository: "{{ IMAGE_REPOSITORY }}/coredns/coredns:v{{ COREDNS_VERSION }}"
     source: pull

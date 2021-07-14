@@ -1,7 +1,9 @@
+- name: Gather facts
+  hosts: all
+
 - name: Initialize etcd cluster
   become: yes
   hosts: etcd
   roles:
-    - common/prepare
-    - common/config
+    - common
     - etcd

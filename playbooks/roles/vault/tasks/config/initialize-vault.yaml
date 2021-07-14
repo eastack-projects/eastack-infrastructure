@@ -2,13 +2,13 @@
 # Initialize vault
 - name: Wait vault to be available
   wait_for:
-    host: "{{ VAULT_FQDN }}"
+    host: "{{ VAULT_DOMAIN }}"
     port: "{{ VAULT_PORT }}"
 
 - name: Initialize the vault
   uri:
     method: PUT
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/sys/init"
+    url: "https://{{ VAULT_DOMAIN }}:{{ VAULT_PORT }}/v1/sys/init"
     body_format: json
     body:
       secret_shares: 3

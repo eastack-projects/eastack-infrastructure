@@ -5,11 +5,11 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/root/root/generate/internal"
+    url: "https://{{ VAULT_DOMAIN }}:{{ VAULT_PORT }}/v1/pki/root/generate/internal"
     body_format: json
     status_code: 200
     body:
-      common_name: "root.{{ VAULT_FQDN }}"
+      common_name: "root.{{ VAULT_DOMAIN }}"
   register: root_certificate
 
 - name: Persistent the root CA certificate
@@ -22,9 +22,9 @@
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/root/config/urls"
+    url: "https://{{ VAULT_DOMAIN }}:{{ VAULT_PORT }}/v1/pki/config/urls"
     body_format: json
     status_code: 204
     body:
-      issuing_certificates: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/ca"
-      crl_distribution_points: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/crl"
+      issuing_certificates: "https://{{ VAULT_DOMAIN }}:{{ VAULT_PORT }}/v1/pki/ca"
+      crl_distribution_points: "https://{{ VAULT_DOMAIN }}:{{ VAULT_PORT }}/v1/pki/crl"

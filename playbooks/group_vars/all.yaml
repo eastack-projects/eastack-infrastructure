@@ -3,19 +3,20 @@
 PKI_TTL: 8760h
 MAX_PKI_TTL: 17520h
 RESOURCES_PATH: ../resources
+PUBLIC_IP_ADDRESS: "{{ ansible_enp0s8.ipv4.address }}"
 
 # KUBERNETES
-image_repository: registry.aliyuncs.com/google_containers
-coredns_version: 1.8.0
+IMAGE_REPOSITORY: registry.aliyuncs.com/google_containers
+COREDNS_VERSION: 1.8.0
 
 # HARBOR
-harbor_fqdn: harbor.lan
+HARBOR_DOMAIN: harbor.lan
 
 # DNS
-fallback_dns: 114.114.114.114
+FALLBACK_DNS: 114.114.114.114
 
 # VAULT
-VAULT_FQDN: vault.lan
+VAULT_DOMAIN: vault.lan
 VAULT_PORT: 8200
 VAULT_PKI_DIR: /etc/vault/pki
 ROOT_CERT_NAME: root-ca.crt
@@ -26,5 +27,5 @@ VAULT_CSR_NAME: tls.csr
 VAULT_INITIALIZE_RESULT: initialize_result.json
 
 # GITLAB
-GITLAB_FQDN: gitlab.lan
+GITLAB_DOMAIN: gitlab.lan
 EXTERNAL_URL: https://gitlab.lan

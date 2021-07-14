@@ -1,7 +1,6 @@
 ---
 - name: Install gitlab-ce dependencies
   apt:
-    update_cache: yes
     name:
       - postfix
       - apt-transport-https
@@ -23,31 +22,9 @@
     state: present
     mode: 0644
 
-- name: Add gitlab-runner tsinghua repository
-  apt_repository:
-    repo: deb https://mirrors.tuna.tsinghua.edu.cn/gitlab-runner/ubuntu focal main
-    state: present
-    mode: 0644
-
-- name: Create certificate directory
-  file:
-    path: /etc/gitlab/ssl
-    state: directory
-    mode: 0644
-
-- name: Copy gitlib certificate
-  copy:
-    src: "./roles/gitlab/server/prepare/{{ GITLAB_FQDN }}.{{ item }}"
-    dest: "/etc/gitlab/ssl/{{ GITLAB_FQDN }}.{{ item }}"
-    mode: 0644
-  with_items:
-    - key
-    - crt
-
 - name: Install gitlab-ce
   apt:
-    update_cache: yes
     name:
       - gitlab-ce
   environment:
-    EXTERNAL_URL: "{{ EXTERNAL_URL }}"
+    EXTERNAL_URL: "https://{{ GITLAB_DOMAIN }}"

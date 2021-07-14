@@ -27,8 +27,8 @@
     dest: "/opt/harbor/tls/{{ item }}"
     mode: 0644
   with_items:
-    - "{{ harbor_fqdn }}.crt"
-    - "{{ harbor_fqdn }}.key"
+    - "{{ HARBOR_DOMAIN }}.crt"
+    - "{{ HARBOR_DOMAIN }}.key"
 
 - name: Generate harbor.yaml
   shell: ./generate-harbor.yaml.py

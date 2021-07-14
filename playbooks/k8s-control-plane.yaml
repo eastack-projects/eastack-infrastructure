@@ -3,6 +3,5 @@
   hosts: kubernetes_control_plane
   roles:
     - common
-    - docker
     - kubernetes/common
     - kubernetes/control-plane

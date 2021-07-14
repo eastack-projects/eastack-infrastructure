@@ -4,8 +4,8 @@ Based Ansible and Vagrant.
 
 == Boot Order
 
-bind
 vault
+bind
 etcd
 kubernetes-server
 kubernetes-node
@@ -34,6 +34,8 @@ kubectl replace --force -f coredns-deployment.yaml
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.45.0/deploy/static/provider/cloud/deploy.yaml
 kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
 ----
+
+Vault 和 Bind9 属于基础设施类服务，尽可能减少修改与配置，keep clean
 
 == To Do
 

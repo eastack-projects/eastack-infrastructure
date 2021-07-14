@@ -2,6 +2,4 @@
   become: yes
   hosts: vault
   roles:
-    - common/prepare
     - vault
-    - common/config

@@ -1,37 +1,43 @@
 ---
-- name: Add GitLab peer role
+- name: Add GitLab role
   uri:
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/int/roles/gitlab"
+    url: "https://{{ VAULT_DOMAIN }}:{{ VAULT_PORT }}/v1/pki_int/roles/{{ GITLAB_DOMAIN }}"
     body_format: json
     status_code: 204
     body:
       allow_any_name: true
       allowed_domains: "{{ GITLAB_DOMAIN }}"
 
-- name: Generate GitLab peer certificate
+- name: Generate GitLab certificate
   uri:
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_FQDN }}:{{ VAULT_PORT }}/v1/pki/int/issue/peer.etcd"
+    url: "https://{{ VAULT_DOMAIN }}:{{ VAULT_PORT }}/v1/pki_int/issue/{{ GITLAB_DOMAIN }}"
     body_format: json
     status_code: 200
     body:
-      common_name: "peer.{{ ETCD_DOMAIN }}"
-      ip_sans: "{{ ansible_host }}"
+      common_name: "{{ GITLAB_DOMAIN }}"
+      ip_sans: "{{ PUBLIC_IP_ADDRESS }}"
   register: certificate
 
-- name: Persistent etcd peer certificate
-  copy:
-    content: "{{ certificate.json.data.certificate }}"
-    dest: "{{ ETCD_PKI_DIR }}/{{ ETCD_PEER_CERT_NAME }}"
+- name: Create certificate directory
+  file:
+    path: /etc/gitlab/ssl
+    state: directory
     mode: 0644
 
-- name: Persistent etcd peer key
+- name: Persistent GitLab certificate
+  copy:
+    content: "{{ certificate.json.data.certificate }}"
+    dest: "/etc/gitlab/ssl/{{ GITLAB_DOMAIN }}.crt"
+    mode: 0644
+
+- name: Persistent GitLab key
   copy:
     content: "{{ certificate.json.data.private_key }}"
-    dest: "{{ ETCD_PKI_DIR }}/{{ ETCD_PEER_KEY_NAME }}"
+    dest: "/etc/gitlab/ssl/{{ GITLAB_DOMAIN }}.key"
     mode: 0644

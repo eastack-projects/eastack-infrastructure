@@ -1,21 +1,6 @@
-- name: Gather facts
-  hosts: all
-
-- name: Update DNS record
+- name: Initialize Harbor
   become: yes
   hosts: harbor
   roles:
     - common
-
-      #- name: Initialize harbor
-      #  become: yes
-      #  hosts: harbor
-      #  roles:
-      #    - common/config/timezone
-      #    - common/config/update
-      #    - common/config/dns
-      #    - common/config/apt
-      #    - common/config/ca
-      #    - docker/setup
-      #    - harbor/prepare
-      #    - harbor/setup
+    - harbor

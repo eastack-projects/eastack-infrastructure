@@ -2,16 +2,39 @@
 - name: Initialize
   become: yes
   hosts: all
-
   tasks:
+  - name: Gather facts from db servers
+    setup:
+    delegate_to: "{{ item }}"
+    delegate_facts: true
+    loop: "{{ groups['all'] }}"
+
   - name: Patch inventory ansible_host
     replace:
       path: "/vagrant/.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory"
-      regexp: "127.0.0.1"
-      replace: "{{ ansible_enp0s8.ipv4.address }}"
+      regexp: "^{{item}} ansible_host=(127.0.0.1)"
+      replace: "{{ item }} ansible_host={{ hostvars[item].ansible_enp0s8.ipv4.address }}"
+    loop: "{{ groups['all'] }}"
 
   - name: Patch inventory ansible_port
     replace:
       path: "/vagrant/.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory"
       regexp: 'ansible_port=(\d+)'
       replace: "ansible_port=22"
+
+  - name: Config APT mirror
+    replace:
+      path: "/etc/apt/sources.list"
+      regexp: 'archive.ubuntu.com|security.ubuntu.com'
+      replace: "mirrors.tuna.tsinghua.edu.cn"
+
+  - name: Disable APT auto update
+    replace:
+      path: /etc/apt/apt.conf.d/20auto-upgrades
+      regexp: '1'
+      replace: '0'
+      backup: yes
+
+  - name: Set Timezone
+    timezone:
+      name: Asia/Shanghai

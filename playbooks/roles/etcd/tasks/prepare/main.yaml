@@ -12,9 +12,6 @@
   when: not etcd_package_stat.stat.exists
 
 # Generate certificate
-- name: Unseal vault
-  include_tasks: ../../../common/prepare/tasks/unseal-vault.yaml
-
 - name: Create etcd certificate directory
   file:
     path: "{{ ETCD_PKI_DIR }}"

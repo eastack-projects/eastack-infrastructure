@@ -1,11 +1,6 @@
-- name: Initialize gitlab ce
+- name: Initialize GitLab CE
   become: yes
   hosts: gitlab
   roles:
-    - common/config/timezone
-    - common/config/update
-    - common/config/dns
-    - common/config/apt
-    - common/config/ca
-    - gitlab/server/prepare
-    - gitlab/server/setup
+    - common
+    - gitlab
