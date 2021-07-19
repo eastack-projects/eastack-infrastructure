@@ -1,5 +1,5 @@
 ---
-- name: Create harbor packages directory
+- name: Create Harbor packages directory
   become: no
   local_action:
     module: file
@@ -12,4 +12,4 @@
   local_action:
     module: get_url
     url: "{{ HARBOR_DOWNLOAD_URL }}"
-    dest:  "{{ HARBOR_PACKAGE }}"
+    dest:  "{{ HARBOR_PACKAGE_NAME }}"

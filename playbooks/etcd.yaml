@@ -1,7 +1,7 @@
 - name: Gather facts
   hosts: all
 
-- name: Initialize etcd cluster
+- name: Initialize Etcd cluster
   become: yes
   hosts: etcd
   roles:

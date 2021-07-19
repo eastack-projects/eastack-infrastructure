@@ -1,5 +1,5 @@
 ---
-- name: Enable and restart etcd service
+- name: Enable and restart Etcd service
   systemd:
     name: etcd
     daemon_reload: yes

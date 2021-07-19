@@ -11,5 +11,6 @@
 
 - name: Install Vault
   apt:
+    update_cache: yes
     name:
       - vault

@@ -12,7 +12,7 @@
       enforce_hostnames: false
       allowed_domains: "{{ ETCD_DOMAIN }},localhost"
 
-- name: Generate etcd client certificate
+- name: Generate Etcd client certificate
   uri:
     method: POST
     headers:
@@ -25,13 +25,13 @@
       ip_sans: "{{ PUBLIC_IP_ADDRESS }},127.0.0.1"
   register: certificate
 
-- name: Persistent etcd client certificate
+- name: Persistent Etcd client certificate
   copy:
     content: "{{ certificate.json.data.certificate }}"
     dest: "{{ ETCD_PKI_DIR }}/{{ ETCD_CLIENT_CERT_NAME }}"
     mode: 0644
 
-- name: Persistent etcd client key
+- name: Persistent Etcd client key
   copy:
     content: "{{ certificate.json.data.private_key }}"
     dest: "{{ ETCD_PKI_DIR }}/{{ ETCD_CLIENT_KEY_NAME }}"

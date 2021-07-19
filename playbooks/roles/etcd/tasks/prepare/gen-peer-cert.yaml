@@ -24,13 +24,13 @@
       ip_sans: "{{ PUBLIC_IP_ADDRESS }}"
   register: certificate
 
-- name: Persistent etcd peer certificate
+- name: Persistent Etcd peer certificate
   copy:
     content: "{{ certificate.json.data.certificate }}"
     dest: "{{ ETCD_PKI_DIR }}/{{ ETCD_PEER_CERT_NAME }}"
     mode: 0644
 
-- name: Persistent etcd peer key
+- name: Persistent Etcd peer key
   copy:
     content: "{{ certificate.json.data.private_key }}"
     dest: "{{ ETCD_PKI_DIR }}/{{ ETCD_PEER_KEY_NAME }}"

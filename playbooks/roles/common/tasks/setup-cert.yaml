@@ -24,7 +24,7 @@
 
 - name: Slurp int certificate
   slurp:
-    src: "{{ VAULT_PKI_DIR }}/{{ ROOT_CERT_NAME }}"
+    src: "{{ VAULT_PKI_DIR }}/{{ INT_CERT_NAME }}"
   register: int_cert
   delegate_to: vault
 

@@ -6,11 +6,12 @@ RESOURCES_PATH: ../resources
 PUBLIC_IP_ADDRESS: "{{ ansible_enp0s8.ipv4.address }}"
 
 # KUBERNETES
-IMAGE_REPOSITORY: registry.aliyuncs.com/google_containers
+IMAGE_REPOSITORY: harbor.lan/kubernetes
 COREDNS_VERSION: 1.8.0
 
 # HARBOR
 HARBOR_DOMAIN: harbor.lan
+HARBOR_PKI_DIR: /opt/harbor/pki
 
 # DNS
 FALLBACK_DNS: 114.114.114.114

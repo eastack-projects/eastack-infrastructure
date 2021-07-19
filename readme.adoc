@@ -12,7 +12,7 @@ kubernetes-node
 
 == notes
 
-.test etcd cluster
+.test Etcd cluster
 [source, bash]
 ----
 cd /etc/etcd/pki/

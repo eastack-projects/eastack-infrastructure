@@ -1,0 +1,52 @@
+---
+- name: Setup docker
+  apt:
+    update_cache: yes
+    name:
+      - docker.io
+
+- name: Enable docker service
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+
+- name: Create Docker Harbor certificate directory
+  file:
+    path: "{{ DOCKER_CERT_DIR }}/{{ HARBOR_DOMAIN }}"
+    state: directory
+    mode: 0755
+
+- name: Slurp Harbor certificate
+  slurp:
+    src: "{{ HARBOR_PKI_DIR }}/{{ HARBOR_DOMAIN }}.crt"
+  register: harbor_crt
+  delegate_to: harbor
+
+- name: Copy Harbor certificate
+  copy:
+    content: "{{ harbor_crt['content'] | b64decode }}"
+    dest: "{{ DOCKER_CERT_DIR }}/{{ HARBOR_DOMAIN }}.cert"
+
+- name: Slurp Harbor key
+  slurp:
+    src: "{{ HARBOR_PKI_DIR }}/{{ HARBOR_DOMAIN }}.key"
+  register: harbor_key
+  delegate_to: harbor
+
+- name: Copy Harbor key
+  copy:
+    content: "{{ harbor_key['content'] | b64decode }}"
+    dest: "{{ DOCKER_CERT_DIR }}/{{ HARBOR_DOMAIN }}.key"
+
+- name: Config docker daemon
+  copy:
+    src: daemon.json
+    dest: /etc/docker/daemon.json
+    mode: 0644
+
+- name: Restart docker service
+  systemd:
+    name: docker
+    state: restarted
+    daemon_reload: true

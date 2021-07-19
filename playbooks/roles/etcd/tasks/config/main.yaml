@@ -1,13 +1,13 @@
 ---
-- name: Create etcd config directory
+- name: Create Etcd config directory
   file:
     path: "{{ ETCD_CONFIG_DIR }}"
     state: directory
     mode: 0755
 
-- name: Generate etcd environment file
+- name: Generate Etcd environment file
   template:
     src: etcd.j2
     dest: "{{ ETCD_CONFIG_DIR }}/etcd.env"
     mode: 0644
-  notify: Enable and restart etcd service
+  notify: Enable and restart Etcd service

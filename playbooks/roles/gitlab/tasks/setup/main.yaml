@@ -1,6 +1,7 @@
 ---
 - name: Install gitlab-ce dependencies
   apt:
+    update_cache: yes
     name:
       - postfix
       - apt-transport-https
@@ -24,6 +25,7 @@
 
 - name: Install gitlab-ce
   apt:
+    update_cache: yes
     name:
       - gitlab-ce
   environment:

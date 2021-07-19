@@ -1,5 +1,5 @@
 ---
-- name: Create etcd packages directory
+- name: Create Etcd packages directory
   become: no
   local_action:
     module: file
@@ -7,7 +7,7 @@
     state: directory
     mode: 0755
 
-- name: Download etcd node binary package
+- name: Download Etcd node binary package
   become: no
   local_action:
     module: get_url

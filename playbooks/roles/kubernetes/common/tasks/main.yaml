@@ -1,15 +1,5 @@
 ---
-- name: Config docker daemon
-  copy:
-    src: daemon.json
-    dest: /etc/docker/daemon.json
-    mode: 0644
-
-- name: Restart docker service
-  systemd:
-    name: docker
-    state: restarted
-    daemon_reload: true
+- include_tasks: setup-docker.yaml
 
 - name: Add kubernetes mirror key
   apt_key:
@@ -24,8 +14,8 @@
 
 - name: Install Docker Kubelet and Kubeadm
   apt:
+    update_cache: yes
     name:
-      - docker.io
       - conntrack
       - python3-docker
       - kubelet
@@ -35,12 +25,6 @@
       - apt-transport-https
       - gnupg-agent
       - software-properties-common
-
-- name: Enable docker service
-  systemd:
-    name: docker
-    enabled: yes
-    state: started
 
 - name: Remove swapfile from /etc/fstab
   mount:

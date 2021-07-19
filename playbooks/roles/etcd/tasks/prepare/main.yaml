@@ -1,18 +1,18 @@
 ---
-# Download etcd package
-- name: Stat etcd package
+# Download Etcd package
+- name: Stat Etcd package
   become: no
   local_action:
     module: stat
     path: "{{ ETCD_PACKAGE_NAME }}"
   register: etcd_package_stat
 
-- name: Try donwload etcd package
+- name: Try donwload Etcd package
   include_tasks: download-etcd.yaml
   when: not etcd_package_stat.stat.exists
 
 # Generate certificate
-- name: Create etcd certificate directory
+- name: Create Etcd certificate directory
   file:
     path: "{{ ETCD_PKI_DIR }}"
     state: directory

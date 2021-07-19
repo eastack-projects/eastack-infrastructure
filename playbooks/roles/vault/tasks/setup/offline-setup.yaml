@@ -13,4 +13,5 @@
 
 - name: Install vault
   apt:
+    update_cache: yes
     deb: /opt/vault/package/vault.deb

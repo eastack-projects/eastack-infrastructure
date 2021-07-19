@@ -1,12 +1,28 @@
 ---
-- include_tasks: download.yaml
-
-- name: Check harbor private key stat
+# Download Harbor package
+- name: Stat Harbor package
   become: no
   local_action:
     module: stat
-    path: "./roles/harbor/prepare/files/{{ HARBOR_DOMAIN }}.key"
+    path: "{{ HARBOR_PACKAGE_NAME }}"
+  register: package_stat
+
+- name: Try donwload Harbor package
+  include_tasks: download-harbor.yaml
+  when: not package_stat.stat.exists
+
+# Generate certificate
+- name: Check Harbor private key stat
+  stat:
+    path: "{{ HARBOR_PKI_DIR }}/{{ HARBOR_DOMAIN }}.crt"
   register: certificate_file
+
+- name: Create Harbor certificate directory
+  file:
+    path: "{{ HARBOR_PKI_DIR }}"
+    state: directory
+    mode: 0755
+  when: not certificate_file.stat.exists
 
 - include_tasks: gen-harbor-cert.yaml
   when: not certificate_file.stat.exists

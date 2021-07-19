@@ -1,50 +1,37 @@
 ---
-- name: Check harbor certificate stat
-  stat:
-    path: "./roles/harbor/prepare/files/{{ HARBOR_DOMAIN }}.crt"
-  register: harbor_cert_stat
-
-- name: Add harbor role
+- name: Add Harbor role
   uri:
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_DOMAIN }}:{{ VAULT_PORT }}/v1/kubernetes/roles/{{ HARBOR_DOMAIN }}"
+    url: "https://{{ VAULT_DOMAIN }}:{{ VAULT_PORT }}/v1/pki_int/roles/{{ HARBOR_DOMAIN }}"
     body_format: json
     status_code: 204
     body:
-      allowed_domains: "{{ HARBOR_DOMAIN }}"
       allow_any_name: true
-      allow_subdomains: yes
-  when: not harbor_cert_stat.stat.exists
+      allowed_domains: "{{ HARBOR_DOMAIN }}"
 
-- name: Generate harbor certificate
+- name: Generate Harbor certificate
   uri:
     method: POST
     headers:
       X-Vault-Token: "{{ vault_initialize_result['root_token'] }}"
-    url: "https://{{ VAULT_DOMAIN }}:{{ VAULT_PORT }}/v1/kubernetes/issue/{{ HARBOR_DOMAIN }}"
+    url: "https://{{ VAULT_DOMAIN }}:{{ VAULT_PORT }}/v1/pki_int/issue/{{ HARBOR_DOMAIN }}"
     body_format: json
     status_code: 200
     body:
       common_name: "{{ HARBOR_DOMAIN }}"
-      ip_sans: "{{ ansible_host }}"
+      ip_sans: "{{ PUBLIC_IP_ADDRESS }}"
   register: certificate
-  when: not harbor_cert_stat.stat.exists
 
-- name: Persistent harbor certificate
-  become: no
-  local_action:
-    module: copy
+- name: Persistent Harbor certificate
+  copy:
     content: "{{ certificate.json.data.certificate }}"
-    dest: "./roles/harbor/prepare/files/{{ HARBOR_DOMAIN }}.crt"
-  when: not harbor_cert_stat.stat.exists
+    dest: "{{ HARBOR_PKI_DIR }}/{{ HARBOR_DOMAIN }}.crt"
+    mode: 0644
 
-- name: Persistent harbor private key
-  become: no
-  local_action:
-    module: copy
+- name: Persistent Harbor key
+  copy:
     content: "{{ certificate.json.data.private_key }}"
-    dest: "./roles/harbor/prepare/files/{{ HARBOR_DOMAIN }}.key"
-  when: not harbor_cert_stat.stat.exists
-
+    dest: "{{ HARBOR_PKI_DIR }}/{{ HARBOR_DOMAIN }}.key"
+    mode: 0644

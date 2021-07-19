@@ -1,5 +1,5 @@
 ---
-- name: Create etcd directory
+- name: Create Etcd directory
   file:
     path: "{{ item }}"
     state: directory
@@ -8,7 +8,7 @@
     - "{{ ETCD_WORKING_DIR }}"
     - "{{ ETCD_EXTRACT_DIR }}"
 
-- name: Extract etcd package
+- name: Extract Etcd package
   unarchive:
     src: "{{ ETCD_PACKAGE_NAME }}"
     dest: "{{ ETCD_EXTRACT_DIR }}"
@@ -24,9 +24,9 @@
   with_items:
     - etcd
     - etcdctl
-  notify: Enable and restart etcd service
+  notify: Enable and restart Etcd service
 
-- name: Add basic etcd systemd service
+- name: Add basic Etcd systemd service
   template:
     src: etcd.service.j2
     dest: /usr/lib/systemd/system/etcd.service
