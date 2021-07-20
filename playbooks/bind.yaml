@@ -1,8 +1,0 @@
-- name: Gather facts
-  hosts: all
-
-- name: Setup bind
-  become: yes
-  hosts: bind
-  roles:
-    - bind

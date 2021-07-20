@@ -1,5 +1,9 @@
-- name: Setup vault
-  become: yes
-  hosts: localhost
-  roles:
-    - common
+- name: Test DDNS
+  hosts: pdns
+  tasks:
+    - name: Update harbor DNS record
+      nsupdate:
+        server: 192.168.254.57
+        zone: 'lan'
+        record: 'harbor'
+        value: '192.168.2.1'

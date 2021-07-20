@@ -1,0 +1,18 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.define "pdns" do |pdns|
+    pdns.vm.box = "ubuntu/focal64"
+    pdns.vm.hostname = "pdns"
+    pdns.vm.network "public_network"
+    pdns.vm.provider "virtualbox" do |vb|
+      vb.memory = "512"
+    end
+
+    pdns.vm.provision :ansible do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.playbook = "playbook.yaml"
+    end
+  end
+end

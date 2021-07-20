@@ -4,11 +4,11 @@ Based Ansible and Vagrant.
 
 == Boot Order
 
-vault
-bind
-etcd
-kubernetes-server
-kubernetes-node
+PowerDNS
+Vault
+Etcd
+Kubernetes Control plane
+Kubernetes Worker
 
 == notes
 

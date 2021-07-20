@@ -1,5 +1,5 @@
 ---
-- name: Restart bind service
+- name: RestartPowerDNSservice
   systemd:
     name: bind9
     state: restarted

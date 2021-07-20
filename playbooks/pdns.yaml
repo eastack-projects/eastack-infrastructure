@@ -1,0 +1,5 @@
+- name: Setup pdns
+  become: yes
+  hosts: pdns
+  roles:
+    - pdns
