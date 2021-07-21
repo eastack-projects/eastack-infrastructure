@@ -1,9 +1,11 @@
 - name: Test DDNS
-  hosts: pdns
+  hosts: harbor
+  become: yes
   tasks:
-    - name: Update harbor DNS record
+    - name: Update DNS record
+      delegate_to: pdns
       nsupdate:
-        server: 192.168.254.57
-        zone: 'lan'
-        record: 'harbor'
-        value: '192.168.2.1'
+        server: "{{ DNS }}"
+        zone: "{{ ZONE }}"
+        record: "{{ ansible_hostname }}"
+        value: "{{ PUBLIC_IP }}"

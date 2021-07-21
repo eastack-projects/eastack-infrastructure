@@ -1,38 +1,27 @@
 ---
-# Certificate
-- name: Slurp vault cert
+- name: Required certificate
+  set_fact:
+    certificates:
+      - "{{ VAULT_CERT_NAME }}"
+      - "{{ ROOT_CERT_NAME }}"
+      - "{{ INT_CERT_NAME }}"
+
+- name: Slurp certificate
   slurp:
-    src: "{{ VAULT_PKI_DIR }}/{{ VAULT_CERT_NAME }}"
-  register: vault_cert
+    src: "{{ VAULT_PKI_DIR }}/{{ item }}"
+  register: cert_res
   delegate_to: vault
+  with_items: "{{ certificates }}"
 
-- name: Copy CA cert
+- name: Copy certificate
   copy:
-    content: "{{ vault_cert['content'] | b64decode }}"
-    dest: "/usr/local/share/ca-certificates/vault-cert.crt"
+    content: "{{ item.0.content | b64decode }}"
+    dest: "/usr/local/share/ca-certificates/{{ item.1 }}"
+  with_together:
+    - "{{ cert_res.results }}"
+    - "{{ certificates }}"
 
-- name: Slurp root certificate
-  slurp:
-    src: "{{ VAULT_PKI_DIR }}/{{ ROOT_CERT_NAME }}"
-  register: root_cert
-  delegate_to: vault
-
-- name: Copy root certificate
-  copy:
-    content: "{{ root_cert['content'] | b64decode }}"
-    dest: "/usr/local/share/ca-certificates/root-cert.crt"
-
-- name: Slurp int certificate
-  slurp:
-    src: "{{ VAULT_PKI_DIR }}/{{ INT_CERT_NAME }}"
-  register: int_cert
-  delegate_to: vault
-
-- name: Copy int certificate
-  copy:
-    content: "{{ int_cert['content'] | b64decode }}"
-    dest: "/usr/local/share/ca-certificates/int-cert.crt"
-
-- name: Update CA certificate
+- name: Update certificate
   shell:
     cmd: update-ca-certificates
+

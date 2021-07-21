@@ -21,7 +21,7 @@
     status_code: 200
     body:
       common_name: "{{ GITLAB_DOMAIN }}"
-      ip_sans: "{{ PUBLIC_IP_ADDRESS }}"
+      ip_sans: "{{ PUBLIC_IP }}"
   register: certificate
 
 - name: Create certificate directory

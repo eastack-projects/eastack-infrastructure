@@ -20,12 +20,36 @@
     cmd: "sqlite3 -init schema.sqlite3.sql pdns.sqlite3 .quit"
     chdir: /var/lib/powerdns
 
+- name: Change file ownership, group and permissions
+  file:
+    path: /var/lib/powerdns/pdns.sqlite3
+    owner: pdns
+    group: pdns
+
+# 虽然问题不大，这里应该是用模板更好些，防止未来默认配置有所修改，导致冲突。
+# 这里用 blockinfile 只是为了让代码更丰富。
 - name: Config PowerDNS
   blockinfile:
     path: /etc/powerdns/pdns.conf
     block: |
       dnsupdate=yes
-      allow-dnsupdate-from=127.0.0.0/8,::1,{{ PUBLIC_IP_ADDRESS }}
+      allow-dnsupdate-from=127.0.0.0/8,::1,{{ PUBLIC_IP }}
       launch=gsqlite3
       gsqlite3-database=/var/lib/powerdns/pdns.sqlite3
-      local-address={{ PUBLIC_IP_ADDRESS }}
+      local-address={{ PUBLIC_IP }}
+
+- name: Restart PowerDNS
+  systemd:
+    name: pdns
+    state: restarted
+
+- name: Create zone for 'lan'
+  command: "pdnsutil create-zone lan"
+
+- name: Update DNS Server address
+  become: no
+  local_action:
+    module: replace
+    path: "group_vars/all.yaml"
+    regexp: 'DNS: (.*$)'
+    replace: "DNS: {{ PUBLIC_IP }}"
