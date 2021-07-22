@@ -52,3 +52,10 @@
 ----
 {% for host in groups['all'] %}{{ host }}.lan. IN A {{ hostvars[host].ansible_enp0s8.ipv4.address | default('127.0.0.1') }}{{ "\n" if not loop.last else "" }}{% endfor %}
 ----
+
+.Nginx Ingress 安装
+[source, bash]
+----
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.45.0/deploy/static/provider/cloud/deploy.yaml
+kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
+----

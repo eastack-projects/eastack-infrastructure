@@ -26,7 +26,7 @@
 - name: Copy Harbor certificate
   copy:
     content: "{{ harbor_crt['content'] | b64decode }}"
-    dest: "{{ DOCKER_CERT_DIR }}/{{ HARBOR_DOMAIN }}.cert"
+    dest: "{{ DOCKER_CERT_DIR }}/{{ HARBOR_DOMAIN }}/{{ HARBOR_DOMAIN }}.cert"
 
 - name: Slurp Harbor key
   slurp:
@@ -37,7 +37,7 @@
 - name: Copy Harbor key
   copy:
     content: "{{ harbor_key['content'] | b64decode }}"
-    dest: "{{ DOCKER_CERT_DIR }}/{{ HARBOR_DOMAIN }}.key"
+    dest: "{{ DOCKER_CERT_DIR }}/{{ HARBOR_DOMAIN }}/{{ HARBOR_DOMAIN }}.key"
 
 - name: Config docker daemon
   copy:

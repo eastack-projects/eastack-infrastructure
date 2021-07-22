@@ -1,0 +1,16 @@
+= Etcd
+
+.test Etcd cluster
+[source, bash]
+----
+cd /etc/etcd/pki/
+etcdctl --cacert=ca.crt --cert=client.crt --key=client.key put hello world
+----
+
+.coredns deployment
+[source, bash]
+----
+git clone https://github.com/coredns/deployment.git
+# 10.96.0.10 在 playbooks/roles/kubernetes/node/setup/templates/kubelet-config.yaml.j2
+./deploy.sh -s -i 10.96.0.10 > coredns-deployment.yaml
+kubectl replace --force -f coredns-deployment.yaml

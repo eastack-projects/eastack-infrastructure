@@ -15,36 +15,12 @@ GitLab
 
 == notes
 
-.test Etcd cluster
-[source, bash]
-----
-cd /etc/etcd/pki/
-etcdctl --cacert=ca.crt --cert=client.crt --key=client.key put hello world
-----
-
-.coredns deployment
-[source, bash]
-----
-git clone https://github.com/coredns/deployment.git
-# 10.96.0.10 在 playbooks/roles/kubernetes/node/setup/templates/kubelet-config.yaml.j2
-./deploy.sh -s -i 10.96.0.10 > coredns-deployment.yaml
-kubectl replace --force -f coredns-deployment.yaml 
-----
-
-.nginx ingress
-[source, bash]
-----
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.45.0/deploy/static/provider/cloud/deploy.yaml
-kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
-----
-
 Vault 和 Bind9 属于基础设施类服务，尽可能减少修改与配置，keep clean
 
 == To Do
 
 * [x] kubernetes 集群搭建
 * [ ] 还有太多细节值得完善
-* [ ] clean file
 * [ ] github releast 下载可以借助https://ghproxy.com等实现
 * [ ] 差个高配服务器,,,,啊
 * [ ] 命名与可维护性
