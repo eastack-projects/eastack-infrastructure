@@ -65,9 +65,3 @@
     name: kubelet
     daemon_reload: yes
     enabled: yes
-
-- name: Pull coredns docker image
-  docker_image:
-    name: "coredns/coredns:{{ COREDNS_VERSION }}"
-    repository: "{{ IMAGE_REPOSITORY }}/coredns/coredns:v{{ COREDNS_VERSION }}"
-    source: pull

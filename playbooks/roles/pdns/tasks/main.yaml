@@ -26,25 +26,19 @@
     owner: pdns
     group: pdns
 
-# 虽然问题不大，这里应该是用模板更好些，防止未来默认配置有所修改，导致冲突。
-# 这里用 blockinfile 只是为了让代码更丰富。
-- name: Config PowerDNS
-  blockinfile:
-    path: /etc/powerdns/pdns.conf
-    block: |
-      dnsupdate=yes
-      allow-dnsupdate-from=127.0.0.0/8,::1,{{ PUBLIC_IP }}
-      launch=gsqlite3
-      gsqlite3-database=/var/lib/powerdns/pdns.sqlite3
-      local-address={{ PUBLIC_IP }}
+- name: Generate PowerDNS configuration
+  template:
+    src: pdns.conf.j2
+    dest: /etc/powerdns/pdns.conf
+    mode: 0600
 
 - name: Restart PowerDNS
   systemd:
     name: pdns
     state: restarted
 
-- name: Create zone for 'lan'
-  command: "pdnsutil create-zone lan"
+- name: "Create zone for {{ ZONE }}"
+  command: "pdnsutil create-zone {{ ZONE }}"
 
 - name: Update DNS Server address
   become: no

@@ -1,0 +1,54 @@
+.获取所有 hostvars 及正则替换
+[source, yaml]
+----
+- name: Gather facts from db servers
+  setup:
+  delegate_to: "{{ item }}"
+  delegate_facts: true
+  loop: "{{ groups['all'] }}"
+
+- name: Patch inventory ansible_host
+  replace:
+    path: "/vagrant/.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory"
+    regexp: "^{{item}} ansible_host=(127.0.0.1)"
+    replace: "{{ item }} ansible_host={{ hostvars[item].ansible_enp0s8.ipv4.address }}"
+  loop: "{{ groups['all'] }}"
+
+- name: Patch inventory ansible_port
+  replace:
+    path: "/vagrant/.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory"
+    regexp: 'ansible_port=(\d+)'
+    replace: "ansible_port=22"
+----
+
+.配置文件添加多行
+[source, yaml]
+----
+# 虽然问题不大，这里应该是用模板更好些，防止未来默认配置有所修改，导致冲突。
+# 这里用 blockinfile 只是为了让代码更丰富。
+- name: Config PowerDNS
+  blockinfile:
+    path: /etc/powerdns/pdns.conf
+    block: |
+      dnsupdate=yes
+      allow-dnsupdate-from=127.0.0.0/8,::1,{{ PUBLIC_IP }}
+      launch=gsqlite3
+      gsqlite3-database=/var/lib/powerdns/pdns.sqlite3
+      local-address={{ PUBLIC_IP }}
+----
+
+.更新 APT 源
+[source, yaml]
+----
+- name: Config APT mirror
+  replace:
+    path: "/etc/apt/sources.list"
+    regexp: 'archive.ubuntu.com|security.ubuntu.com'
+    replace: "mirrors.tuna.tsinghua.edu.cn"
+----
+
+.遍历 hostvars 生成DNS配置
+[source, jinj2]
+----
+{% for host in groups['all'] %}{{ host }}.lan. IN A {{ hostvars[host].ansible_enp0s8.ipv4.address | default('127.0.0.1') }}{{ "\n" if not loop.last else "" }}{% endfor %}
+----

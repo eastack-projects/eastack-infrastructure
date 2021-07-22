@@ -1,5 +1,0 @@
----
-- name: Restart harbor
-  shell: ./install.sh
-  args:
-    chdir: /opt/harbor/

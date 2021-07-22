@@ -2,4 +2,6 @@
   become: yes
   hosts: kubernetes_worker
   roles:
+    - common
+    - k8s/common
     - k8s/worker

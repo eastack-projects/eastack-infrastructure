@@ -31,4 +31,8 @@
   shell: ./generate-harbor-yaml.py
   args:
     chdir: /opt/harbor
-  notify: Restart harbor
+
+- name: Install harbor
+  shell: ./install.sh
+  args:
+    chdir: /opt/harbor/

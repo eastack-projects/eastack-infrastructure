@@ -6,9 +6,12 @@ Based Ansible and Vagrant.
 
 PowerDNS
 Vault
-Etcd
+Harbor
 Kubernetes Control plane
 Kubernetes Worker
+
+Etcd
+GitLab
 
 == notes
 
@@ -61,3 +64,4 @@ Vault 和 Bind9 属于基础设施类服务，尽可能减少修改与配置，k
 * [ ] 关闭swap
 * [*] Kubeadm 它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!它不香吗!
 * [*] DNS那货怎么搞奥
+* [*] 软链接的使用究竟是好是坏，先用用再体会吧

@@ -1,4 +1,6 @@
 ---
 - include_tasks: config-dns.yaml
+- include_tasks: register-dns.yaml
 - include_tasks: setup-cert.yaml
 - include_tasks: unseal-vault.yaml
+- include_tasks: config-apt-cache.yaml

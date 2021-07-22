@@ -1,0 +1,20 @@
+---
+# Config DNS
+- name: Configure DNS
+  replace:
+    path: /etc/systemd/resolved.conf
+    regexp: '#DNS='
+    replace: "DNS={{ DNS }}"
+    backup: yes
+
+- name: Configure fallback DNS
+  replace:
+    path: /etc/systemd/resolved.conf
+    regexp: '#FallbackDNS='
+    replace: "FallbackDNS={{ FALLBACK_DNS }}"
+    backup: yes
+
+- name: Restart systemd-resolved service
+  systemd:
+    name: systemd-resolved
+    state: restarted

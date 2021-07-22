@@ -1,0 +1,9 @@
+---
+- name: Create vault group
+  group:
+    name: vault
+
+- name: Create vault user
+  user:
+    name: vault
+    group: vault

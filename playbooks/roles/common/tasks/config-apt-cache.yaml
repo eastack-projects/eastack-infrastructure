@@ -1,0 +1,5 @@
+---
+- name: Install squid-deb-proxy-client
+  apt:
+    update_cache: yes
+    name: squid-deb-proxy-client

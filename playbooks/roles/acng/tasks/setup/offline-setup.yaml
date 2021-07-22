@@ -1,0 +1,17 @@
+---
+- name: Create vault package directory
+  file:
+    path: /opt/vault/package
+    state: directory
+    mode: 0755
+
+- name: Copy vault deb package
+  copy:
+    src: "{{ VAULT_PACKAGE_NAME }}"
+    dest: /opt/vault/package/vault.deb
+    mode: 0644
+
+- name: Install vault
+  apt:
+    update_cache: yes
+    deb: /opt/vault/package/vault.deb

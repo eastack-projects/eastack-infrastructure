@@ -7,7 +7,7 @@ Vagrant.configure("2") do |config|
   (1..2).each do |i|
     config.vm.define "kubernetes-worker#{i}" do |node|
       node.vm.box = "ubuntu/focal64"
-      node.vm.network "public_network"
+      node.vm.network "public_network", bridge: "enp2s0"
       node.vm.hostname = "kubernetes-worker#{i}"
       node.vm.provider "virtualbox" do |vb|
         vb.memory = "4096"

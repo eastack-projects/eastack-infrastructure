@@ -1,0 +1,13 @@
+resources:
+- calico.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+images:
+- name: docker.io/calico/cni
+  newName: harbor.lan/calico/cni
+- name: docker.io/calico/pod2daemon-flexvol
+  newName: harbor.lan/calico/pod2daemon-flexvol
+- name: docker.io/calico/node
+  newName: harbor.lan/calico/node
+- name: docker.io/calico/kube-controllers
+  newName: harbor.lan/calico/kube-controllers

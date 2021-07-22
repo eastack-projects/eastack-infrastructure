@@ -1,0 +1,5 @@
+- name: Setup vault
+  become: yes
+  hosts: acng
+  roles:
+    - acng

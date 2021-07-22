@@ -1,0 +1,19 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.define "acng" do |acng|
+    acng.vm.box_check_update = false
+    acng.vm.box = "ubuntu/focal64"
+    acng.vm.network "public_network", bridge: "enp2s0"
+    acng.vm.hostname = "acng"
+    acng.vm.provider "virtualbox" do |vb|
+      vb.memory = "1024"
+    end
+
+    acng.vm.provision :ansible do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.playbook = "playbook.yaml"
+    end
+  end
+end

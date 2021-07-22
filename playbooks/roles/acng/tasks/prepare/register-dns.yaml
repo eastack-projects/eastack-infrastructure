@@ -1,0 +1,8 @@
+---
+- name: Update DNS record
+  delegate_to: pdns
+  nsupdate:
+    server: "{{ DNS }}"
+    zone: "{{ ZONE }}"
+    record: "{{ ansible_hostname }}"
+    value: "{{ PUBLIC_IP }}"

@@ -1,0 +1,6 @@
+- name: Setup APT cacher
+  apt:
+    update_cache: yes
+    name:
+      - apt-cacher-ng
+      - avahi-daemon

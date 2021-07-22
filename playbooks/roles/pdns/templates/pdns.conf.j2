@@ -1,0 +1,9 @@
+allow-dnsupdate-from={{ PUBLIC_IP }}
+local-address={{ PUBLIC_IP }}
+dnsupdate=yes
+gsqlite3-database=/var/lib/powerdns/pdns.sqlite3
+include-dir=/etc/powerdns/pdns.d
+launch=gsqlite3
+security-poll-suffix=
+setgid=pdns
+setuid=pdns

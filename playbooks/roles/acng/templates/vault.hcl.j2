@@ -1,0 +1,9 @@
+storage "file" {
+  path = "/opt/vault/data"
+}
+
+listener "tcp" {
+  address       = "0.0.0.0:8200"
+  tls_cert_file = "{{ VAULT_PKI_DIR }}/{{ VAULT_CERT_NAME }}"
+  tls_key_file  = "{{ VAULT_PKI_DIR }}/{{ VAULT_KEY_NAME }}"
+}
