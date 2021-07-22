@@ -1,6 +1,11 @@
 ---
 - name: Initialize the Kubernetes cluster using Kubeadm
-  command: "kubeadm init --apiserver-advertise-address {{ PUBLIC_IP }} --image-repository {{ IMAGE_REPOSITORY }} --pod-network-cidr=192.168.0.0/16"
+  command: |
+    kubeadm init \
+      --kubernetes-version={{ K8S_VERSION }} \
+      --apiserver-advertise-address {{ PUBLIC_IP }} \
+      --image-repository {{ IMAGE_REPOSITORY }} \
+      --pod-network-cidr=192.168.0.0/16
 
 - name: Copy Kubeconfig configuration
   command: "{{ item }}"

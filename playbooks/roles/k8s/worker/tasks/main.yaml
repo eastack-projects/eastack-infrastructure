@@ -5,5 +5,4 @@
   register: join_command
 
 - name: Join cluster
-  debug:
-    msg: "{{ join_command.stdout }}"
+  command: "{{ join_command.stdout }}"

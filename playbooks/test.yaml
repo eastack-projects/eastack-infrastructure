@@ -2,6 +2,18 @@
   hosts: harbor
   become: yes
   tasks:
+    - name: Test command
+      command: |
+        ls \
+        -l \
+        -a \
+        -h
+      register: res
+
+    - name: Debug res
+      debug:
+        msg: "{{ res }}"
+
     - name: Update DNS record
       delegate_to: pdns
       nsupdate:
@@ -9,3 +21,12 @@
         zone: "{{ ZONE }}"
         record: "{{ ansible_hostname }}"
         value: "{{ PUBLIC_IP }}"
+
+    - name: Generate join command
+      command: "kubeadm token create --print-join-command"
+      delegate_to: kubernetes-control-plane
+      register: join_command
+
+    - name: Join cluster
+      command: "{{ join_command.stdout }}"
+
